@@ -271,6 +271,41 @@ function rebirthIntro(st){
  st.choiceSource='依重生層次、身分與當地事件生成';
  return st;
 }
+// 修仙家門本來具備傳承；年幼時先由家長照顧，識字、測靈與傳授隨年齡進行。
+function familyCultivationSchool(st){
+ const b=st.birth||{},d=st.worldDiscovery||{},f=st.familyEstate;
+ if(b.realm==='mortal'||!f||!/仙域世族|修仙世家|修行家族|宗門|仙門|仙宮|世家|世族/.test(b.family||''))return false;
+ f.cultivationSchool=f.cultivationSchool||{source:f.clanName+'家傳',stage:'幼年待教',teacherId:null,startedAge:null,notes:[]};
+ let school=f.cultivationSchool;
+ if(!school.teacherId){const tutor=(st.npcs||[]).find(n=>n.alive&&/父親|母親|家族長輩|宗親/.test(n.familyRole||''));if(tutor)school.teacherId=tutor.id;}
+ d.knowsCultivation=true;d.knowledge=Math.max(d.knowledge,st.age>=6?3:1);
+ d.hasTeacher=true; // 有家族傳承與指導者，不等於嬰兒已修成術法
+ if(st.age<6){school.stage='受照顧與耳濡目染';return true}
+ if(st.age<9){school.stage='族學識字、戒律與修士常識';st.skills.learning=Math.max(st.skills.learning||0,2);return true}
+ school.stage='依資質接受家傳引氣課';
+ st.cultivation.arts=Array.isArray(st.cultivation.arts)?st.cultivation.arts:[];
+ if(st.cultivation.aptitude>=20){
+  if(!st.cultivation.arts.some(a=>a&&a.name==='家傳引氣訣'))st.cultivation.arts.push({name:'家傳引氣訣',rank:1,experience:0});
+  d.cultivationUnlocked=true;
+ } else {school.stage='修行資質受限，仍學習族學基礎';}
+ if(school.startedAge==null)school.startedAge=st.age;
+ return true;
+}
+function familySchoolBirthday(st){
+ if(!familyCultivationSchool(st))return;
+ const f=st.familyEstate,school=f.cultivationSchool;
+ if(st.age>=6&&st.age<=18){st.skills.learning=Math.min(100,(st.skills.learning||0)+1);st.knowledge=Math.min(st.knowledgeMax,st.knowledge+1);}
+ if(st.age>=9&&st.age<=30&&st.cultivation.aptitude>=20&&st.cultivation.arts.some(a=>a?.name==='家傳引氣訣')){
+  let art=st.cultivation.arts.find(a=>a.name==='家傳引氣訣');
+  const gain=Math.max(1,Math.floor(st.cultivation.aptitude/22));
+  art.experience+=gain;st.cultivation.progress+=gain;
+  // 年度基礎學習僅增加熟練度，不擅自賦予築基、飛行或神通
+  if(st.age>=12&&art.experience>=18){st.cultivation.qi+=Math.max(1,Math.floor(gain/2));}
+  if(st.age===9)emit(st,'族學','在家族指導下開始接觸家傳引氣法，修行成果仍由資質及努力決定');
+ }
+ if(st.age===6)emit(st,'族學','開始族學識字、戒律與修士常識，尚未開始靈氣修鍊');
+}
+function longTermFamilyPracticeRequested(action){return /(?:修煉|修練|練功|學習修仙|修習家傳|修行)/.test(action)}
 function canLearnCultivation(st){return st.worldDiscovery?.cultivationUnlocked===true&&!!st.cultivation?.arts?.length}
 
 // 世界內部真相與角色知識分離；修仙秘境不在凡人地圖自動公開。
@@ -380,10 +415,10 @@ function timeRequest(raw){const a=String(raw||'').trim();let m=a.match(/([零〇
 function timeInputMinutes(){let value=Number($('minutes').value),unit=$('timeUnit').value,scale={minute:1,hour:60,day:1440,month:43200,year:518400}[unit];return value*scale}
 function timeAnswer(st,req){const afterAge=Math.floor((st.ageDays+req.minutes/1440)/YEAR);return `目前你是 ${st.age} 歲。如果單純計算 ${req.value}${req.unit}後的年齡，將約為 ${afterAge} 歲。這只是推算，未實際流逝時間，也不能保證你能活到那時。若要真正快進，請輸入「推進${req.value}${req.unit}」。`}
 // One transaction simulates a whole interval, stopping at death. Regular jobs/travel are not repeated implicitly.
-function longAdvance(st,minutes){let start=now(st),fromAge=st.age,fromYear=st.year,fromTick=st.world.tick,oldMoney=st.money,oldNPC=st.npcs.filter(n=>n.alive).length,oldEvents=st.events.length;
+function longAdvance(st,minutes){familyCultivationSchool(st);let start=now(st),fromAge=st.age,fromYear=st.year,fromTick=st.world.tick,oldMoney=st.money,oldNPC=st.npcs.filter(n=>n.alive).length,oldEvents=st.events.length;
  st.longAdvance=true;let adv;try{adv=advance(st,minutes)}finally{delete st.longAdvance}
- const yr=Math.floor(adv.days/YEAR),worldEvents=(st.society?.history||[]).filter(x=>true).slice(-5).map(x=>x.text||x.description||'地方局勢有變');const outcome=adv.dead?'期間角色離世，推進已在死亡當日停止。':'時間推進已完成。';let detail=`從 ${start} 推進至 ${now(st)}，實際經過 ${adv.days} 天；年齡 ${fromAge} → ${st.age} 歲；現銀 ${oldMoney} → ${st.money}；在世 NPC ${oldNPC} → ${st.npcs.filter(n=>n.alive).length}。${outcome}`;
- if(worldEvents.length)detail+=' 近期地方紀錄：'+worldEvents.slice(-2).join('；');
+ const yr=Math.floor(adv.days/YEAR),school=st.familyEstate?.cultivationSchool,worldEvents=(st.society?.history||[]).filter(x=>true).slice(-5).map(x=>x.text||x.description||'地方局勢有變');const outcome=adv.dead?'期間角色離世，推進已在死亡當日停止。':'時間推進已完成。';let detail=`從 ${start} 推進至 ${now(st)}，實際經過 ${adv.days} 天；年齡 ${fromAge} → ${st.age} 歲；現銀 ${oldMoney} → ${st.money}；在世 NPC ${oldNPC} → ${st.npcs.filter(n=>n.alive).length}。${outcome}`;
+ if(school&&adv.days>=YEAR)detail+=' 家族修行教育：'+school.stage+'；此為實際年齡階段的學習紀錄，不代表歲月中持續閉關或必然突破境界。';if(worldEvents.length)detail+=' 近期地方紀錄：'+worldEvents.slice(-2).join('；');
  const y=Math.floor((st.world.tick-fromTick)/YEAR);emit(st,'歲月推演',`時間推進約${y}年，${detail}`,{elapsed:adv.minutes});return {ok:true,verified:true,text:detail,minutes:adv.minutes,dead:adv.dead,kind:'歲月推演'};}
 function executeTimeSkip(action,minutes){if(!state||busy||!state.alive)return;const max=20*YEAR*1440;if(!Number.isSafeInteger(minutes)||minutes<1||minutes>max)return message('每次快進最多 20 年，且必須是正整數時間；可分次推進。','bad');if(minutes>=YEAR*1440){let years=(minutes/518400).toFixed(2);if(!confirm(`確定推進約 ${years} 年？途中將模擬世界生活、疾病與死亡，無法保證角色存活。請先匯出重要存檔。`))return}
  try{const res=transaction(draft=>{let fromAge=draft.age;let r=longAdvance(draft,minutes);let story=`【時光流轉】\n${r.text}\n\n${draft.alive?`歲月已經真正過去，你現在 ${draft.age} 歲。家人、人物與地方的變化已按規則結算；你仍須自行決定接下來的行動。`:`此世已在時間推進途中結束，不能假裝仍然活著。`}`;chapter(draft,action,story,r.text,undefined,'時間推演結果');return r});completed(res)}catch(e){message('時間推進失敗，未覆蓋現有存檔：'+e.message,'bad')}}
@@ -476,7 +511,7 @@ function migrate(x){if(!x||typeof x!=='object'||typeof x.id!=='string'||!Array.i
  z.schema=5;z.seed=nu(z.seed,z.rng||1234567)>>>0;z.chapter=Math.max(0,Math.floor(nu(z.chapter)));z.hp=cap(nu(z.hp,100),0,10000);z.hpMax=Math.max(1,nu(z.hpMax,100));z.staminaMax=Math.max(1,nu(z.staminaMax,100));z.stamina=cap(nu(z.stamina,70),0,z.staminaMax);z.hunger=nu(z.hunger,0);z.food=Math.max(0,nu(z.food,12));z.money=Math.max(0,nu(z.money,0));z.ageDays=Math.max(0,nu(z.ageDays,nu(z.age)*YEAR));z.age=Math.floor(z.ageDays/YEAR);z.year=Math.floor(nu(z.year,1));z.day=cap(Math.floor(nu(z.day,1)),1,YEAR);z.minute=cap(Math.floor(nu(z.minute,480)),0,1439);z.health=nu(z.health,100);z.strength=nu(z.strength,35);z.strengthMax=Math.max(z.strength,nu(z.strengthMax,100));z.knowledge=nu(z.knowledge,20);z.knowledgeMax=Math.max(z.knowledge,nu(z.knowledgeMax,100));z.illness=nu(z.illness);z.injury=nu(z.injury);z.alive=z.alive!==false;z.setting=z.setting||'古代民間';z.location=z.location||'青溪村';z.trait=z.trait||'凡體';z.sex=z.sex||'未知';z.name=z.name||'無名';
  z.inventory={wood:0,ore:0,tools:0,herbs:0,...(z.inventory||{})};z.skills={learning:0,farming:0,crafting:0,combat:0,trade:0,...(z.skills||{})};z.cultivation={aptitude:0,qi:0,level:0,progress:0,...(z.cultivation||{})};z.assets=arr(z.assets).map(a=>{let t=a.kind||a.type||'財產';t=t==='簡易住屋'||t==='house'?'住屋':t==='小田'||t==='field'?'田地':t;return {...a,id:a.id||'asset-'+Math.random().toString(36).slice(2,9),kind:t,owner:a.owner||z.id}});z.farm={progress:cap(nu(z.farmProgress,0)*33,0,99),harvestable:0,...(z.farm||{})};z.business=z.business||null;z.household={partnerId:null,married:false,engaged:false,dependents:[],pregnancy:null,...(z.household||{})};z.familyEstate=z.familyEstate||null;z.household.dependents=arr(z.household.dependents).map(k=>({...k,ageDays:nu(k.ageDays,nu(k.age)*YEAR),health:nu(k.health,90),learning:nu(k.learning,0),bond:nu(k.bond,50)}));z.world={scarcity:nu(z.market?.scarcity,0),grainPrice:nu(z.market?.foodPrice,2),season:1,tick:0,...(z.world||{})};z.world.grainPrice=cap(nu(z.world.grainPrice,2),1,8);z.ledger=arr(z.ledger).length?z.ledger:arr(z.walletLedger).map(e=>({at:e.at||'',amount:nu(e.amount),reason:e.reason||e.why||'舊版紀錄',balance:nu(e.balance)}));z.events=arr(z.events).slice(-800).map(e=>({...e,type:e.type||e.kind||'舊版事件',description:e.description||((e.action||'')+'：'+(e.result||''))}));z.chapterHistory=arr(z.chapterHistory).slice(-100);z.news=arr(z.news).length?z.news:arr(z.worldNews);z.choices=arr(z.choices);z.choiceSource=z.choiceSource||'舊版選項';z.archives=arr(z.archives);
  z.npcs=arr(z.npcs).map((n,i)=>({...n,id:n.id||'n'+i,age:nu(n.age,25),alive:n.alive!==false,health:nu(n.health,90),money:nu(n.money,10),trust:nu(n.trust),fond:nu(n.fond),obsession:nu(n.obsession),goal:n.goal||'維持生活',nature:n.nature||'謹慎',bond:n.bond||(n.relation==='交往中'?'交往':n.relation==='配偶'?'配偶':n.relation==='分開'?'分開':'相識'),activity:n.activity||'日常生活',memory:arr(n.memory).slice(-30),tick:nu(n.tick,0)}));if(z.npcs.length===0)z.npcs.push(makeNPC(z,0));if(z.household.married&&z.household.partnerId){let p=z.npcs.find(n=>n.id===z.household.partnerId);if(p)p.bond='配偶'}
- if(!z.worldDiscovery)z.worldDiscovery={realm:z.birth?.realm||'mortal',knowledge:0,knownEntrances:[],hasTeacher:false,knowsCultivation:!!z.cultivation?.arts?.length,knownMortalWorld:true,cultivationUnlocked:!!z.cultivation?.arts?.length||z.cultivation?.level>0||z.cultivation?.qi>0};v5Ensure(z);if(legacy){z.news.push({at:now(z),text:'已從 V3 系列複製人生到 V4；舊版本原存檔未被覆蓋。'});if(z.household.partnerId&&!z.npcs.some(n=>n.id===z.household.partnerId))z.household.partnerId=null}return z}
+ if(!z.worldDiscovery)z.worldDiscovery={realm:z.birth?.realm||'mortal',knowledge:0,knownEntrances:[],hasTeacher:false,knowsCultivation:!!z.cultivation?.arts?.length,knownMortalWorld:true,cultivationUnlocked:!!z.cultivation?.arts?.length||z.cultivation?.level>0||z.cultivation?.qi>0};v5Ensure(z);if(legacy){z.news.push({at:now(z),text:'已從 V3 系列複製人生到 V4；舊版本原存檔未被覆蓋。'});if(z.household.partnerId&&!z.npcs.some(n=>n.id===z.household.partnerId))z.household.partnerId=null}familyCultivationSchool(z);return z}
 // All V5 data is additional; V4 snapshots remain readable and intact.
 function v5Ensure(st){
  st.schema=5;
@@ -537,7 +572,7 @@ function npcMemory(n,st,event){n.memory.push({at:now(st),event:String(event).sli
 function selected(st,id){return st.npcs.find(n=>n.id===id)||st.npcs[0]||null}
 function assetsCount(st,kind){return st.assets.filter(a=>a.kind===kind&&a.owner===st.id).length}
 function giveSkill(st,type,amount){st.skills[type]=cap(nu(st.skills[type])+amount,0,100)}
-function advance(st,minutes){let remaining=minutes,days=0,notes=[];while(remaining>0&&st.alive){let step=Math.min(remaining,1440-st.minute),end=step===1440-st.minute;st.minute+=step;if(st.minute>=1440){st.minute=0;st.day++;if(st.day>YEAR){st.day=1;st.year++}st.ageDays++;st.age=Math.floor(st.ageDays/YEAR)}remaining-=step;if(end){days++;let msg=daily(st);if(msg&&notes.length<8)notes.push(msg)}}return {minutes:minutes-remaining,days,notes,dead:!st.alive}}
+function advance(st,minutes){let remaining=minutes,days=0,notes=[];while(remaining>0&&st.alive){let step=Math.min(remaining,1440-st.minute),end=step===1440-st.minute;st.minute+=step;if(st.minute>=1440){st.minute=0;st.day++;if(st.day>YEAR){st.day=1;st.year++}st.ageDays++;let priorAge=st.age;st.age=Math.floor(st.ageDays/YEAR);if(st.age>priorAge)familySchoolBirthday(st)}remaining-=step;if(end){days++;let msg=daily(st);if(msg&&notes.length<8)notes.push(msg)}}return {minutes:minutes-remaining,days,notes,dead:!st.alive}}
 function daily(st){let news=[],people=1+st.household.dependents.filter(x=>x.ageDays<18*YEAR).length+(st.household.married?1:0);let foodNeeded=people;
  // Long skips include ordinary subsistence and caregiving, rather than treating 'wait' as ten years without meals.
  if(st.longAdvance){let guardians=st.npcs.filter(n=>n.alive&&(/父|母|養|監護|祖|叔|姑|伯|嬸|舅/.test(n.familyRole||'')));if(st.age<12&&guardians.length&&chance(st,.992)){st.food+=foodNeeded;news.push('家人照護幼兒的日常飲食')}else if(st.age>=12&&st.hp>28&&chance(st,st.career?.employed?.91:.76)){st.food+=foodNeeded;news.push('維持日常生計與口糧')} }
@@ -659,7 +694,7 @@ function rule(st,code,targetId,minutes=30){if(['investigateMystery','seekMaster'
   st.battles.push({at:now(st),opponent:n.name,victory,rounds});if(st.battles.length>20)st.battles.shift();
   if(st.hp===0){st.alive=false;text+=' 角色因傷死亡。'}npcMemory(n,st,text);
  }break;
- case 'cultivate':spent=120;if(!canLearnCultivation(st))return fail('你尚未學過靈氣與修仙之法。靈根只是潛能，不會讓你自動懂得修煉。');if(st.cultivation.aptitude<20)return fail('目前缺乏基本靈氣感應資質；可以尋找導師或其他方法，但不能無條件入門');if(st.stamina<12)return fail('體力不足，無法修煉');{let k=dice(st,1,3)+Math.floor(st.cultivation.aptitude/30);st.cultivation.qi+=k;st.cultivation.progress+=k;st.stamina-=12;text=`修煉積累 ${k} 點靈氣；境界仍為 ${st.cultivation.level}。`;}break;
+ case 'cultivate':spent=120;familyCultivationSchool(st);if(st.age<9)return fail('你仍年幼；家族有修行傳承，但目前先由族中照顧與授課，不能把嬰幼兒當成獨立修士。可選擇推進歲月接受家族教育。');if(!canLearnCultivation(st))return fail(st.familyEstate?.cultivationSchool?'你已接觸族學，但資質或法門進度尚不足以獨立引氣；可請族中長輩指導。':'你尚未取得可靠的修行指導；靈根不會讓你自動掌握法術。');if(st.cultivation.aptitude<20)return fail('目前缺乏基本靈氣感應資質；可以尋找導師或其他方法，但不能無條件入門');if(st.stamina<12)return fail('體力不足，無法修煉');{let k=dice(st,1,3)+Math.floor(st.cultivation.aptitude/30);st.cultivation.qi+=k;st.cultivation.progress+=k;st.stamina-=12;text=`修煉積累 ${k} 點靈氣；境界仍為 ${st.cultivation.level}。`;}break;
  case 'breakthrough':spent=240;if(!canLearnCultivation(st))return fail('尚未掌握修行功法，無法突破修仙境界。');{let c=st.cultivation,need=(c.level+1)*25;if(c.progress<need||c.qi<need)return fail(`突破需要累積 ${need} 點進度和靈氣`);c.progress-=need;c.qi-=need;let p=cap(.2+c.aptitude/170-c.level*.035,.05,.82);if(chance(st,p)){c.level++;text='突破成功，目前境界 '+c.level+'。'}else{let injury=dice(st,5,22);st.hp=cap(st.hp-injury,0,st.hpMax);st.injury+=Math.ceil(injury/2);text='突破失敗，受到 '+injury+' 點傷害。';if(!st.hp){st.alive=false;text+=' 角色因此死亡。'}}}break;
  case 'gatherWood':spent=120;if(st.stamina<12)return fail('採集木材需要至少 12 體力');{
   let qty=dice(st,1,4)+Math.floor(st.skills.farming/40);st.inventory.wood+=qty;st.stamina-=12;text=`取得木材 ${qty} 份，庫存 ${st.inventory.wood}。`;}
@@ -831,7 +866,7 @@ function finishAction(action,code,minutes,targetId,aiStory=null){return transact
  let options=parsed?.options.length===2?parsed.options:sceneChoices(draft);let source=parsed?.options.length===2?'AI 劇情選項':'系統依目前場景建議';chapter(draft,action,narration,res.verified?res.text:'此類行動尚無完成規則，僅保留意圖與推進的時間。',options,source);return {ok:true,text:res.text,minutes:res.minutes}})}
 function completed(res){if(!res)return;busy=false;render(true);$('action').value='';message(`第 ${state.chapter} 回完成・已儲存・${now(state)}。${res.text}`,'ok');$('chapterArea').scrollIntoView({behavior:'smooth',block:'start'})}
 function systemAction(code){if(!state||busy||!state.alive)return;let npcId=$('npcSelect').value;let actions={work:'打零工',forage:'尋找食物',rest:'休息',buyFood:'購買食物',sellFood:'出售食物',study:'學習',train:'訓練',craft:'製作工具',buyHouse:'購買住屋',buyField:'購買田地',farm:'耕作',harvest:'收成',startBusiness:'創辦小商號',operateBusiness:'營運商號',invent:'研究改良工具',seekTrade:'應徵商販',seekCraft:'應徵工匠',seekGuard:'應徵護衛',resignJob:'辭職',gatherWood:'採木材',mineOre:'採礦',sellWood:'出售木材',sellOre:'出售礦石',stockShop:'商號進貨',hireWorker:'商號雇員',upgradeShop:'商號擴建',withdrawShop:'提領商號現金',borrow:'借款',repay:'還款',teachChild:'教導子女',careerChild:'協助子女就業',familyWill:'指定繼承安排',spouseTalk:'商議家務',forgeWeapon:'打造短劍',equipWeapon:'裝備短劍',repairWeapon:'修繕武器',learnArt:'學習功法',practiceArt:'演練功法',heal:'求醫',social:'與人物交談',court:'提出交往',propose:'提出婚約',marry:'成婚',separate:'分開',adopt:'收養子女',care:'照顧家庭',planChild:'討論生育',defend:'練習防身',fight:'切磋',cultivate:'嘗試修煉',breakthrough:'嘗試突破境界'};let action=code.startsWith('travelTo:')?('前往'+code.slice(9)):(actions[code]||code);let target=state.npcs.find(n=>n.id===npcId);if(['social','court','propose','marry','separate','fight'].includes(code)&&target)action+='（對象：'+target.name+'）';try{const result=finishAction(action,code,30,npcId);completed(result)}catch(e){busy=false;message('行動未執行：'+e.message,'bad')}}
-async function execute(action){if(!state||busy||!state.alive)return;if(!String(action).trim())return message('請先輸入行動內容','bad');const req=timeRequest(action);if(req?.question){return message(timeAnswer(state,req),'ok')}const chosen=timeInputMinutes();if(!Number.isSafeInteger(chosen)||chosen<1)return message('時間必須是有效的正整數','bad');if(req?.direct){return executeTimeSkip(action,req.minutes)}if(/^(?:等待|度過|推進時間|跳過時間|快進|讓時間流逝)\s*$/.test(String(action).trim())){return executeTimeSkip(action,chosen)}let minutes=chosen;if(minutes>43200)return message('一般行動最多 30 天；要快進更長時間，請輸入「推進十年」或「等待」搭配年/月單位。','bad');if(oneActionOnly(action))return message('每回合只能執行一個主要行動。請先完成目前這一步，再安排下一步；沒有一鍵連續趕路、工作和修煉。','bad');
+async function execute(action){if(!state||busy||!state.alive)return;if(!String(action).trim())return message('請先輸入行動內容','bad');const req=timeRequest(action);if(req?.question){return message(timeAnswer(state,req),'ok')}const chosen=timeInputMinutes();if(!Number.isSafeInteger(chosen)||chosen<1)return message('時間必須是有效的正整數','bad');if(req?.direct||req&&!req.question&&/(?:推進|跳過|快進|度過|讓時間流逝)/.test(action)&&longTermFamilyPracticeRequested(action)){return executeTimeSkip(action,req.minutes)}if(/^(?:等待|度過|推進時間|跳過時間|快進|讓時間流逝)\s*$/.test(String(action).trim())){return executeTimeSkip(action,chosen)}let minutes=chosen;if(minutes>43200)return message('一般行動最多 30 天；要快進更長時間，請輸入「推進十年」或「等待」搭配年/月單位。','bad');if(oneActionOnly(action))return message('每回合只能執行一個主要行動。請先完成目前這一步，再安排下一步；沒有一鍵連續趕路、工作和修煉。','bad');
  if(movementIntent(action))return message('你尚未學會有效的傳送能力，不能直接瞬移到別處。此回未扣時間。','bad');
  if(!conf.endpoint||!conf.password){let target=state.npcs.find(n=>action.includes(n.name))||selected(state,$('npcSelect').value),code=route(action);const result=finishAction(action,code,minutes,target?.id);completed(result);return}let target=state.npcs.find(n=>action.includes(n.name))||selected(state,$('npcSelect').value),code=route(action);const expectedSave=localStorage.getItem(STORE);busy=true;render();message(`正在生成第 ${state.chapter+1} 回；回應成功前不修改存檔。`);$('chapterArea').scrollIntoView({behavior:'smooth',block:'start'});
  try{let preview=clone(state),ruling=rule(preview,code,target?.id,minutes);if(!ruling.ok){busy=false;render();message('行動不成立：'+ruling.text+'（時間與存檔都沒有改動）','bad');return}
