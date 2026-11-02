@@ -272,6 +272,12 @@ function rebirthSetup(st,options={}){
  let status=mode==='designated'&&options.status&&options.status!=='random'?options.status:weightedStatus(st);
  // Deliberately preserve explicitly selected social standing, including fallen aristocrats.
  if(mode!=='designated'&&/王侯|仙域世族/.test(family)&&status==='貧困')status='小康';
+ // 隨機富商之家應有真實家業；刻意指定貧困者則保留作為家道中落的角色設定。
+ if(/富商之家/.test(family)){
+  if(mode!=='designated'||options.status==='random'||!options.status){
+   if(['貧困','平民','小康'].includes(status))status=pick(st,['富足','富足','富足','權貴']);
+  }
+ }
  st.setting=w.setting;st.location=site;st.year=dice(st,...w.year);st.day=dice(st,1,360);st.minute=dice(st,6*60,19*60);st.world.season=Math.ceil(st.day/90);
  const mood=pick(st,w.mood),hook=pick(st,BIRTH_HOOKS),weather=pick(st,BIRTH_WEATHER);
  st.birth={period:w.period||null,era:w.era,country:w.country,culture:w.culture,region:w.country,site,standing:status,family,hook,mood,motivation:pick(st,BIRTH_MOTIVATIONS),weather,art:w.art,worldName:w.setting,originCountry:w.country,rebirthMode:mode,realm:layer};
@@ -927,7 +933,33 @@ if(['investigateMystery','seekMaster','enterHidden','senseAptitude','studyLaw','
  case 'buyField':spent=120;if(!adult)return fail('現階段不能獨立購買田地');if(!spend(18,'購買田地'))return fail('購買田地需要 18 銀');st.assets.push({id:'asset-'+st.world.tick+'-'+dice(st,10,9999),kind:'田地',owner:st.id,cost:18,location:st.location});text='取得一塊小田的所有權。';break;
  case 'farm':spent=240;if(assetsCount(st,'田地')===0)return fail('尚未擁有可使用的田地');if(st.stamina<13)return fail('體力不足以耕作');st.stamina-=13;st.farm.progress+=20+Math.floor(st.skills.farming/5);giveSkill(st,'farming',2);if(st.farm.progress>=100){st.farm.progress-=100;st.farm.harvestable++;}text=`耕作完成，作物成熟批次 ${st.farm.harvestable}。`;break;
  case 'harvest':spent=240;if(st.farm.harvestable<1)return fail('目前沒有成熟的作物可收成');if(st.stamina<10)return fail('體力不足');st.farm.harvestable--;st.stamina-=10;{let amount=dice(st,6,12)+Math.floor(st.skills.farming/10);st.food+=amount;text=`收成得到 ${amount} 份糧食。`;}break;
- case 'startBusiness':spent=240;if(!adult)return fail('必須成年才能獨立經營商號');if(st.business)return fail('已有商號，請先經營現有事業');if(!spend(40,'創辦商號資本'))return fail('創辦商號需要 40 銀');st.business={name:st.name+'的小商號',level:1,cash:30,wage:3,profit:0,active:true,started:now(st),stock:0,staff:0,reputation:40};text='創辦一間簡易商號，投入 40 銀，其中 30 銀為營運資金，其他是開辦成本。';break;
+ case 'familyFundingTalk':{
+  const parent=familyTarget(st,st.pendingAction||'');
+  if(!parent)return fail('找不到可確認的家人資料，不能創造一位陌生人冒充父母。');
+  if(parent.home&&parent.home!==st.location)return fail(`${parent.name}不在${st.location}，目前無法當面提出資助要求；請先尋找或前往所在地。`);
+  spent=30;
+  const treasury=Number(st.familyEstate?.treasury||0);
+  const wantedMatch=String(st.pendingAction||'').match(/([一二三四五六七八九十百千\d]+)(?:兩|銀)/);
+  const raw=wantedMatch?.[1];
+  const cn={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9};
+  let requested=raw&&/^\d+$/.test(raw)?Number(raw):raw&&raw.includes('百')?((cn[raw[0]]||1)*100):null;
+  const affordable=requested===null?'尚未說明具體金額':(treasury>=requested?'家族帳面可能負擔':'超過家族目前帳面公款');
+  text=`你向${parent.familyRole||'家人'}${parent.name}提出經營資助的請求${requested!==null?'，希望取得約 '+requested+' 銀':'，但尚未確定數額'}。${affordable}。${parent.name}需要根據個性、家業和彼此關係考慮；本回只完成詢問，並未同意撥款，也未創辦商號。`;kind='家族商議';
+  emit(st,'家族商議',text,{personId:parent.id,verified:true});
+  break;
+ }
+ case 'startBusiness':{
+  spent=240;
+  if(st.business)return fail('你已有商號，可以經營現有事業，或另行規劃擴張。');
+  // 不以年齡作為創辦或持有事業的拒絕條件。幼年角色可聘管事或委託家人執行。
+  const capital=40;
+  if(st.money<capital)return fail(`目前個人可用現銀 ${st.money}，創辦這種商號需 ${capital} 銀。你可先籌資、尋求家人投資或選擇成本較低的攤位；這不代表年齡不足。家族公款須取得同意才能使用。`);
+  if(!spend(capital,'創辦商號資本'))return fail('創辦商號資金不足');
+  const young=st.age<12;
+  st.business={name:st.name+'的小商號',level:1,cash:30,wage:3,profit:0,active:true,started:now(st),stock:0,staff:0,reputation:40,ownerId:st.id,management:young?'委託家人或管事':'本人管理',youngFounder:young};
+  text=`以自有現銀 ${capital} 銀創辦小商號，30 銀作營運資金，其餘作開辦成本。${young?'你可以決定經營方向，具體採購、對外議價與帳房事務由受託成年人協助；仍須實際取得人手與遵守當地規矩。':'你可以自行管理商號。'}`;
+  break;
+ }
  case 'operateBusiness':spent=480;if(!st.business||!st.business.active)return fail('尚無營運中的商號');{
   let b=st.business;if(b.stock===0)return fail('商號沒有貨物，請先採購進貨');let sale=Math.min(b.stock,dice(st,1,3+b.staff+b.level));
   let revenue=sale*(4+Math.floor(b.level/2));b.stock-=sale;b.cash+=revenue;b.profit+=revenue;
@@ -1079,10 +1111,12 @@ function employmentIntent(x){
  return null;
 }
 function employmentChoices(st){return ['向附近店家或作坊打聽是否招收學徒','打聽短工、農活或跑腿的僱用條件'];}
-function route(action){let x=action.trim();const jobIntent=employmentIntent(x);if(jobIntent)return jobIntent;if(/(?:找|尋找|去見|去找|見到|探望|拜訪|呼喚|叫|找尋).{0,8}(?:爸爸|父親|爹爹|爹|媽媽|母親|娘親|娘)/.test(x))return 'findFamily';if(/(?:遇見|偶遇|邂逅|認識新|結識|找人聊天|找人說話|與陌生人|和陌生人|跟路人|認識路人)/.test(x))return 'meetNPC';const worldRoutes=[[/調查.*(?:異象|秘境|洞天|山谷|古跡|傳聞)|尋找.*(?:入口|仙緣|秘境|洞天)|探索.*(?:洞天|山谷|古跡)/,'investigateMystery'],[/求仙師|尋找仙師|拜入宗門|求修仙師承|請求引氣教導/,'seekMaster'],[/進入.*(?:洞天|仙門|秘境)|嘗試.*(?:入口|石門)|穿越.*(?:禁制|山門)/,'enterHidden'],[/測試靈根|感受靈根|試試天生神力/,'senseAptitude'],[/參悟.*(?:法則|術法|武法)|研究.*(?:武法|法則)/,'studyLaw'],[/當眾施法|在凡人面前施法/,'publicSpell']];for(const [pattern,code] of worldRoutes)if(pattern.test(x))return code;
+function route(action){let x=action.trim();if(/(?:爸爸|父親|爹|老爹|娘|媽媽|母親|家人|家族).{0,35}(?:要錢|借錢|給我|資助|投資|出資|開店|開商號|創業)|(?:要錢|借錢|資助|投資|出資).{0,30}(?:爸爸|父親|爹|娘|媽媽|母親|家人|家族)/.test(x))return 'familyFundingTalk';const jobIntent=employmentIntent(x);if(jobIntent&&!/應徵(?:商販|工匠|護衛)|找(?:商販|工匠)工作/.test(x))return jobIntent;if(/(?:找|尋找|去見|去找|見到|探望|拜訪|呼喚|叫|找尋).{0,8}(?:爸爸|父親|爹爹|爹|媽媽|母親|娘親|娘)/.test(x))return 'findFamily';if(/(?:遇見|偶遇|邂逅|認識新|結識|找人聊天|找人說話|與陌生人|和陌生人|跟路人|認識路人)/.test(x))return 'meetNPC';const worldRoutes=[[/調查.*(?:異象|秘境|洞天|山谷|古跡|傳聞)|尋找.*(?:入口|仙緣|秘境|洞天)|探索.*(?:洞天|山谷|古跡)/,'investigateMystery'],[/求仙師|尋找仙師|拜入宗門|求修仙師承|請求引氣教導/,'seekMaster'],[/進入.*(?:洞天|仙門|秘境)|嘗試.*(?:入口|石門)|穿越.*(?:禁制|山門)/,'enterHidden'],[/測試靈根|感受靈根|試試天生神力/,'senseAptitude'],[/參悟.*(?:法則|術法|武法)|研究.*(?:武法|法則)/,'studyLaw'],[/當眾施法|在凡人面前施法/,'publicSpell']];for(const [pattern,code] of worldRoutes)if(pattern.test(x))return code;
  const v5Routes=[[/應徵商販|找商販工作/,'seekTrade'],[/應徵工匠|找工匠工作/,'seekCraft'],[/應徵護衛|當護衛/,'seekGuard'],[/辭職|離職/,'resignJob'],[/償還|還款|還債/,'repay'],[/借款|借錢|貸款/,'borrow'],[/看醫生|就醫|治療|求醫/,'heal'],[/採礦|挖礦/,'mineOre'],[/砍柴|伐木|採木/,'gatherWood'],[/賣木材|出售木材/,'sellWood'],[/賣礦|出售礦/,'sellOre'],[/商號進貨|店舖進貨|採購存貨/,'stockShop'],[/聘請夥計|雇用夥計|聘僱員工/,'hireWorker'],[/擴張商號|擴建商號/,'upgradeShop'],[/提領商號|提領盈餘/,'withdrawShop'],[/教子女|教育子女/,'teachChild'],[/子女就業|孩子找工作/,'careerChild'],[/遺囑|繼承人/,'familyWill'],[/與伴侶商議|與配偶商議/,'spouseTalk'],[/打造短劍|鍛造武器/,'forgeWeapon'],[/裝備武器|佩劍/,'equipWeapon'],[/維修武器|修理武器/,'repairWeapon'],[/學習功法|研習功法/,'learnArt'],[/演練功法|練功/,'practiceArt']];
  for(const [pattern,code] of v5Routes)if(pattern.test(x))return code;
-if(movementIntent(x))return 'impossibleTravel';if(/前往|旅行|移動|出發|我要去|去往|走到|返回|想去|打算去|前去/.test(x)){let dest=localAtlas(state).find(p=>x.includes(p.name));if(dest)return 'travelTo:'+dest.name;if(/前往|旅行|去往|移動|出發|想去/.test(x))return 'travel';}if(/睡|休息/.test(x))return 'rest';if(/買糧|買食物|購買食物/.test(x))return 'buyFood';if(/賣糧|賣食物|出售食物/.test(x))return 'sellFood';if(/(?:開始|正式|今天|去|繼續|做|進行).{0,4}(?:工作|上工|打工|打零工)|^(?:工作|打工|打零工|上工)$/.test(x))return 'work';if(/採集|覓食|採野菜/.test(x))return 'forage';if(/買房|購買住屋/.test(x))return 'buyHouse';if(/買田|購買田地/.test(x))return 'buyField';if(/收成|收割/.test(x))return 'harvest';if(/耕田|耕作|種植/.test(x))return 'farm';if(/創業|開店|開商號/.test(x))return 'startBusiness';if(/經營商號|營運商號/.test(x))return 'operateBusiness';if(/發明|研發|研究新工具/.test(x))return 'invent';if(/製作工具/.test(x))return 'craft';if(/訓練|鍛鍊|練功/.test(x))return 'train';if(/學習|讀書|研讀/.test(x))return 'study';if(/切磋|決鬥|打架|攻擊/.test(x))return 'fight';if(/修煉|修練|修仙/.test(x))return 'cultivate';if(/突破境界/.test(x))return 'breakthrough';if(/收養/.test(x))return 'adopt';if(/照顧.*子女|教育.*孩子/.test(x))return 'care';if(/談生育|生孩子|要小孩/.test(x))return 'planChild';if(/提出婚約|訂婚/.test(x))return 'propose';if(/結婚|成婚/.test(x))return 'marry';if(/分開|離婚/.test(x))return 'separate';if(/交往|求愛/.test(x))return 'court';if(/旅行|遠行|前往.*城/.test(x))return 'travel';if(/觀察|看看/.test(x))return 'observe';if(/問|交談|聊天|說|告訴|回答|「|『/.test(x))return 'chat';return 'unknown'}
+if(movementIntent(x))return 'impossibleTravel';if(/前往|旅行|移動|出發|我要去|去往|走到|返回|想去|打算去|前去/.test(x)){let dest=localAtlas(state).find(p=>x.includes(p.name));if(dest)return 'travelTo:'+dest.name;if(/前往|旅行|去往|移動|出發|想去/.test(x))return 'travel';}if(/睡|休息/.test(x))return 'rest';if(/買糧|買食物|購買食物/.test(x))return 'buyFood';if(/賣糧|賣食物|出售食物/.test(x))return 'sellFood';if(/(?:開始|正式|今天|去|繼續|做|進行).{0,4}(?:工作|上工|打工|打零工)|^(?:工作|打工|打零工|上工)$/.test(x))return 'work';if(/採集|覓食|採野菜/.test(x))return 'forage';if(/買房|購買住屋/.test(x))return 'buyHouse';if(/買田|購買田地/.test(x))return 'buyField';if(/收成|收割/.test(x))return 'harvest';if(/耕田|耕作|種植/.test(x))return 'farm';if(/(?:爸爸|父親|爹|老爹|娘|媽媽|母親|家人|家族).{0,32}(?:要錢|借錢|給我|資助|投資|出資|開店|開商號|創業)|(?:要錢|借錢|資助|投資|出資).{0,26}(?:爸爸|父親|爹|娘|媽媽|母親|家人|家族)/.test(x))return 'familyFundingTalk';
+ if(/^(?:我要|打算|決定|準備|現在|立刻|正式|直接|開始)?(?:拿出|投入|花費|用)?[\s\S]{0,12}(?:創業|開店|開商號|創辦商號)/.test(x)&&!/(?:你覺得|怎麼看|可不可以|能不能|如何|好不好|想法|商量|討論|問問|如果|假如|請|求|借|給我)/.test(x))return 'startBusiness';
+ if(/創業|開店|開商號/.test(x))return 'chat';if(/經營商號|營運商號/.test(x))return 'operateBusiness';if(/發明|研發|研究新工具/.test(x))return 'invent';if(/製作工具/.test(x))return 'craft';if(/訓練|鍛鍊|練功/.test(x))return 'train';if(/學習|讀書|研讀/.test(x))return 'study';if(/切磋|決鬥|打架|攻擊/.test(x))return 'fight';if(/修煉|修練|修仙/.test(x))return 'cultivate';if(/突破境界/.test(x))return 'breakthrough';if(/收養/.test(x))return 'adopt';if(/照顧.*子女|教育.*孩子/.test(x))return 'care';if(/談生育|生孩子|要小孩/.test(x))return 'planChild';if(/提出婚約|訂婚/.test(x))return 'propose';if(/結婚|成婚/.test(x))return 'marry';if(/分開|離婚/.test(x))return 'separate';if(/交往|求愛/.test(x))return 'court';if(/旅行|遠行|前往.*城/.test(x))return 'travel';if(/觀察|看看/.test(x))return 'observe';if(/問|交談|聊天|說|告訴|回答|「|『/.test(x))return 'chat';return 'unknown'}
 function parseChoices(raw){let lines=String(raw||'').replace(/\r/g,'').split('\n'),start=-1;for(let i=0;i<lines.length;i++){if(/(?:你可以|後續可|選項[:：]?|接下來可以)/.test(lines[i].trim())&&lines[i].trim().length<90)start=i}if(start<0)return {story:String(raw||'').trim(),options:[]};let found=[],end=start+1;for(let i=start+1;i<Math.min(lines.length,start+12);i++){let m=lines[i].trim().match(/^(?:[12１２一二][.．、)）:：]|[-•])\s*(.{2,180})$/);if(m){found.push(m[1].trim());end=i+1;if(found.length===2)break}else if(found.length)break}return found.length===2?{story:[...lines.slice(0,start),...lines.slice(end)].join('\n').trim(),options:found}:{story:String(raw||'').trim(),options:[]}}
 function message(str,type=''){let e=$('progress');e.textContent=str;e.className='status '+type}
 function typing(text,animate=false){if(timer)clearInterval(timer);fullStory=String(text||'');$('showAll').classList.add('hidden');if(!animate||fullStory.length<35){$('story').textContent=fullStory;return}let i=0;$('story').textContent='';$('showAll').classList.remove('hidden');timer=setInterval(()=>{i=Math.min(fullStory.length,i+15);$('story').textContent=fullStory.slice(0,i);if(i>=fullStory.length){clearInterval(timer);$('showAll').classList.add('hidden')}},27)}
