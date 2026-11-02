@@ -153,7 +153,7 @@ main{max-width:750px!important;padding:12px 12px 46px!important;margin-inline:au
 #profilePanel h3{font-size:1rem;margin-top:18px;margin-bottom:6px;color:#e8c58e}
 #libraryDrawer .libraryBody{overflow-x:hidden}
 </style></head><body><section id="rebirthOverlay" hidden aria-modal="true" role="dialog" aria-label="選擇重生方式"><div class="rebirthCard"><h2>☯ 選擇這一世的起點</h2><p>三種方式都在同一個宇宙；歷史現世僅涵蓋先秦至清朝，武功與江湖自然存在，仙門洞天隱藏於現世。出生天賦不等於已學會法術。</p><div class="rebirthModes" role="group" aria-label="重生方式"><button type="button" data-rebirth="designated">指定重生</button><button type="button" data-rebirth="random">隨機重生</button><button type="button" data-rebirth="basic" class="active">基本重生</button></div><p id="rebirthExplain">一定出生在現世。身分與地位隨機，可能有靈根卻一輩子不知修仙。</p><div id="designatedOptions" hidden><label for="chosenWorld">出生所在層次</label><select id="chosenWorld"><option value="mortal">下界／凡俗現世（零修為起步）</option><option value="hidden">中界／隱世（成熟修行者常見金丹）</option><option value="upper">上界／仙域（成熟修行者常見元嬰）</option></select><label for="chosenEra">歷史／地域背景</label><select id="chosenEra"><option value="random">隨機選擇時代與地區</option></select><label for="chosenSite">出生地點</label><select id="chosenSite"><option value="random">隨機選擇所在地</option></select><label for="chosenClass">出生身分</label><select id="chosenClass"><option value="random">隨機身分</option><option value="農家子弟">農家子弟</option><option value="市井百姓">市井百姓</option><option value="工匠家庭">工匠家庭</option><option value="江湖武門">江湖武門</option><option value="書香門第">書香門第</option><option value="富商之家">富商之家</option><option value="世家士族">世家士族</option><option value="官宦之家">官宦之家</option><option value="王侯宗室">王侯宗室</option><option value="修仙世家">修仙世家</option><option value="宗門弟子">宗門弟子</option><option value="仙域世族">仙域世族</option></select><label for="chosenStatus">家庭財力／社會地位</label><select id="chosenStatus"><option value="random">隨機地位</option><option value="貧困">貧困</option><option value="平民">普通</option><option value="小康">小康</option><option value="富足">富足</option><option value="權貴">權貴</option></select></div><div class="row"><button type="button" id="rebirthCancel" class="alt">返回</button><button type="button" id="rebirthConfirm">確認開始這一世</button></div><p style="font-size:.78rem">如果已有正在進行的人生，確認時才會封存原人生並建立新人生；取消不影響存檔。</p></div></section><main><div id="libraryBackdrop"></div><aside aria-label="遊戲資料與設定" aria-modal="true" hidden="" id="libraryDrawer" role="dialog"><div class="libraryHeading"><strong>遊戲資料</strong><button aria-label="關閉選單" id="libraryClose" type="button">✕ 關閉</button></div><div class="libraryBody"><details class="panel" id="profilePanel"><summary>人物狀態、家庭與人物關係</summary><h3>角色能力與庫存</h3><div id="stats"></div><h3>修行與世界基準</h3><div id="cultivationStatus"></div><h3>家庭與子女</h3><div id="family"></div><h3>財產與商業</h3><div id="assets"></div><h3>債務、裝備與家產</h3><div id="v5Detail"></div><h3>NPC 自主生活與記憶</h3><div class="npcCards" id="npcCards"></div><div id="npcs"></div><h3>世界事件</h3><div id="news"></div><h3>收支帳本</h3><div id="ledger"></div></details><details class="panel" id="chroniclePanel"><summary>事件經過與歷史摘要</summary><h3>最近 100 回完整劇情</h3><div id="history"></div><h3>事件帳本（最多 800 筆）</h3><div id="events"></div></details><details class="panel" id="mapPanel"><summary>當前世界地圖</summary><p class="sub">地圖是當前地域的道路示意。點目的地只填入行動文字，不會自動瞬移；按「推進下一回」才會檢查體力、道路與行程時間。</p><div aria-label="五處區域的示意地圖" class="atlas"><svg aria-hidden="true" preserveaspectratio="none" viewbox="0 0 600 330" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="mapGround" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#e8d8ae"></stop><stop offset="1" stop-color="#a9bd99"></stop></lineargradient><lineargradient id="mapSea"><stop stop-color="#8ec6bd"></stop><stop offset="1" stop-color="#507c96"></stop></lineargradient></defs><rect fill="url(#mapGround)" height="330" width="600"></rect><path d="M382 250 Q469 190 600 190 L600 330 L386 330 Z" fill="url(#mapSea)" opacity=".9"></path><path d="M0 202 Q105 185 160 210 T300 193 T446 221 L470 330 L0 330 Z" fill="#c4c797" opacity=".6"></path><path d="M64 0 L106 62 L138 17 L177 94 L222 7 L265 88 L292 18 L330 91 L355 0" fill="none" opacity=".43" stroke="#8a9880" stroke-linejoin="round" stroke-width="17"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".9" stroke="#d8e0b8" stroke-width="25"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".96" stroke="#75b0b5" stroke-width="15"></path><path d="M108 95 Q166 127 145 198 T310 183 T483 240" fill="none" opacity=".75" stroke="#90735a" stroke-dasharray="8 10" stroke-width="5"></path><g opacity=".45" stroke="#587a67" stroke-width="4"><path d="M30 180 l14 -31 l14 31z M68 178 l12 -24 l12 24z M387 130 l14 -31 l14 31z M412 143 l11 -25 l11 25z" fill="#5f9666"></path></g></svg><div class="mapPins" id="mapPins"></div><div class="atlasStamp">浮生州域圖 · 示意路程</div></div><div aria-live="polite" class="sub" id="travelHint"></div><div class="row" style="margin-top:12px"><button class="alt" id="mapBack" type="button">返回目前場景</button></div></details><details class="panel" id="settingsPanel"><summary>設定、備份與輪迴</summary><h3>舊版人生與復原</h3><p class="sub">列出此瀏覽器仍保存的舊版人生。切換前會保存目前人生快照；不會合併不同版本的劇情或覆寫舊版存檔。</p><div id="saveSourceList"></div><div class="row"><button type="button" class="alt" id="refreshSources">重新掃描舊人生</button><button type="button" class="alt" id="exportAllSaves">備份全部版本存檔</button></div><label>Cloudflare Worker 網址</label><input id="endpoint" placeholder="https://example.workers.dev"/><label>通行密語（只儲存在你的瀏覽器）</label><input autocomplete="off" id="password" type="password"/><div class="row" style="margin-top:10px"><button class="alt" id="config">儲存 AI 設定</button><button class="alt" id="check">測試 Worker 綁定</button><button class="alt" id="export">匯出 JSON 備份</button><button class="alt" id="import">匯入 JSON 備份</button></div><div class="row" style="margin-top:10px"><button class="alt" id="archive">結束並封存本世</button><button class="ghost" id="discard">結束且不保留本世</button><button class="alt" id="reincarnate">下一世（先封存）</button><button class="alt" id="continueHeir">由成年子女承續人生</button></div><input accept=".json,application/json" class="hidden" id="file" type="file"/><p class="sub">刪除本世只移除 V5 正在遊玩的人生，不動 V3 舊版與已下載的 JSON。已封存人生會保留在 V5 輪迴史；死亡並不保證所有資產可自動繼承。</p></details></div></aside>
-<div class="gameHead"><div><h1>浮生無界 <small>· 萬世因果</small></h1><div class="sub">隨機人生 · 故事主導 · 每回一個行動 <strong style="color:#ffe09d;border:1px solid #b48c50;border-radius:5px;padding:2px 5px;white-space:nowrap">修正版本 V6.1 · 1102F</strong></div></div><span class="versionToken">直式 · 三種重生模式</span><button aria-controls="libraryDrawer" aria-expanded="false" aria-haspopup="dialog" id="libraryToggle" type="button">☰ 遊戲資料</button></div>
+<div class="gameHead"><div><h1>浮生無界 <small>· 萬世因果</small></h1><div class="sub">隨機人生 · 故事主導 · 每回一個行動 <strong style="color:#ffe09d;border:1px solid #b48c50;border-radius:5px;padding:2px 5px;white-space:nowrap">修正版本 V7.0 · 1102F</strong></div></div><span class="versionToken">直式 · 三種重生模式</span><button aria-controls="libraryDrawer" aria-expanded="false" aria-haspopup="dialog" id="libraryToggle" type="button">☰ 遊戲資料</button></div>
 <details class="panel obsoleteRules"><summary>長期推演：年齡、健康、家庭與世界自主運作</summary><p class="sub">每年採 360 天，逐日處理飲食、家庭消耗、工作、NPC 生活、世界物價、疾病及死亡。推演可能提早中斷，不保證一定存活或完成事業。</p><div class="row"><div><label>經過幾年</label><input id="years" max="100" min="0" type="number" value="0"/></div><div><label>再經過幾天</label><input id="days" max="359" min="0" type="number" value="0"/></div></div><button class="alt" id="jump" style="margin-top:10px">確定推演時間</button></details>
 <nav aria-label="遊戲快捷導覽" class="obsoleteRules" id="bottomNav"><button class="active" data-nav="artScene" type="button"><span>🏞️</span>場景</button><button data-nav="mapPanel" type="button"><span>🧭</span>地圖</button><button data-nav="chapterArea" type="button"><span>📜</span>劇情</button><button data-nav="worldPanel" type="button"><span>⚒️</span>行動</button><button data-nav="profilePanel" type="button"><span>👥</span>人物</button><button data-nav="settingsPanel" type="button"><span>⚙️</span>設定</button></nav><section class="panel" id="menu"><h2>人生主選單</h2><div class="sub" id="menuStatus"></div><div class="row" style="margin-top:10px"><button id="continue">繼續人生</button><button class="alt" id="new">選擇重生方式</button><button class="alt" id="backup">匯出完整備份</button></div><p class="sub">三種重生模式共用同一宇宙；本版首次進入只複製先前直式存檔，保留原檔。新人生會重新抽選年代、文化、國度、地區、家庭、天賦及開場事件。</p></section><section class="panel" id="heroPanel"><div id="topInfo">尚未開始人生</div><div class="clock" id="clock">—</div><div class="sub" id="location"></div><div class="mutedline" id="quickStats"></div>
 <div aria-live="polite" class="resourceStrip">
@@ -189,7 +189,219 @@ function chance(st,p){return rand(st)<cap(p,0,1)}
 function pick(st,arr){return arr[Math.floor(rand(st)*arr.length)]}
 function now(st){if(!st)return '—';let p=st.birth?.period;let year=st.year;if(p&&p[0]<1){let astr=p[0]+1+st.year-1;year=astr<=0?'西元前'+(1-astr):'西元'+astr;}return `${year} 年第 ${st.day} 日 ${String(Math.floor(st.minute/60)).padStart(2,'0')}:${String(st.minute%60).padStart(2,'0')}`}
 function emit(st,type,description,details={}){st.events.push({at:now(st),type,description,...details});if(st.events.length>800)st.events.splice(0,st.events.length-800)}
-function money(st,amount,reason){if(st.money+amount<0)return false;st.money=Math.round((st.money+amount)*100)/100;st.ledger.push({at:now(st),amount,reason,balance:st.money});if(st.ledger.length>350)st.ledger.shift();return true}
+
+// V7 經濟核心：內部相容舊版銀兩帳，貨幣以固定面額換算；商品價格另受市場供需浮動。
+const ECON_VERSION='7.0';
+const ECON_COINS={copper:1,silverPiece:100,silverTael:1000,silverIngot:10000,goldIngot:100000};
+// 1 金元寶＝10 銀元寶＝100 兩碎銀；1 銀元寶＝10 兩；1 兩＝1000 文；碎銀可細分至 0.1 兩。
+// 遊戲用靈石品級固定面額，非宣稱原著所有地區統一使用相同比值。
+const ECON_STONES={low:1,middle:100,high:10000,extreme:1000000};
+const ECON_GOODS={
+ grain:{name:'糧食',base:1,weight:2,decay:180,industry:'農'},
+ cloth:{name:'布匹',base:3,weight:1,industry:'工'},
+ wood:{name:'木材',base:2,weight:5,industry:'農工'},
+ ore:{name:'礦石',base:4,weight:7,industry:'工'},
+ tea:{name:'茶葉',base:5,weight:1,industry:'農商'},
+ medicine:{name:'藥材',base:6,weight:1,decay:360,industry:'醫'},
+ pottery:{name:'陶器',base:4,weight:3,industry:'工'},
+ salt:{name:'食鹽',base:3,weight:2,industry:'商'},
+ tools:{name:'農具',base:7,weight:4,industry:'工'},
+ spiritHerb:{name:'靈草',base:8,weight:1,decay:300,industry:'修仙',spirit:true},
+ pill:{name:'丹藥',base:25,weight:0.2,industry:'修仙',spirit:true}
+};
+function econHub(st){return String(st.localRegion||st.location||'').split('·')[0]||'當地';}
+function econRealm(st){return st.worldDiscovery?.realm||st.birth?.realm||'mortal'}
+function econInit(st){
+ if(!st.econV7){st.econV7={version:ECON_VERSION,warehouse:{},markets:{},shipments:[],orders:[],receivables:[],trades:[],professions:{士:0,農:0,工:0,商:0,醫:0,運:0,服務:0},npcFirms:[],counter:0,lastDailyTick:-1,immortalStones:0,spiritBalance:Math.max(0,Math.floor(Number(st.money)||0))};}
+ let e=st.econV7;
+ for(const k of ['warehouse','markets','professions'])e[k]=e[k]||{};
+ for(const k of ['shipments','orders','receivables','trades','npcFirms'])e[k]=Array.isArray(e[k])?e[k]:[];
+ if(!Number.isFinite(e.counter))e.counter=0;
+ if(e.lastDailyTick===undefined)e.lastDailyTick=-1;
+ if(!e.markets[econHub(st)])econMarket(st,econHub(st));
+ return e;
+}
+function econMarket(st,hub){
+ let e=st.econV7;const key=String(hub||econHub(st));
+ if(!e.markets[key]){
+   const offerings={};for(const [id,g] of Object.entries(ECON_GOODS))offerings[id]={stock:g.spirit?4:35,price:1,pressure:0};
+   e.markets[key]={hub:key,goods:offerings,history:[],tick:st.world?.tick||0};
+ }
+ return e.markets[key];
+}
+function econPrice(st,id,hub=econHub(st)){
+ const e=econInit(st),g=ECON_GOODS[id];if(!g)return 0;
+ const market=econMarket(st,hub),item=market.goods[id];
+ const scarcity=Math.max(0,50-item.stock)/110;
+ const season=id==='grain'&&st.world?.season===4?.12:0;
+ return Math.max(.1,Math.round(g.base*Math.max(.65,Math.min(1.85,item.price+scarcity+season))*100)/100);
+}
+function econFormatSilver(v){
+ const amount=Math.max(0,Math.round(Number(v||0)*1000));
+ let copper=amount;const gold=Math.floor(copper/ECON_COINS.goldIngot);copper%=ECON_COINS.goldIngot;
+ const big=Math.floor(copper/ECON_COINS.silverIngot);copper%=ECON_COINS.silverIngot;
+ const pieces=Math.floor(copper/ECON_COINS.silverPiece);copper%=ECON_COINS.silverPiece;
+ const parts=[gold?gold+'金元寶':'',big?big+'銀元寶':'',pieces?+(pieces/10).toFixed(1)+'兩碎銀':'',copper?copper+'文銅錢':''].filter(Boolean);
+ return parts.join('、')||'0 文銅錢';
+}
+function econFormatStones(v){let n=Math.max(0,Math.floor(Number(v)||0));let out=[];for(let [unit,label] of [['extreme','極品'],['high','上品'],['middle','中品'],['low','下品']]){let q=Math.floor(n/ECON_STONES[unit]);n%=ECON_STONES[unit];if(q)out.push(q+'塊'+label+'靈石')}return out.join('、')||'0 塊下品靈石'}
+function econLedger(st,kind,detail){let e=econInit(st);e.trades.push({at:now(st),kind,detail:String(detail).slice(0,220)});if(e.trades.length>150)e.trades.shift()}
+function econValidQty(n){return Number.isSafeInteger(n)&&n>0&&n<=2000}
+function econProductId(name){let t=String(name||'').trim();return Object.keys(ECON_GOODS).find(id=>ECON_GOODS[id].name===t)||null}
+function econWarehouse(st,hub=econHub(st)){let e=econInit(st);if(!e.warehouse[hub])e.warehouse[hub]={};return e.warehouse[hub]}
+function econTake(st,hub,id,qty){const w=econWarehouse(st,hub);if((w[id]||0)<qty)return false;w[id]-=qty;return true}
+function econPut(st,hub,id,qty){const w=econWarehouse(st,hub);w[id]=(w[id]||0)+qty}
+function econEnsureFirms(st,hub=econHub(st)){
+ const e=econInit(st);let firms=e.npcFirms.filter(f=>f.hub===hub);
+ if(!firms.length){for(let i=0;i<3;i++){e.npcFirms.push({id:'firm-'+hub+'-'+i,name:hub+['糧行','布行','百貨商社'][i],hub,cash:150+i*80,inventory:{grain:15+i*4,cloth:10+i*4,wood:8+i*3},volume:0,sector:['農','工','商'][i]})}firms=e.npcFirms.filter(f=>f.hub===hub)}
+ return firms;
+}
+function econTxn(st,action){
+ const e=econInit(st),home=econHub(st),realm=econRealm(st);
+ const body=String(action||'').trim();
+ const product=(body.match(/(糧食|布匹|木材|礦石|茶葉|藥材|陶器|食鹽|農具|靈草|丹藥)/)||[])[1];
+ const id=econProductId(product),qtyMatch=body.match(/(\d{1,4})\s*(?:件|份|匹|石|斤|箱|袋|個|批|單位)?/),qty=qtyMatch?Number(qtyMatch[1]):1;
+ const requireQty=()=>econValidQty(qty)?'':'交易數量須為 1～2000 的正整數';
+ const fail=message=>({ok:false,text:message,minutes:0,kind:'經濟判定'});
+ const done=(kind,message,mins=60)=>{const a=advance(st,mins);econLedger(st,kind,message);emit(st,kind,message,{action,verified:true,elapsed:a.minutes});return {ok:true,text:message,minutes:a.minutes,verified:true,kind}};
+ const finance=(value)=>money(st,realm==='mortal'?value:Math.round(value),'經濟交易');
+ if(/^接單|^承接訂單/.test(body)){
+  if(!id||!econValidQty(qty))return fail('請輸入「接單 布匹 5 件 到 洛陽」等商品、數量與目的地');
+  const match=body.match(/(?:到|往)\s*([^，。\s]{2,24})/),to=match?.[1];const node=localAtlas(st).find(p=>p.name===to);
+  if(!node)return fail('沒有確認有效交貨城市，請使用地圖上的正式地名');
+  const buyer=econEnsureFirms(st,node.name)[1],price=Math.round(econPrice(st,id,node.name)*qty*1.25*100)/100;
+  if(buyer.cash<price)return fail('買方商行資金不足以支付這筆訂單');
+  buyer.cash-=price;const order={id:'訂單'+(++e.counter),buyerId:buyer.id,buyerName:buyer.name,product:id,qty,to:node.name,from:home,price,escrow:price,status:'待發貨',created:now(st)};
+  e.orders.push(order);return done('承接訂單',`已承接${buyer.name}的${order.id}：${product}×${qty}，送往${node.name}，買方已預留貨款${price}，貨款須驗收後才入帳。`,40);
+ }
+ if(/^履行訂單/.test(body)){
+  const name=(body.match(/訂單\s*\d+/)||[])[0]?.replace(/\s+/g,'');const order=e.orders.find(o=>o.id===name);
+  if(!order||order.status!=='待發貨')return fail('找不到待出貨訂單：'+(name||'請輸入訂單編號'));
+  if(home!==order.from)return fail('請先到訂單出貨地：'+order.from);
+  if((econWarehouse(st,home)[order.product]||0)<order.qty)return fail('出貨倉庫缺少 '+ECON_GOODS[order.product].name+'×'+order.qty);
+  const minutes=localTravelMinutes(st,order.from,order.to);if(minutes<=0)return fail('無法確認送貨道路');
+  const days=Math.max(1,Math.ceil(minutes/480)),cost=Math.ceil((days*2+ECON_GOODS[order.product].weight*order.qty*.15)*100)/100;
+  if(realm==='mortal'){if(!money(st,-cost,'訂單運費'))return fail('無法支付運費 '+cost+' 銀')}else{if((e.spiritBalance||0)<Math.ceil(cost))return fail('靈石不足支付運費');money(st,-Math.ceil(cost),'靈石運費')}
+  econTake(st,home,order.product,order.qty);
+  e.shipments.push({id:'運單'+(++e.counter),orderId:order.id,product:order.product,qty:order.qty,from:home,to:order.to,remaining:days,freight:cost,status:'運送中',owner:st.id,age:0});
+  order.status='運送中';return done('訂單發貨',order.id+' 已由'+home+'出發，目的地'+order.to+'，預計 '+days+' 天；貨款待目的地驗收。',90);
+ }
+ if(/^(?:查詢|查看|檢視|看看)?(?:貨幣|錢包|財產明細|物價|行情|倉庫|庫存|運單|貨運|商業帳本|交易紀錄)$/.test(body)){
+  let info='貨幣：'+(realm==='mortal'?econFormatSilver(st.money):econFormatStones(e.spiritBalance||0)+(realm==='upper'?'；仙元石 '+(e.immortalStones||0)+' 枚（不與靈石固定兌換）':''))+'；當地 '+home+'。';
+  info+='\n物價（'+(realm==='mortal'?'銀兩':'下品靈石')+'／單位）：'+Object.entries(ECON_GOODS).filter(([k,g])=>!!g.spirit===(realm!=='mortal')).map(([k,g])=>g.name+' '+econPrice(st,k,home)).join('、');
+  info+='\n倉庫：'+(Object.entries(econWarehouse(st)).filter(x=>x[1]>0).map(([k,n])=>ECON_GOODS[k]?.name+'×'+n).join('、')||'空');
+  info+='\n訂單：'+(e.orders.map(o=>o.id+' '+o.status+' '+ECON_GOODS[o.product].name+'×'+o.qty).join('；')||'無');
+  info+='\n運單：'+(e.shipments.filter(x=>x.status==='運送中').map(x=>x.id+' '+ECON_GOODS[x.product].name+'×'+x.qty+' → '+x.to+'，尚需'+x.remaining+'天').join('；')||'無');
+  return {ok:true,text:info,minutes:0,verified:true,kind:'帳本查詢'};
+ }
+ if(/(?:市場|集市|市集).*(?:詢價|查價)|(?:查詢|查看)(?:.*)(?:價格|行情)/.test(body))return {ok:true,text:'當地商品行情：'+Object.entries(ECON_GOODS).filter(([k,g])=>!!g.spirit===(realm!=='mortal')).map(([k,g])=>g.name+' '+econPrice(st,k)+'／單位').join('、'),minutes:0,verified:true,kind:'行情查詢'};
+ if(id && /(?:採購|購買|進貨|買入|買)(?:.*)/.test(body)&& !/(?:想|考慮|詢問|可不可以|能不能|討論)/.test(body)){
+  if(requireQty())return fail(requireQty());const g=ECON_GOODS[id];if(!!g.spirit!==(realm!=='mortal'))return fail('此貨物與當前世界貨幣制度不相容');
+  const m=econMarket(st,home).goods[id];if(m.stock<qty)return fail('市場只有 '+m.stock+' 件，無法購買 '+qty+' 件');
+  const cost=Math.round(econPrice(st,id)*qty*100)/100;if(!finance(-cost))return fail('貨幣不足，應付 '+cost+(realm==='mortal'?'兩':'下品靈石'));
+  m.stock-=qty;m.pressure=Math.min(40,m.pressure+qty);econPut(st,home,id,qty);
+  return done('採購入庫',`在${home}購入${product}×${qty}，支付${cost}${realm==='mortal'?'兩':'下品靈石'}，已實際入庫。`,90);
+ }
+ if(id&&/(?:出售|賣出|賣掉|賣)(?:.*)/.test(body)&&!/(?:想|考慮|詢問|可不可以|能不能|討論)/.test(body)){
+  if(requireQty())return fail(requireQty());if(!econTake(st,home,id,qty))return fail('本地倉庫庫存不足，無法賣出 '+qty+' 件'+product);
+  const market=econMarket(st,home).goods[id],income=Math.round(econPrice(st,id)*qty*.90*100)/100;
+  finance(income);market.stock+=qty;market.pressure=Math.max(-40,market.pressure-qty);
+  return done('商品出售',`已在${home}出售${product}×${qty}，扣除交易費用後實收${income}${realm==='mortal'?'兩':'下品靈石'}。`,80);
+ }
+ if(id&&/(?:送貨|運送|發貨|託運|派車|運貨)/.test(body)){
+  if(requireQty())return fail(requireQty());const match=body.match(/(?:到|往|送到|送往|運至|運到)\s*([^，。\s]{2,24})/),to=match?.[1]?.replace(/(?:去|交貨|出售|賣掉)$/,'');
+  if(!to)return fail('請指定目的地，例如「送貨 布匹 5 件 到 長安」');
+  const place=localAtlas(st).find(p=>p.name===to||p.name.endsWith('·'+to));
+  if(!place)return fail('目的地須為已知地圖上的地點：'+to);
+  const destination=place.name.split('·')[0];if(destination===home)return fail('同一聚落可直接搬運，不需要跨城貨運');
+  if((econWarehouse(st,home)[id]||0)<qty)return fail('出發倉庫沒有足夠的'+product);
+  const pathMinutes=localTravelMinutes(st,home,destination);if(pathMinutes<=0)return fail('沒有確認兩地的可行路線，不能直接瞬移貨物');
+  const days=Math.max(1,Math.ceil(pathMinutes/480)),weight=ECON_GOODS[id].weight*qty;
+  const freight=Math.ceil((days*2+weight*.15)*100)/100;
+  if(!finance(-freight))return fail('運費不足，需要'+freight+(realm==='mortal'?'兩':'下品靈石'));
+  econTake(st,home,id,qty);const rec={id:'運單'+(++e.counter),product:id,qty,from:home,to:destination,remaining:days,freight,status:'運送中',owner:st.id,age:0};e.shipments.push(rec);
+  return done('貨物出發',`${rec.id}：${product}×${qty} 已從${home}裝車出發，目的地${destination}，運費${freight}，預計${days}天；貨物在途而非瞬間到貨。`,90);
+ }
+ if(/(?:承接|接下|接取).*(?:訂單|貨單)|(?:建立|下達)(?:採購單|訂單)/.test(body)){
+  return fail('訂單須明確指定商品、數量、買方、價格與交付地點；請先透過買賣與運單完成可核實的交易。');
+ }
+ if(/(?:考科舉|參加科舉|報考科舉|應試|參加考試)/.test(body)){
+  if(st.knowledge<28)return fail('需要先讀書累積知識（目前 '+st.knowledge+'），才有合理的應試能力');
+  const skill=e.professions.士||0;let pass=chance(st,Math.min(.75,.12+st.knowledge/180+skill/250));e.professions.士=skill+2;
+  return done('仕途應試',pass?'完成一次科舉／選官類應試並通過初步考核；正式任官仍須符合本朝制度。':'完成一次應試但未能通過，沒有憑空取得官職。',360);
+ }
+ if(/(?:行醫|接診|看診|替人治病|開醫館)/.test(body)){
+  if(st.knowledge<22)return fail('醫療需要一定知識與實務經驗，不能無條件行醫');
+  e.professions.醫=(e.professions.醫||0)+2;
+  let fee=Math.max(.1,Math.round((1+e.professions.醫/20)*100)/100);
+  finance(fee);return done('醫療服務',`完成一次基礎診療服務，收取${fee}${realm==='mortal'?'兩':'下品靈石'}；無法保證重病必然治癒。`,120);
+ }
+ if(/(?:當車夫|從事運輸|跑運輸|做搬運|做工匠|從事木工|當學徒|開學館|辦學|教書)/.test(body)){
+  const kind=/車夫|運輸|搬運/.test(body)?'運':/工匠|木工|學徒/.test(body)?'工':'士';e.professions[kind]=(e.professions[kind]||0)+1;
+  const pay=.5+Math.round((e.professions[kind]/10)*10)/10;finance(pay);
+  return done('百業勞務',`完成一次${kind}業相關勞務，取得報酬 ${pay}${realm==='mortal'?'兩':'下品靈石'}，職業經驗持續累積。`,240);
+ }
+ return null;
+}
+function econDaily(st){
+ const e=econInit(st),tick=st.world?.tick||0;if(e.lastDailyTick===tick)return;e.lastDailyTick=tick;
+ // 定期的可追蹤價格更新：價格不改變固定幣值，且限制單日/總體波動。
+ for(const m of Object.values(e.markets)){
+  for(const [id,item] of Object.entries(m.goods)){
+   const supply=id==='grain'?(st.world?.livelihood?.harvest||50):st.world?.livelihood?.trade||50;
+   const drift=(55-supply)/3500 +item.pressure/900 + (Math.random()-.5)*.025;
+   item.price=Math.max(.7,Math.min(1.6,Math.round((item.price*(1+Math.max(-.04,Math.min(.04,drift))))*1000)/1000));
+   item.pressure*=.8;
+   item.stock=Math.max(0,item.stock+Math.round((supply-45)/25)+Math.floor(Math.random()*3)-1);
+  }
+  m.tick=tick;
+ }
+ for(const shipment of e.shipments){if(shipment.status!=='運送中')continue;
+  shipment.age++;shipment.remaining=Math.max(0,shipment.remaining-1);
+  if(shipment.remaining===0){
+   const security=st.world?.livelihood?.security??60;
+   const lost=Math.random()<Math.max(.002,(40-security)/300)?Math.max(1,Math.ceil(shipment.qty*.15)):0;
+   shipment.delivered=Math.max(0,shipment.qty-lost);
+   if(shipment.orderId){
+    const order=e.orders.find(o=>o.id===shipment.orderId);
+    if(order){const buyer=e.npcFirms.find(f=>f.id===order.buyerId);
+      if(buyer){buyer.inventory[shipment.product]=(buyer.inventory[shipment.product]||0)+shipment.delivered;buyer.volume+=shipment.delivered}
+      const payout=Math.round(order.escrow*(shipment.delivered/order.qty)*100)/100;
+      if(econRealm(st)==='mortal')money(st,payout,'訂單驗收付款');else money(st,Math.floor(payout),'訂單驗收付款');
+      order.status=shipment.delivered===order.qty?'已完成':'部分交付';order.paid=payout;
+      const refund=Math.round((order.escrow-payout)*100)/100;if(buyer)buyer.cash+=refund;
+    }
+   }else econPut(st,shipment.to,shipment.product,shipment.delivered);
+   shipment.status='已交貨';
+   const msg=shipment.id+'抵達'+shipment.to+'；實收'+shipment.delivered+'件'+ECON_GOODS[shipment.product].name+(lost?'，運損'+lost+'件':'');
+   econLedger(st,'運單交貨',msg);st.news.push({at:now(st),text:msg});
+  }
+ }
+ // NPC 市場參與者有獨立資金與商品流，並非全世界只由玩家成交。
+ if(tick%7===0){
+  for(const firm of econEnsureFirms(st,econHub(st))){
+    const key=Object.keys(firm.inventory).find(k=>firm.inventory[k]>0);
+    if(key){const sold=Math.min(firm.inventory[key],1+Math.floor(Math.random()*4));firm.inventory[key]-=sold;
+      firm.cash+=Math.round(econPrice(st,key,firm.hub)*sold*100)/100;firm.volume+=sold;
+    }else if(firm.cash>30){const buy='grain',q=5,cost=Math.round(econPrice(st,buy,firm.hub)*q*100)/100;
+      if(firm.cash>=cost){firm.cash-=cost;firm.inventory[buy]=(firm.inventory[buy]||0)+q}
+    }
+  }
+  const m=econMarket(st,econHub(st));
+  for(const k of ['grain','cloth','wood','ore','medicine']){
+   const item=m.goods[k],q=1+Math.floor(Math.random()*4);
+   if(Math.random()<.5)item.stock+=q;else item.stock=Math.max(0,item.stock-q);
+  }
+ }
+}
+function econStatus(st){const e=econInit(st),realm=econRealm(st),hub=econHub(st);
+ const cur=realm==='mortal'?econFormatSilver(st.money):econFormatStones(e.spiritBalance||0)+(realm==='upper'?'；仙元石 '+(e.immortalStones||0)+' 枚（不得按固定匯率兌換）':'');
+ const stocks=Object.entries(econWarehouse(st,hub)).filter(([k,v])=>v>0).map(([k,v])=>ECON_GOODS[k]?.name+'×'+v).join('、')||'空';
+ const shipments=e.shipments.filter(x=>x.status==='運送中').length;
+ return `【V7 經濟】${realm==='mortal'?'凡俗金銀銅制度':'靈石交易制度'}｜錢袋 ${cur}｜${hub}倉庫：${stocks}｜運送中 ${shipments} 筆。輸入「物價」、「買布匹5件」、「賣布匹2件」、「送貨 布匹 2 件 到 長安」、「運單」可操作。`;
+}
+
+function money(st,amount,reason){const spirit=econRealm(st)!=='mortal';if(spirit){const e=econInit(st);amount=Math.round(amount);if((e.spiritBalance||0)+amount<0)return false;e.spiritBalance+=amount;st.money=e.spiritBalance}else{if(st.money+amount<0)return false;st.money=Math.round((st.money+amount)*1000)/1000}st.ledger.push({at:now(st),amount,reason,balance:st.money,unit:spirit?'下品靈石':'銀兩'});if(st.ledger.length>350)st.ledger.shift();return true}
 // 人名生成：依地區／文化、性別與家族同姓組合，不引用固定小說角色名單。
 const SURNAME_BANK={mortal:'陳林黃張李王吳劉蔡楊許鄭謝郭洪曾沈周葉蘇江何蕭羅魏宋唐杜方程鄧范顧韓曹邵潘陸白夏秦傅孟尹袁高薛馬孫石廖金賀溫戴任于彭朱侯常喬梁陶韋熊嚴包孔田龔左姜余盧安鄒賈',hidden:'雲楚沈白顧寧蘇玄凌葉溫洛寒蕭江林謝唐陸風柳秦岳衛祁封司空慕容東方南宮上官公孫',upper:'雲凌司空上官慕容南宮東方公孫軒轅夏侯百里長孫獨孤尉遲聞人鍾離端木澹臺皇甫白顧沈洛寧蘇葉溫楚蕭玄'};
 const GIVEN_BANK={male:['景','承','修','明','安','遠','澤','謙','崇','之','伯','元','思','衡','霖','維','景','曜','奕','昭','言','衍','淮','硯','鈞','川','岑','敘','聞','珩','允','靖','紹','仲','嶽','嵐','岳','晏','逸','成','清','知','長','彥','臨','佑','延','凜','澄','行','禹','策','霄','朔','驍','恆','宇'],female:['清','婉','蘭','若','月','棠','煙','書','凝','雨','卿','玉','舒','雲','芷','微','錦','音','瑤','寧','霜','晴','妍','柔','雅','嵐','蕙','荷','琬','漪','沅','夕','絮','芸','映','慈','竹','盈','雪','綺','璇','丹','珞','靜','淑','曦','菱','姝','瑾','蓉','鳶','熙','澄','宜']};
@@ -995,6 +1207,7 @@ function daily(st){let news=[],people=1+st.household.dependents.filter(x=>x.ageD
  let fatal=mortalityRisk(st);if(st.hp<=0||chance(st,fatal)){st.hp=0;st.alive=false;news.push(st.age>=lifeLimit(st)?'壽元耗盡，推演中斷':'角色因傷病或劫難死亡，推演中斷')}
  st.world.tick++;
  socialTick(st,news);
+  econDaily(st);
  if(st.world.tick%30===0&&st.familyEstate){let e=st.familyEstate;let income=Math.max(0,Number(e.monthlyIncome)||0),expense=Math.max(0,Number(e.monthlyExpenses)||0);e.treasury=Math.max(0,(Number(e.treasury)||0)+income-expense);let grant=0;if(st.age>=18&&st.alive&&e.treasury>20&&e.monthlyAllowance>0){grant=Math.min(e.monthlyAllowance,Math.max(0,e.treasury-20));e.treasury-=grant;money(st,grant,'家族生活供養');}let note='族產月結：收入 '+income+'、維護與人員支出 '+expense+'、族庫餘額 '+e.treasury+'，個人供養 '+grant+'；族產不可任意支取';e.history=e.history||[];e.history.push({at:now(st),type:'月結',text:note});if(e.history.length>100)e.history.shift();st.news.push({at:now(st),text:note});}
  if(st.worldDiscovery?.realm==='mortal'&&st.worldDiscovery.lawBreaches>0&&chance(st,Math.min(.65,.04*st.worldDiscovery.lawBreaches))){let warning='仙凡隔離禁令：有人追查之前的異術目擊傳聞。';st.news.push({at:now(st),text:warning});news.push(warning);st.worldDiscovery.knowledge=Math.max(st.worldDiscovery.knowledge,2);if(st.worldDiscovery.lawBreaches>=3){st.worldDiscovery.lawBreaches--;st.hp=Math.max(1,st.hp-2);news.push('因遭追查與奔走，身體負擔增加。')}}if(st.world.tick%30===0){st.world.scarcity=cap(st.world.scarcity+dice(st,-1,1),0,4);st.world.grainPrice=2+st.world.scarcity;st.world.season=st.world.season%4+1;let m='物價變化：糧價為 '+st.world.grainPrice+' 銀／份';st.news.push({at:now(st),text:m});news.push(m)}
  // NPC life is goal-driven, with persistent work, residence, savings and family choices.
@@ -1036,14 +1249,19 @@ function daily(st){let news=[],people=1+st.household.dependents.filter(x=>x.ageD
   }
  }
  if(st.business&&st.business.active&&st.world.tick%7===0){let b=st.business;
-  let wage=b.staff*2,need=Math.min(b.stock,2+b.staff+b.level),customers=cap(Math.round(need*st.world.market.demand/60),0,need);
-  if(b.cash>=wage){b.cash-=wage;b.profit-=wage;if(b.stock>=customers){b.stock-=customers;let sale=customers*(4+Math.floor(b.level/2));b.cash+=sale;b.profit+=sale;news.push('商號本週售出 '+customers+' 件，營收 '+sale+' 銀')}
-  }else if(b.staff>0){b.staff=0;news.push('商號現金不足，員工離職')}
-  if(b.stock===0)news.push('商號庫存不足，請進貨');
+  b.goods=b.goods||{};if(!Object.values(b.goods).some(q=>q>0)&&b.stock>0)b.goods.cloth=b.stock;
+  let wage=b.staff*2;if(b.cash>=wage){b.cash-=wage;b.profit-=wage;}else if(b.staff>0){b.staff=0;news.push('商號現金不足，雇工離職')}
+  let item=Object.keys(b.goods).find(k=>b.goods[k]>0);
+  if(item){let qty=Math.min(b.goods[item],Math.max(0,Math.round((1+b.staff+b.level)*st.world.market.demand/60)));
+   let income=Math.round(qty*econPrice(st,item)*1.2*100)/100;
+   b.goods[item]-=qty;b.stock=Math.max(0,b.stock-qty);b.cash+=income;b.profit+=income;
+   if(qty>0)news.push('商號本週售出 '+ECON_GOODS[item].name+' '+qty+' 件，營收 '+income+' 銀');
+  }else news.push('商號無庫存，請進貨');
  }
  if(st.household.dependents.length){for(const c of st.household.dependents){if(c.age>=18&&c.career!=='未就業'&&st.world.tick%30===0){c.savings+=Math.max(0,Math.floor(c.learning/12)+1)}}}
  if(st.news.length>160)st.news.splice(0,st.news.length-160);if(news.length)emit(st,'日常／世界',news.join('；'));return news.join('；')}
 function rule(st,code,targetId,minutes=30){
+ if(code==='econV7'){const transaction=econTxn(st,st.pendingAction||'');if(transaction)return transaction;return {ok:false,text:'經濟行動無法識別，請提供商品名稱、數量及交易方式',minutes:0};}
  if(code==='findFamily'||code==='meetNPC'){let found=discoverPerson(st,code==='findFamily'?(familyTarget(st,st.pendingAction||'')?st.pendingAction:'找爸爸'):(st.pendingAction||'遇見陌生人'),targetId);if(!found.ok)return {ok:false,text:found.text,minutes:0};let adv=advance(st,30);emit(st,'人物相遇',found.text,{personId:found.npc.id,elapsed:adv.minutes,verified:true});return {ok:true,text:found.text,minutes:adv.minutes,verified:true,kind:'人物相遇'};}
 if(['investigateMystery','seekMaster','enterHidden','senseAptitude','studyLaw','publicSpell'].includes(code))return worldAction(st,code);const dest=String(code).startsWith('travelTo:')?String(code).slice(9):null;if(dest)code='travel';let travelArrival=null;let n=familyTarget(st,st.pendingAction||'')||activeSpeaker(st)||ensureSceneSpeaker(st)||(st.npcs||[]).find(q=>q.id===targetId&&q.alive&&q.home===st.location), text='',spent=30,kind='規則',ok=true,verified=true;const fail=t=>({ok:false,text:t,minutes:0}),adult=st.age>=18;let price=st.world.grainPrice;
  const spend=(amount,label)=>money(st,-amount,label);
@@ -1124,11 +1342,13 @@ if(['investigateMystery','seekMaster','enterHidden','senseAptitude','studyLaw','
   break;
  }
  case 'operateBusiness':spent=480;if(!st.business||!st.business.active)return fail('尚無營運中的商號');{
-  let b=st.business;if(b.stock===0)return fail('商號沒有貨物，請先採購進貨');let sale=Math.min(b.stock,dice(st,1,3+b.staff+b.level));
-  let revenue=sale*(4+Math.floor(b.level/2));b.stock-=sale;b.cash+=revenue;b.profit+=revenue;
-  st.stamina=Math.max(0,st.stamina-10);giveSkill(st,'trade',2);
-  text=`完成營業，售出 ${sale} 件貨物，實收 ${revenue} 銀；剩餘庫存 ${b.stock}。`;}
-  break;
+ let b=st.business;b.goods=b.goods||{};if(!Object.values(b.goods).some(q=>q>0)&&b.stock>0)b.goods.cloth=b.stock;
+ let id=Object.keys(b.goods).find(k=>b.goods[k]>0);if(!id)return fail('商號沒有可供出售的商品，請先採購進貨');
+ let sale=Math.min(b.goods[id],dice(st,1,3+b.staff+b.level));let unit=econPrice(st,id)*1.2;
+ let revenue=Math.round(sale*unit*100)/100;b.goods[id]-=sale;b.stock=Math.max(0,(b.stock||0)-sale);b.cash+=revenue;b.profit+=revenue;
+ st.stamina=Math.max(0,st.stamina-10);giveSkill(st,'trade',2);
+ text=`實際售出${ECON_GOODS[id].name}${sale}件，收入${revenue}銀，剩餘商號庫存${b.stock}件。`;}
+ break;
  case 'invent':spent=360;if(st.knowledge<35||st.skills.crafting<5)return fail('新工具研究需要知識至少 35、製作技能至少 5');if(st.inventory.tools<1||st.inventory.wood<1)return fail('研究需要工具 1 件及木材 1 份');st.inventory.wood--;st.stamina=Math.max(0,st.stamina-15);if(chance(st,cap(.12+st.knowledge/360+st.skills.crafting/170,.1,.75))){st.inventory.tools++;text='完成一次可重現的小改良工具，已記錄物品；不代表突破當代全部工業限制。'}else text='研究未能完成，留有失敗紀錄，需補足知識與材料。';giveSkill(st,'crafting',3);break;
  case 'social':spent=30;if(!n||!n.alive)return fail('目前沒有可以互動的人物');{let goodwill=chance(st,cap(.5+n.trust/250,.12,.83));n.trust=cap(n.trust+(goodwill?dice(st,1,3):-dice(st,0,2)),-100,100);n.fond=cap(n.fond+(goodwill?1:-1),-100,100);text=n.name+(goodwill?'願意交談，雙方關係略有變化。':'今天不願意深談。');npcMemory(n,st,text)}break;
  case 'court':spent=60;if(!adult||!n||n.age<18||!n.alive)return fail('雙方需成年、在世且有明確對象');if(n.bond==='伴侶'||n.bond==='婚約')return fail('已存在親密或婚約關係');if(chance(st,cap(.12+n.fond/160+n.trust/250,.02,.75))){n.bond='交往';n.fond=cap(n.fond+4,-100,100);text=n.name+'同意開始交往。'}else text=n.name+'拒絕交往，仍保有自主意願。';npcMemory(n,st,text);break;
@@ -1190,10 +1410,10 @@ if(['investigateMystery','seekMaster','enterHidden','senseAptitude','studyLaw','
   let revenue=st.world.market.ore*2;money(st,revenue,'出售礦石');text=`出售 2 份礦石，收到 ${revenue} 銀。`;}
   break;
  case 'stockShop':spent=180;if(!st.business||!st.business.active)return fail('沒有營運中的商號');{
-  let b=st.business,cost=12+Math.ceil(st.world.market.demand/20);
-  if(b.cash<cost)return fail(`商號帳戶不足，進貨需要 ${cost} 銀`);
-  b.cash-=cost;b.profit-=cost;b.stock+=5;text=`進貨 5 件，成本 ${cost} 銀；庫存 ${b.stock}。`;}
-  break;
+ let b=st.business,gid='cloth',m=econMarket(econInit(st)&&st,econHub(st)).goods[gid];let q=5,cost=Math.round(econPrice(st,gid)*q*100)/100;
+ if(m.stock<q)return fail('當地市場布匹不足，商號無法進貨');if(b.cash<cost)return fail('商號現金不足，進貨需要 '+cost+' 銀');
+ b.goods=b.goods||{};b.goods[gid]=(b.goods[gid]||0)+q;b.stock=(b.stock||0)+q;m.stock-=q;b.cash-=cost;b.profit-=cost;
+ text='商號向當地市場實際採購布匹 '+q+' 件，支付 '+cost+' 銀，庫存 '+b.stock+' 件（商號獨立庫存，不計入私人倉庫）。';}break;
  case 'hireWorker':spent=120;if(!st.business||!st.business.active)return fail('目前沒有商號');if(st.business.staff>=8)return fail('商號最多聘用八名夥計');
   if(st.business.cash<8)return fail('商號至少需要 8 銀可用現金做招募和薪資準備');
   st.business.cash-=8;st.business.profit-=8;st.business.staff++;text=`商號現有夥計 ${st.business.staff} 名；每週另須支付 2 銀／人。`;break;
@@ -1294,6 +1514,9 @@ function employmentIntent(x){
 }
 function employmentChoices(st){return ['向附近店家或作坊打聽是否招收學徒','打聽短工、農活或跑腿的僱用條件'];}
 function route(action){let x=action.trim();
+ if(/(?:說|問|詢問|討論|商量|建議|如果|想要|想買|想賣|可不可以|能不能)/.test(x)&&!/(?:^買|^購買|^採購|^進貨|^出售|^賣|^送貨|^運送|^發貨|^託運|^查詢|^查看|^檢視|^物價)/.test(x))return 'chat';
+ if(/^(?:接單|承接訂單|履行訂單)/.test(x))return 'econV7';
+ if(/^(?:查詢|查看|檢視|看看)?(?:貨幣|錢包|財產明細|物價|行情|倉庫|庫存|運單|貨運|商業帳本|交易紀錄)$/.test(x)||/(?:市場|集市|市集).*(?:詢價|查價)|(?:查詢|查看).*(?:價格|行情)/.test(x)||/(?:買|購買|採購|進貨|出售|賣出|賣掉|送貨|運送|發貨|託運|派車|運貨).*(?:糧食|布匹|木材|礦石|茶葉|藥材|陶器|食鹽|農具|靈草|丹藥)|(?:送貨|運送|發貨|託運|派車|運貨)\s*(?:糧食|布匹|木材|礦石|茶葉|藥材|陶器|食鹽|農具|靈草|丹藥)|(?:考科舉|參加科舉|報考科舉|應試|參加考試|行醫|接診|看診|替人治病|開醫館|當車夫|從事運輸|跑運輸|做搬運|做工匠|從事木工|當學徒|開學館|辦學|教書)/.test(x))return 'econV7';
  // 起身走、說完就走、轉身出門都以本回「移動」為主行動；原話可在劇情中呈現。
  if(isWanderAction(x))return 'wander';if(/繼續趕路|繼續旅程|繼續前往目的地/.test(x))return 'continueJourney';
  const movement=/說完|轉身|繼續|沿著|走向|走去|往|去|走到|前往|我要去|離開|出門|到|進入|返回|回家/;
@@ -1411,8 +1634,10 @@ function render(animate=false){$('endpoint').value=conf.endpoint||'';$('password
  $('assets').textContent=`住屋 ${assetsCount(s,'住屋')}、田地 ${assetsCount(s,'田地')}；耕作 ${s.farm.progress}%／成熟 ${s.farm.harvestable} 批；家族產業：${s.familyEstate?.estate?.map(a=>a.kind+'×'+a.quantity).join('、')||'無'}（不可直接支用）；商號：${s.business?s.business.name+'（現金 '+s.business.cash+'，庫存 '+s.business.stock+'，員工 '+s.business.staff+'，累計損益 '+s.business.profit+'，'+(s.business.active?'營運':'暫停')+'）':'尚無'}。`;
  let npcSelect=$('npcSelect'),last=npcSelect.value;npcSelect.replaceChildren(...s.npcs.filter(n=>n.encountered).map(n=>{let o=document.createElement('option');o.value=n.id;o.textContent=`${n.name}（${n.nature}，${n.alive?'在世':'已故'}）`;return o}));if(s.npcs.some(n=>n.id===last&&n.encountered))npcSelect.value=last;
  entries('npcs',s.npcs.filter(n=>n.encountered),n=>`${n.name}｜${n.age} 歲｜${n.alive?'在世':'已故'}｜${n.nature}｜工作 ${n.job}｜所在 ${n.home}｜境界 ${REALM_RANKS[Math.min(8,n.cultivationLevel||0)]}｜資質 ${n.cultivationAptitude??'未測'}／修行${n.trainingYears||0}年｜${n.familyRole||'居民'}｜目標 ${n.goal}｜目前 ${n.activity}｜信任 ${n.trust}／好感 ${n.fond}｜關係 ${n.bond}｜配偶 ${s.npcs.find(q=>q.id===n.family?.spouseId)?.name||'無'}／子女 ${n.family?.children||0}｜記憶 ${n.memory.length} 件`);
+ econInit(s);
  $('v5Detail').textContent=`職業 ${s.career.name} ${s.career.rank} 級（${s.career.employed?'在職':'未就業'}，經驗 ${s.career.exp}）｜統一主版存檔｜負債本金 ${s.debt.principal.toFixed(2)} 銀；累計利息 ${s.debt.accrued.toFixed(2)} 銀；到期日 第 ${s.debt.dueTick} 天｜木材市價 ${s.world.market.wood}、礦石市價 ${s.world.market.ore}｜短劍庫存 ${s.equipment.weaponCount}，目前裝備 ${s.equipment.weapon?s.equipment.weapon.name+'（耐久 '+s.equipment.weapon.durability+'）':'無'}｜功法 ${s.cultivation.arts.map(a=>a.name+' '+a.rank+' 階').join('、')||'無'}｜繼承安排 ${s.household.dependents.find(c=>c.id===s.household.will.heirId)?.name||'未指定'}｜最近切磋 ${s.battles.length} 次`;
 
+ $('v5Detail').textContent+='\n'+econStatus(s);
  entries('news',s.news.slice(-20).reverse(),e=>`${e.at}｜${e.text}`);entries('ledger',s.ledger.slice(-25).reverse(),e=>`${e.at}｜${e.reason}｜${e.amount>=0?'+':''}${e.amount} 銀｜餘額 ${e.balance}`);entries('events',s.events.slice(-90).reverse(),e=>`${e.at}｜${e.type}｜${e.description}`);history();renderArt(s);renderWorldMap(s);renderNPCGallery(s);
 }
 function offlineNarration(st,action,result){
