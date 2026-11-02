@@ -10,7 +10,7 @@ NPC 保有目標、年齡、關係、記憶與拒絕權；玩家對話必須顯�
 持續擴充：直接修改這份完整版，不要以短篇 Demo 取代它；後續需保持測試案例。
 詳情見同套件的 V5_SPEC.md 及 QA_REPORT.md。
 -->
-<title>浮生無界・萬世因果｜家族經濟與身分一致性修正版</title>
+<title>浮生無界・萬世因果｜生活與社會規則整合版</title>
 <style>
 :root{color-scheme:dark;--bg:#101b22;--card:#1b2d35;--border:#3d5662;--gold:#f0c77e;--ink:#eee9d9;--muted:#b7c8cb;--green:#87cba5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Noto Sans TC",sans-serif}main{max-width:860px;margin:auto;padding:18px 15px 70px}h1{font-size:1.6rem;margin:0;color:var(--gold)}h2{font-size:1.14rem;margin:0 0 10px;color:#ffe1a3}h3{font-size:1rem;margin:12px 0 6px}.sub{color:var(--muted);font-size:.85rem}.panel{padding:17px;border:1px solid var(--border);background:var(--card);border-radius:15px;margin:12px 0}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,input,textarea,select{font:inherit;border-radius:9px}button{padding:10px 12px;cursor:pointer;border:1px solid #e3b56f;background:var(--gold);color:#172129;font-weight:730}button.alt{background:#334c59;color:white;border-color:#557180}button.ghost{background:transparent;color:var(--ink);border-color:#58717c}button.choice{display:block;width:100%;text-align:left;background:#314954;color:white;border-color:#59717a;margin:8px 0}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:3px solid white}textarea,input,select{background:#0e2028;color:white;border:1px solid #77909b;padding:10px;width:100%}textarea{min-height:116px}label{display:block;font-size:.94rem;margin:10px 0 5px}details>summary{cursor:pointer;font-weight:750;color:#e9c98e}details.panel[open]>summary{margin-bottom:12px}.status{border-left:4px solid #bdcdd4;border-radius:6px;background:#283f4c;padding:10px 12px;margin:10px 0}.ok{border-left-color:var(--green)}.bad{border-left-color:#f0908e}.story{white-space:pre-wrap;line-height:2.04;min-height:80px}.clock{font-weight:700;color:var(--gold);font-size:1.13rem}.entry{padding:7px 0;border-bottom:1px solid #435764;font-size:.9rem;white-space:pre-wrap}.hidden{display:none!important}#chapterArea{scroll-margin-top:12px}#topInfo{font-weight:650}#menuStatus{white-space:pre-wrap}.tag{display:inline-block;border:1px solid #5a7680;background:#283f47;padding:2px 8px;border-radius:999px;font-size:.8rem;margin:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.mutedline{font-size:.85rem;color:var(--muted)}.compact button{padding:9px 8px;font-size:.92rem}@media(max-width:540px){main{padding:12px 11px 80px}.panel{padding:14px}.row>*{flex-basis:140px}}
 
@@ -375,8 +375,88 @@ function localTravelMinutes(st,from,to){let a=localAtlas(st).find(x=>x.name===fr
 function movementIntent(action){return /(瞬間移動|瞬移|傳送|傳送陣|御劍飛行|隔空到達|直接飛到|原地消失|瞬身)/.test(action)}
 function oneActionOnly(text){let a=String(text).trim();return /(?:然後|接著|隨後|之後|再去|再來|同時|順便|做完.*再|吃完.*後|工作完.*後)/.test(a)&&/(?:前往|走去|移動|旅行|出發|睡覺|休息|工作|打工|鍛鍊|練功|修煉|購買|買|出售|賣|吃飯|喝|戰鬥|攻擊|採集)/.test(a)}
 
+
+/* 世界模擬補強：所有衍生資料有來源；舊存檔只補欄位，不重抽家人。 */
+const SOCIAL_MODEL_REV=1;
+function ensureSociety(st){
+ st.society=st.society||{revision:SOCIAL_MODEL_REV,history:[],rumors:[],climate:'平常',policy:'地方日常秩序'};
+ st.society.history=Array.isArray(st.society.history)?st.society.history:[];
+ st.society.rumors=Array.isArray(st.society.rumors)?st.society.rumors:[];
+ st.society.revision=SOCIAL_MODEL_REV;
+ st.society.climate=st.society.climate||'平常';
+ st.society.policy=st.society.policy||'地方日常秩序';
+ st.world=st.world||{};st.world.livelihood=st.world.livelihood||{harvest:50,security:60,trade:50};
+ for(const n of st.npcs||[]){
+   n.family=n.family||{spouseId:null,children:0};
+   n.livelihood=n.livelihood||{tradeStock:0,land:0,earnings:0,expenses:0,residence:n.home||st.location,yearsWorked:0,food:6};
+   n.livelihood.residence=n.livelihood.residence||n.home||st.location;
+   n.livelihood.tradeStock=Math.max(0,Number(n.livelihood.tradeStock)||0);
+   n.livelihood.land=Math.max(0,Number(n.livelihood.land)||0);
+   n.livelihood.food=Math.max(0,Number(n.livelihood.food)||0);
+   n.livelihood.earnings=Math.max(0,Number(n.livelihood.earnings)||0);
+   n.livelihood.expenses=Math.max(0,Number(n.livelihood.expenses)||0);
+   n.livelihood.yearsWorked=Math.max(0,Number(n.livelihood.yearsWorked)||0);
+ }
+ return st;
+}
+function socialTick(st,news){
+ ensureSociety(st);
+ const tick=st.world.tick,realm=st.birth?.realm||'mortal',m=st.world.livelihood;
+ if(tick%30===0){
+   m.harvest=cap(m.harvest+dice(st,-9,9)+(st.world.season===4?-3:0),12,95);
+   m.security=cap(m.security+dice(st,-7,7),12,95);
+   m.trade=cap(m.trade+dice(st,-8,8)+(realm==='upper'?3:0),12,95);
+   const happenings=[
+     m.harvest<28?'附近收成欠佳，口糧取得更困難':m.harvest>75?'附近村落收成較好，糧價趨穩':'市集正在商議下月糧貨供應',
+     m.security<30?'地方治安不靖，商旅更謹慎':m.security>75?'道路暫時安定，往來商旅較多':'巡防與旅人互相打聽沿途狀況',
+     m.trade<30?'商路暫時冷清，部分攤販減少進貨':m.trade>75?'往來貨物增加，商行忙於議價':'貨商正在打聽附近的買賣機會'
+   ];
+   const announcement=pick(st,happenings);
+   st.society.history.push({tick,at:now(st),location:st.location,description:announcement});
+   if(st.society.history.length>60)st.society.history.shift();
+   st.news.push({at:now(st),text:announcement});news.push(announcement);
+   st.world.grainPrice=cap(Math.round(2+(55-m.harvest)/24+st.world.scarcity),1,12);
+ }
+ for(const n of st.npcs){
+   if(!n.alive||!n.livelihood)continue;
+   const l=n.livelihood;
+   if(tick%7===0){
+     let wage=n.job==='商販'?Math.max(0,Math.round(l.tradeStock*.15+st.world.livelihood.trade/24)):n.job==='農人'?Math.max(1,Math.round((m.harvest+l.land*5)/25)):n.job==='學徒'?1:Math.max(1,Math.round(m.trade/25));
+     if(n.job==='商販'){l.tradeStock=Math.max(0,l.tradeStock+dice(st,-2,3));}
+     if(n.job==='農人'&&l.land===0&&n.savings>=18&&chance(st,.13)){l.land=1;n.savings-=18;n.activity='添置一小塊可耕土地'}
+     let expenses=Math.max(1,Math.round(st.world.grainPrice/2))+ (n.family.spouseId?1:0);
+     l.earnings+=wage;l.expenses+=expenses;l.food=Math.max(0,l.food+dice(st,-1,2));
+     if(l.food===0&&n.money<expenses){n.health=cap(n.health-2,0,100);n.activity='生活物資短缺，正在尋找生計'}
+     if(n.goal.includes('經商')&&n.savings>=12&&n.job!=='商販'){n.job='商販';l.tradeStock+=3;n.savings-=8;n.activity='籌備攤位與進貨'}
+     if(n.goal.includes('家')&&n.home!==l.residence)l.residence=n.home;
+   }
+   if(tick%YEAR===0){l.yearsWorked++;if(n.age>=18&&n.age<=64&&n.skill>65&&n.job==='學徒'){n.job='師傅';n.activity='技藝漸有成果，開始帶徒弟'} }
+ }
+}
+function relevantMemories(st,action){
+ const target=st.npcs.find(n=>n.alive&&n.home===st.location&&(action.includes(n.name)||(n.familyRole&&action.includes(n.familyRole))));
+ const known=st.npcs.filter(n=>n.alive&&n.home===st.location).slice(0,5);
+ return {target,known,history:(st.society?.history||[]).filter(x=>x.location===st.location).slice(-3)};
+}
+function contextualOpening(st){
+ const b=st.birth||{},f=st.familyEstate||{},s=st.society||{},near=st.npcs.filter(n=>n.alive&&n.home===st.location);
+ const relative=st.npcs.find(n=>n.alive&&n.familyRole&&(n.familyRole==='配偶'||n.familyRole==='父親'||n.familyRole==='母親'||n.familyRole==='兄弟'||n.familyRole==='姊妹'));
+ const age=st.age,world=b.realm==='upper'?'仙域':b.realm==='hidden'?'隱世':'現世';
+ const topic=age<8?'家中大人的爭論':age>=70?'與你過去經歷相關的舊事':b.standing==='權貴'||b.standing==='富足'?'家產、家務與地方責任':b.standing==='貧困'?'今後幾日的生計與口糧':'附近的人事與日常安排';
+ let intro=`【${b.era||st.setting}・${st.location}｜${world}】\n\n${b.weather||'天色漸明'}。你是${st.name}，${age}歲，${b.family||'地方人家'}出身，家境${b.standing||'平民'}。`;
+ if(relative)intro+=`\n\n${relative.name}（${relative.familyRole}）仍在此地生活，彼此之間不是剛認識的陌生人。`;
+ if(f.clanName&&f.level>=3)intro+=`\n\n${f.clanName}有自己的公產與家務規矩；你現下的角色是「${f.role||'家族成員'}」，家族資源不等於你可以隨意挪用的私產。`;
+ if(b.standing==='貧困')intro+=`\n\n你正為口糧與收入盤算：手頭有${st.money}銀、${st.food}份口糧；眼下的每一筆花費都可能改變接下來幾天。`;
+ if(st.lifePast?.events?.length&&age>12)intro+=`\n\n過往人生已有痕跡：${st.lifePast.events.slice(-3).join('；')}。`;
+ if(near.length)intro+=`\n\n${pick(st,near).name}正為${topic}忙碌。${b.hook||'近日地方有些變化'}，尚需親自查證，沒有人能替你決定。`;
+ else intro+=`\n\n眼前需要處理的是${topic}，鄰里有各自的立場，不會因你的念頭就自動配合。`;
+ if(b.realm==='mortal'&&!st.worldDiscovery?.knowsCultivation)intro+='\n\n對你而言，修仙只是難辨真假的民間傳說；你並不知道隱世入口或施法方式。';
+ else if(b.realm!=='mortal')intro+='\n\n你知道此地有人談論修行，但出生於這裡不等於你有法術或自由進出宗門的資格。';
+ return intro;
+}
+
 function newLife(archives=[],options={}){let st={schema:4,id:'life-'+Date.now()+'-'+Math.floor(Math.random()*999999),seed:(Math.random()*4294967295)>>>0,chapter:0,year:0,day:1,minute:480,ageDays:0,age:0,sex:'',name:'',trait:'',setting:'',location:'',alive:true,health:100,hp:100,hpMax:100,stamina:75,staminaMax:100,hunger:0,illness:0,injury:0,money:0,food:12,inventory:{wood:2,ore:0,tools:0,herbs:0},skills:{learning:0,farming:0,crafting:0,combat:0,trade:0},strength:30,strengthMax:100,knowledge:10,knowledgeMax:100,training:0,cultivation:{aptitude:0,qi:0,level:0,progress:0},assets:[],farm:{progress:0,harvestable:0},business:null,household:{partnerId:null,married:false,engaged:false,dependents:[],pregnancy:null},npcs:[],world:{scarcity:0,grainPrice:2,season:1,tick:0},ledger:[],events:[],chapterHistory:[],news:[],choices:[],choiceSource:'系統建議',story:'新的一世開始。命運與性格各不相同；你可以自由說話、行動，也可以進行世界管理。',archives:archives.map(a=>({id:a.id,name:a.name,age:a.age,summary:a.summary}))};
- rebirthSetup(st,options);st._nameUsed=new Set();st.sex=chance(st,.5)?'女':'男';st.name=birthName(st);let a=rand(st);st.age=a<.14?dice(st,0,8):a<.81?dice(st,9,45):a<.985?dice(st,46,79):dice(st,80,96);st.ageDays=st.age*YEAR+dice(st,0,359);st.trait=pick(st,['凡體','耐勞','健壯','聰穎','體弱','靈敏','異稟']);st.hpMax=st.trait==='體弱'?75:st.trait==='健壯'?115:100;st.hp=st.hpMax;st.staminaMax=st.trait==='耐勞'?125:100;st.strengthMax=dice(st,75,145);st.knowledgeMax=dice(st,75,145);st.strength=dice(st,15,Math.min(65,st.strengthMax));st.knowledge=dice(st,10,Math.min(48,st.knowledgeMax));st.cultivation.aptitude=st.trait==='異稟'?dice(st,55,100):dice(st,0,42);if(st.age<12)st.career={name:'無',rank:1,exp:0,employed:false};for(let i=0;i<8;i++){let n=makeNPC(st,i);n.home=i<5?st.location:pick(st,st.atlas).name;st.npcs.push(n)}establishFamilyAndBackground(st);synthesizePast(st);rebirthIntro(st);if(st.lifePast?.events?.length&&st.age>0)st.story+='\n\n【這一世已經走過的歲月】\n'+st.lifePast.events.join('\n');delete st._nameUsed;return st}
+ rebirthSetup(st,options);st._nameUsed=new Set();st.sex=chance(st,.5)?'女':'男';st.name=birthName(st);let a=rand(st);st.age=a<.14?dice(st,0,8):a<.81?dice(st,9,45):a<.985?dice(st,46,79):dice(st,80,96);st.ageDays=st.age*YEAR+dice(st,0,359);st.trait=pick(st,['凡體','耐勞','健壯','聰穎','體弱','靈敏','異稟']);st.hpMax=st.trait==='體弱'?75:st.trait==='健壯'?115:100;st.hp=st.hpMax;st.staminaMax=st.trait==='耐勞'?125:100;st.strengthMax=dice(st,75,145);st.knowledgeMax=dice(st,75,145);st.strength=dice(st,15,Math.min(65,st.strengthMax));st.knowledge=dice(st,10,Math.min(48,st.knowledgeMax));st.cultivation.aptitude=st.trait==='異稟'?dice(st,55,100):dice(st,0,42);if(st.age<12)st.career={name:'無',rank:1,exp:0,employed:false};for(let i=0;i<8;i++){let n=makeNPC(st,i);n.home=i<5?st.location:pick(st,st.atlas).name;st.npcs.push(n)}establishFamilyAndBackground(st);synthesizePast(st);ensureSociety(st);rebirthIntro(st);st.story=contextualOpening(st);st.choices=sceneChoices(st);if(st.lifePast?.events?.length&&st.age>0)st.story+='\n\n【這一世已經走過的歲月】\n'+st.lifePast.events.join('\n');delete st._nameUsed;return st}
 function arr(v){return Array.isArray(v)?v:[]}
 function migrate(x){if(!x||typeof x!=='object'||typeof x.id!=='string'||!Array.isArray(x.events)||!Array.isArray(x.npcs))throw Error('缺少有效人生 ID、NPC 或事件帳本');let z=clone(x),legacy=nu(z.schema,0)<4;
  z.schema=5;z.seed=nu(z.seed,z.rng||1234567)>>>0;z.chapter=Math.max(0,Math.floor(nu(z.chapter)));z.hp=cap(nu(z.hp,100),0,10000);z.hpMax=Math.max(1,nu(z.hpMax,100));z.staminaMax=Math.max(1,nu(z.staminaMax,100));z.stamina=cap(nu(z.stamina,70),0,z.staminaMax);z.hunger=nu(z.hunger,0);z.food=Math.max(0,nu(z.food,12));z.money=Math.max(0,nu(z.money,0));z.ageDays=Math.max(0,nu(z.ageDays,nu(z.age)*YEAR));z.age=Math.floor(z.ageDays/YEAR);z.year=Math.floor(nu(z.year,1));z.day=cap(Math.floor(nu(z.day,1)),1,YEAR);z.minute=cap(Math.floor(nu(z.minute,480)),0,1439);z.health=nu(z.health,100);z.strength=nu(z.strength,35);z.strengthMax=Math.max(z.strength,nu(z.strengthMax,100));z.knowledge=nu(z.knowledge,20);z.knowledgeMax=Math.max(z.knowledge,nu(z.knowledgeMax,100));z.illness=nu(z.illness);z.injury=nu(z.injury);z.alive=z.alive!==false;z.setting=z.setting||'古代民間';z.location=z.location||'青溪村';z.trait=z.trait||'凡體';z.sex=z.sex||'未知';z.name=z.name||'無名';
@@ -406,6 +486,7 @@ function v5Ensure(st){
  st.skills=st.skills||{};for(let k of ['learning','farming','crafting','combat','trade','medicine'])st.skills[k]=Math.max(0,nu(st.skills[k]));
  if(st.business){let b=st.business;b.staff=Math.max(0,nu(b.staff));b.stock=Math.max(0,nu(b.stock));b.reputation=cap(nu(b.reputation,40),0,100);b.cash=nu(b.cash);b.profit=nu(b.profit);b.level=Math.max(1,nu(b.level,1));b.wage=nu(b.wage,3)}
  for(let n of arr(st.npcs)){n.job=n.job||(['經商','攢錢買地'].includes(n.goal)?'商販':n.goal==='尋找師傅'?'學徒':'雜役');n.home=n.home||st.location;n.family=n.family||{spouseId:null,children:0};n.savings=Math.max(0,nu(n.savings));n.injury=Math.max(0,nu(n.injury));n.skill=Math.max(0,nu(n.skill,dice(st,10,55)));n.memory=arr(n.memory)}
+ ensureSociety(st);
  return st
 }
 const LEGACY_SOURCES=['fusheng_unified_v3_state','fusheng_portrait_v2_state','fusheng_portrait_v1_state','fusheng_landscape_v1_state','fusheng_v5_state','fusheng_v4_state','fusheng_integrated_v07'];
@@ -437,7 +518,7 @@ try{let raw=localStorage.getItem(STORE);if(raw){state=migrate(JSON.parse(raw))}e
  put(z)}
  }}catch(e){loadProblem='存檔讀取或轉移未完成：'+e.message+'。為保護原資料，暫停建立新人生。';state=null}
 function chapter(st,action,text,notes,options=null,source='系統建議'){st.chapter++;st.story='【你的行動／發言】'+action+'\n\n'+text+(notes?'\n\n【規則確認】'+notes:'');st.choices=options||sceneChoices(st);st.choiceSource=source;st.chapterHistory.push({chapter:st.chapter,at:now(st),action,story:st.story});if(st.chapterHistory.length>100)st.chapterHistory.shift();emit(st,'回合',`第 ${st.chapter} 回：${action.slice(0,130)}`,{result:notes});return st}
-function sceneChoices(st){let here=st.npcs.filter(n=>n.alive&&n.home===st.location);let b=st.birth||{};if(st.age<7)return ['觀察照顧我的人正做什麼','試著發出聲音，表達眼前的需要'];if(st.hp<35)return ['查看自己的傷勢，想辦法向附近的人求助','檢查身邊可用的物品和遮蔽處'];if(st.food<3)return ['詢問目前所在地的食物來源與價格','查看自己的口糧，想想今天該如何維持生活'];if(b.hook&&st.chapter<3)return [`追查：${b.hook}`,'先看看周圍的人對這件事有何反應'];if(here.length)return [`我問${here[0].name}：「你現在在忙什麼？」`,'留在原地觀察街巷與行人動靜'];return ['仔細觀察眼前的環境與動靜','想想今天最需要處理的一件事']}
+function sceneChoices(st){let here=st.npcs.filter(n=>n.alive&&n.home===st.location);let b=st.birth||{};if(st.chapter===0&&st.age>=8){if(b.standing==='貧困')return ['查看家中的口糧和可用工錢','向附近可信的人打聽可做的生計'];if(b.standing==='權貴'||b.standing==='富足')return ['先核對家族公產和自己能動用的資源','詢問親族近期的家務或外界變化'];}if(st.age<7)return ['觀察照顧我的人正做什麼','試著發出聲音，表達眼前的需要'];if(st.hp<35)return ['查看自己的傷勢，想辦法向附近的人求助','檢查身邊可用的物品和遮蔽處'];if(st.food<3)return ['詢問目前所在地的食物來源與價格','查看自己的口糧，想想今天該如何維持生活'];if(b.hook&&st.chapter<3)return [`追查：${b.hook}`,'先看看周圍的人對這件事有何反應'];if(here.length)return [`我問${here[0].name}：「你現在在忙什麼？」`,'留在原地觀察街巷與行人動靜'];return ['仔細觀察眼前的環境與動靜','想想今天最需要處理的一件事']}
 function npcMemory(n,st,event){n.memory.push({at:now(st),event:String(event).slice(0,250)});if(n.memory.length>30)n.memory.shift()}
 function selected(st,id){return st.npcs.find(n=>n.id===id)||st.npcs[0]||null}
 function assetsCount(st,kind){return st.assets.filter(a=>a.kind===kind&&a.owner===st.id).length}
@@ -450,6 +531,7 @@ function daily(st){let news=[],people=1+st.household.dependents.filter(x=>x.ageD
  if(st.illness>0){st.hp=Math.max(0,st.hp-Math.ceil(st.illness/35));st.illness=Math.max(0,st.illness-1)}if(chance(st,.00045)){st.illness=cap(st.illness+dice(st,2,14),0,100);news.push('出現疾病徵兆')}
  let fatal=(st.age>95?.01:st.age>80?.003:st.age>65?.0008:.00003)+st.illness*.00004+st.injury*.00005+(st.hp<18?.012:0);if(st.hp<=0||chance(st,fatal)){st.hp=0;st.alive=false;news.push('角色死亡，推演中斷')}
  st.world.tick++;
+ socialTick(st,news);
  if(st.world.tick%30===0&&st.familyEstate){let e=st.familyEstate;let income=Math.max(0,Number(e.monthlyIncome)||0),expense=Math.max(0,Number(e.monthlyExpenses)||0);e.treasury=Math.max(0,(Number(e.treasury)||0)+income-expense);let grant=0;if(st.age>=18&&st.alive&&e.treasury>20&&e.monthlyAllowance>0){grant=Math.min(e.monthlyAllowance,Math.max(0,e.treasury-20));e.treasury-=grant;money(st,grant,'家族生活供養');}let note='族產月結：收入 '+income+'、維護與人員支出 '+expense+'、族庫餘額 '+e.treasury+'，個人供養 '+grant+'；族產不可任意支取';e.history=e.history||[];e.history.push({at:now(st),type:'月結',text:note});if(e.history.length>100)e.history.shift();st.news.push({at:now(st),text:note});}
  if(st.worldDiscovery?.realm==='mortal'&&st.worldDiscovery.lawBreaches>0&&chance(st,Math.min(.65,.04*st.worldDiscovery.lawBreaches))){let warning='仙凡隔離禁令：有人追查之前的異術目擊傳聞。';st.news.push({at:now(st),text:warning});news.push(warning);st.worldDiscovery.knowledge=Math.max(st.worldDiscovery.knowledge,2);if(st.worldDiscovery.lawBreaches>=3){st.worldDiscovery.lawBreaches--;st.hp=Math.max(1,st.hp-2);news.push('因遭追查與奔走，身體負擔增加。')}}if(st.world.tick%30===0){st.world.scarcity=cap(st.world.scarcity+dice(st,-1,1),0,4);st.world.grainPrice=2+st.world.scarcity;st.world.season=st.world.season%4+1;let m='物價變化：糧價為 '+st.world.grainPrice+' 銀／份';st.news.push({at:now(st),text:m});news.push(m)}
  // NPC life is goal-driven, with persistent work, residence, savings and family choices.
@@ -715,6 +797,10 @@ function render(animate=false){$('endpoint').value=conf.endpoint||'';$('password
 function offlineNarration(st,action,result){
  const b=st.birth||{},n=st.npcs.find(q=>q.alive&&q.home===st.location&&action.includes(q.name));
  const pieces=[`【${b.era||st.setting}・${st.location}｜${now(st)}】`];
+ const contextual=relevantMemories(st,action);const recentWorld=contextual.history.map(h=>h.description).slice(-2);
+ if(recentWorld.length)pieces.push('此地近期變動：'+recentWorld.join('；')+'。');
+ if(contextual.target){let t=contextual.target;pieces.push(t.name+'（'+(t.familyRole||t.bond||'相識')+'，'+t.nature+'）目前在'+t.home+'，以'+t.job+'維生；'+(t.activity||'正在處理日常事務')+'。'+(t.memory?.length?'你記得彼此最近曾談及：'+String(t.memory.at(-1).event).slice(0,85)+'。':''));}
+
  if(/帳房|族產|家業|家族管事|族務|收支/.test(action)&&st.familyEstate){let e=st.familyEstate;pieces.push(`${e.clanName}的帳房記錄顯示：每月族產收入${e.monthlyIncome||0}，維護與人員支出${e.monthlyExpenses||0}，族庫尚餘${e.treasury||0}。${e.authority==='管事'?'你有協調日常族務的權限，但無權把整筆公產當私財。':'你尚無自由處分族產的權限，需徵得家族同意。'}`)}
  else if(/市集|糧價|物價|交易|食物|工作/.test(action)){pieces.push(`你打聽到此地目前一份口糧的市價約${st.world.grainPrice}銀；你身上有${st.money}銀、${st.food}份口糧。這只是目前地方行情，並不代表商販會免費提供貨物。`)}
  if(pieces.length>1){}else if(/觀察|看看|巡視|查明|追查/.test(action))pieces.push(`你沒有貿然離開${st.location}。${b.mood||'附近的人各有心事'}；眼前所見還不足以判定傳聞真偽。`);
@@ -733,7 +819,7 @@ async function execute(action){if(!state||busy||!state.alive)return;if(!String(a
  if(movementIntent(action))return message('你尚未學會有效的傳送能力，不能直接瞬移到別處。此回未扣時間。','bad');
  if(!conf.endpoint||!conf.password){let target=state.npcs.find(n=>action.includes(n.name))||selected(state,$('npcSelect').value),code=route(action);const result=finishAction(action,code,Number($('minutes').value),target?.id);completed(result);return}let target=state.npcs.find(n=>action.includes(n.name))||selected(state,$('npcSelect').value),code=route(action);const expectedSave=localStorage.getItem(STORE);busy=true;render();message(`正在生成第 ${state.chapter+1} 回；回應成功前不修改存檔。`);$('chapterArea').scrollIntoView({behavior:'smooth',block:'start'});
  try{let preview=clone(state),ruling=rule(preview,code,target?.id,minutes);if(!ruling.ok){busy=false;render();message('行動不成立：'+ruling.text+'（時間與存檔都沒有改動）','bad');return}
- let context=[`世界設定：${state.setting}，${state.location}，出生資料：${JSON.stringify(state.birth||{})}；時間：${now(state)}。重生層次：${state.worldDiscovery?.realm||"mortal"}；角色實際知道的修仙常識：${state.worldDiscovery?.knowledge||0}；角色已知入口：${JSON.stringify(state.worldDiscovery?.knownEntrances||[])}；不得洩漏隱藏入口及其他世界真相；未取得師承不可施法。現世凡人可能終生不知道仙門存在，上界出生者也可能不知凡間。人物不能瞬移、不能隔空對話，玩家本回只執行一個主行動。`,`【本回由程式確認的結果】${ruling.text}。不得描寫與此矛盾的成功、財產、死亡或婚姻。`,`角色：${state.name}，${state.age} 歲；銀兩 ${preview.money}，生命 ${preview.hp}。`,`家庭：已婚 ${preview.household.married}，子女 ${preview.household.dependents.length}。`,`資產：住屋 ${assetsCount(preview,'住屋')}；田地 ${assetsCount(preview,'田地')}。`,`NPC 事實：${preview.npcs.slice(0,4).map(n=>n.name+' '+n.nature+'／'+n.goal+'／'+n.bond+'／信任'+n.trust+'／記憶'+n.memory.slice(-1).map(m=>m.event).join('')).join('；')}`, ...preview.events.slice(-3).map(e=>e.type+':'+e.description)];
+ let context=[`已知人物與生活狀態：${JSON.stringify(relevantMemories(state,action))}；已發生的過往：${JSON.stringify(state.lifePast?.events||[])}；近期地方變動：${JSON.stringify((state.society?.history||[]).slice(-4))}。人物家族公產不得視為個人私產。`, `世界設定：${state.setting}，${state.location}，出生資料：${JSON.stringify(state.birth||{})}；時間：${now(state)}。重生層次：${state.worldDiscovery?.realm||"mortal"}；角色實際知道的修仙常識：${state.worldDiscovery?.knowledge||0}；角色已知入口：${JSON.stringify(state.worldDiscovery?.knownEntrances||[])}；不得洩漏隱藏入口及其他世界真相；未取得師承不可施法。現世凡人可能終生不知道仙門存在，上界出生者也可能不知凡間。人物不能瞬移、不能隔空對話，玩家本回只執行一個主行動。`,`【本回由程式確認的結果】${ruling.text}。不得描寫與此矛盾的成功、財產、死亡或婚姻。`,`角色：${state.name}，${state.age} 歲；銀兩 ${preview.money}，生命 ${preview.hp}。`,`家庭：已婚 ${preview.household.married}，子女 ${preview.household.dependents.length}。`,`資產：住屋 ${assetsCount(preview,'住屋')}；田地 ${assetsCount(preview,'田地')}。`,`NPC 事實：${preview.npcs.slice(0,4).map(n=>n.name+' '+n.nature+'／'+n.goal+'／'+n.bond+'／信任'+n.trust+'／記憶'+n.memory.slice(-1).map(m=>m.event).join('')).join('；')}`, ...preview.events.slice(-3).map(e=>e.type+':'+e.description)];
  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),32000);let response;try{response=await fetch(conf.endpoint,{method:'POST',headers:{'content-type':'application/json','x-game-password':conf.password},body:JSON.stringify({action:action+'\n（規則已確認：'+ruling.text+'；請自然描寫 NPC 反應，不要另判成功；不得憑空改變地點、跳過路程、獲得術法或發生未記錄的婚姻死亡。請結尾給兩個緊貼當前場景的選項，不要突然建議吃飯、工作或修煉。）',minutes,state:publicStoryState(preview),recent:context.slice(-8)}),signal:controller.signal})}finally{clearTimeout(timeout)}
  let data=await response.json();if(!response.ok||typeof data.story!=='string'||!data.story.trim())throw Error(data.error||'AI 沒有回傳故事');
  // 避免 AI 回答期間使用者在另一個分頁改動存檔：檢查目前本頁 ID 與回合數仍一致。
