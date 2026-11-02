@@ -10,7 +10,7 @@ NPC 保有目標、年齡、關係、記憶與拒絕權；玩家對話必須顯�
 持續擴充：直接修改這份完整版，不要以短篇 Demo 取代它；後續需保持測試案例。
 詳情見同套件的 V5_SPEC.md 及 QA_REPORT.md。
 -->
-<title>浮生無界・萬世因果｜行動自動計時版</title>
+<title>浮生無界・萬世因果｜修行啟蒙與時間同步修正版</title>
 <style>
 :root{color-scheme:dark;--bg:#101b22;--card:#1b2d35;--border:#3d5662;--gold:#f0c77e;--ink:#eee9d9;--muted:#b7c8cb;--green:#87cba5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Noto Sans TC",sans-serif}main{max-width:860px;margin:auto;padding:18px 15px 70px}h1{font-size:1.6rem;margin:0;color:var(--gold)}h2{font-size:1.14rem;margin:0 0 10px;color:#ffe1a3}h3{font-size:1rem;margin:12px 0 6px}.sub{color:var(--muted);font-size:.85rem}.panel{padding:17px;border:1px solid var(--border);background:var(--card);border-radius:15px;margin:12px 0}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,input,textarea,select{font:inherit;border-radius:9px}button{padding:10px 12px;cursor:pointer;border:1px solid #e3b56f;background:var(--gold);color:#172129;font-weight:730}button.alt{background:#334c59;color:white;border-color:#557180}button.ghost{background:transparent;color:var(--ink);border-color:#58717c}button.choice{display:block;width:100%;text-align:left;background:#314954;color:white;border-color:#59717a;margin:8px 0}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:3px solid white}textarea,input,select{background:#0e2028;color:white;border:1px solid #77909b;padding:10px;width:100%}textarea{min-height:116px}label{display:block;font-size:.94rem;margin:10px 0 5px}details>summary{cursor:pointer;font-weight:750;color:#e9c98e}details.panel[open]>summary{margin-bottom:12px}.status{border-left:4px solid #bdcdd4;border-radius:6px;background:#283f4c;padding:10px 12px;margin:10px 0}.ok{border-left-color:var(--green)}.bad{border-left-color:#f0908e}.story{white-space:pre-wrap;line-height:2.04;min-height:80px}.clock{font-weight:700;color:var(--gold);font-size:1.13rem}.entry{padding:7px 0;border-bottom:1px solid #435764;font-size:.9rem;white-space:pre-wrap}.hidden{display:none!important}#chapterArea{scroll-margin-top:12px}#topInfo{font-weight:650}#menuStatus{white-space:pre-wrap}.tag{display:inline-block;border:1px solid #5a7680;background:#283f47;padding:2px 8px;border-radius:999px;font-size:.8rem;margin:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.mutedline{font-size:.85rem;color:var(--muted)}.compact button{padding:9px 8px;font-size:.92rem}@media(max-width:540px){main{padding:12px 11px 80px}.panel{padding:14px}.row>*{flex-basis:140px}}
 
@@ -273,38 +273,43 @@ function rebirthIntro(st){
 }
 // 修仙家門本來具備傳承；年幼時先由家長照顧，識字、測靈與傳授隨年齡進行。
 function familyCultivationSchool(st){
- const b=st.birth||{},d=st.worldDiscovery||{},f=st.familyEstate;
- if(b.realm==='mortal'||!f||!/仙域世族|修仙世家|修行家族|宗門|仙門|仙宮|世家|世族/.test(b.family||''))return false;
- f.cultivationSchool=f.cultivationSchool||{source:f.clanName+'家傳',stage:'幼年待教',teacherId:null,startedAge:null,notes:[]};
- let school=f.cultivationSchool;
- if(!school.teacherId){const tutor=(st.npcs||[]).find(n=>n.alive&&/父親|母親|家族長輩|宗親/.test(n.familyRole||''));if(tutor)school.teacherId=tutor.id;}
- d.knowsCultivation=true;d.knowledge=Math.max(d.knowledge,st.age>=6?3:1);
- d.hasTeacher=true; // 有家族傳承與指導者，不等於嬰兒已修成術法
- if(st.age<6){school.stage='受照顧與耳濡目染';return true}
- if(st.age<9){school.stage='族學識字、戒律與修士常識';st.skills.learning=Math.max(st.skills.learning||0,2);return true}
- school.stage='依資質接受家傳引氣課';
+ const b=st.birth||{}, d=discovery(st), f=st.familyEstate;
+ const institution=/仙域世族|修仙世家|修行家族|宗門|仙門|仙宮|世家|世族|宗門弟子|修士家族/.test(b.family||'');
+ if(b.realm==='mortal'||!f||!institution)return false;
+ const school=f.cultivationSchool=f.cultivationSchool||{source:f.clanName+'家傳',stage:'家中啟蒙',teacherId:null,startedAge:null,notes:[]};
+ school.notes=Array.isArray(school.notes)?school.notes:[];
+ if(!school.teacherId){const teacher=(st.npcs||[]).find(n=>n.alive&&/父親|母親|家族長輩|宗親/.test(n.familyRole||''));if(teacher)school.teacherId=teacher.id;}
+ d.knowsCultivation=true;d.hasTeacher=true;d.knowledge=Math.max(d.knowledge,st.age>=2?2:1);
  st.cultivation.arts=Array.isArray(st.cultivation.arts)?st.cultivation.arts:[];
- if(st.cultivation.aptitude>=20){
-  if(!st.cultivation.arts.some(a=>a&&a.name==='家傳引氣訣'))st.cultivation.arts.push({name:'家傳引氣訣',rank:1,experience:0});
-  d.cultivationUnlocked=true;
- } else {school.stage='修行資質受限，仍學習族學基礎';}
- if(school.startedAge==null)school.startedAge=st.age;
+ if(st.age<2){school.stage='家人照顧、耳濡目染';return true;}
+ // 能聽懂話便開始家傳引導，但傳承與真正引氣、境界提升是不同的事。
+ if(school.startedAge==null||school.startedAge>st.age)school.startedAge=st.age;
+ if(st.age<4){school.stage='由親族陪伴的吐納、辨識靈氣與故事啟蒙';return true;}
+ if(st.age<6){school.stage='師長引導下的基礎吐納與經脈常識';}
+ else {school.stage='族學、功法識讀與循序引氣';d.knowledge=Math.max(d.knowledge,3);}
+ if(!st.cultivation.arts.some(a=>a&&a.name==='家傳引氣訣'))st.cultivation.arts.push({name:'家傳引氣訣',rank:1,experience:0});
+ // 取得教材不代表有能力獨立修煉；低靈根也能接受教育。
+ if(st.age>=6&&st.cultivation.aptitude>=12)d.cultivationUnlocked=true;
  return true;
 }
 function familySchoolBirthday(st){
  if(!familyCultivationSchool(st))return;
- const f=st.familyEstate,school=f.cultivationSchool;
- if(st.age>=6&&st.age<=18){st.skills.learning=Math.min(100,(st.skills.learning||0)+1);st.knowledge=Math.min(st.knowledgeMax,st.knowledge+1);}
- if(st.age>=9&&st.age<=30&&st.cultivation.aptitude>=20&&st.cultivation.arts.some(a=>a?.name==='家傳引氣訣')){
-  let art=st.cultivation.arts.find(a=>a.name==='家傳引氣訣');
-  const gain=Math.max(1,Math.floor(st.cultivation.aptitude/22));
-  art.experience+=gain;st.cultivation.progress+=gain;
-  // 年度基礎學習僅增加熟練度，不擅自賦予築基、飛行或神通
-  if(st.age>=12&&art.experience>=18){st.cultivation.qi+=Math.max(1,Math.floor(gain/2));}
-  if(st.age===9)emit(st,'族學','在家族指導下開始接觸家傳引氣法，修行成果仍由資質及努力決定');
+ if(st.age<2)return;
+ const school=st.familyEstate.cultivationSchool;
+ st.skills.learning=Math.min(100,(st.skills.learning||0)+1);
+ if(st.age>=4)st.knowledge=Math.min(st.knowledgeMax,st.knowledge+1);
+ let art=st.cultivation.arts.find(a=>a?.name==='家傳引氣訣');
+ if(art&&st.age>=4){
+  const familiar=Math.max(1,Math.floor((st.cultivation.aptitude||0)/30)+1);
+  art.experience+=familiar;
+  // 孩子從小鍛鍊但成果可能只停留在呼吸、感知和識字；不保證引氣。
+  if(st.age>=6){st.cultivation.progress+=familiar;if(st.cultivation.aptitude>=12&&art.experience>=8)st.cultivation.qi+=Math.max(0,Math.floor(familiar/2));}
  }
- if(st.age===6)emit(st,'族學','開始族學識字、戒律與修士常識，尚未開始靈氣修鍊');
+ if(st.age===2)emit(st,'家傳啟蒙','能聽懂簡單教導後，親族開始傳授修行故事、吐納與生活規範');
+ if(st.age===4)emit(st,'家傳啟蒙','在長輩看護下練習基礎呼吸與辨識靈氣，不代表已能獨立運功');
+ if(st.age===6)emit(st,'家傳族學','開始更有系統地學習功法、經脈與族學；可否引氣取決於資質和經驗');
 }
+
 function longTermFamilyPracticeRequested(action){return /(?:修煉|修練|練功|學習修仙|修習家傳|修行)/.test(action)}
 function canLearnCultivation(st){return st.worldDiscovery?.cultivationUnlocked===true&&!!st.cultivation?.arts?.length}
 
@@ -411,18 +416,26 @@ function movementIntent(action){return /(瞬間移動|瞬移|傳送|傳送陣|�
 // Time requests are parsed before routing to AI; questions never change the clock.
 const LONG_TIME_UNITS={分鐘:1,分:1,小時:60,時:60,天:1440,日:1440,週:10080,周:10080,月:43200,年:518400};
 function chineseInt(raw){const t=String(raw).replace(/[０-９]/g,x=>String.fromCharCode(x.charCodeAt(0)-65248));if(/^\d+$/.test(t))return Number(t);const nums={'零':0,'〇':0,'一':1,'二':2,'兩':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9};if(!/^[零〇一二兩三四五六七八九十百千萬亿億\d]+$/.test(t))return NaN;let result=0,section=0,v=0;for(const c of t){if(/\d/.test(c)){v=v*10+Number(c)}else if(c==='十'||c==='百'||c==='千'){let n=c==='十'?10:c==='百'?100:1000;section+=(v||1)*n;v=0}else if(c==='萬'||c==='亿'||c==='億'){result+=(section+v||1)*(c==='萬'?10000:100000000);section=0;v=0}else v=nums[c]}return result+section+v}
-function timeRequest(raw){const a=String(raw||'').trim();let m=a.match(/([零〇一二兩三四五六七八九十百千萬億亿\d０-９]+)\s*(分鐘|小時|週|周|個月|月|年|天|日)/);if(!m)return null;let value=chineseInt(m[1]),unit=m[2]==='個月'?'月':m[2],minutes=value*LONG_TIME_UNITS[unit];if(!Number.isFinite(minutes)||value<1)return null;const question=/(?:幾歲|多少歲|會怎樣|會如何|如果|假如|能不能|可不可以|會不會|\?|？)/.test(a)&&!/(?:推進|跳過|快進|略過|等待|度過|時間前進).*(?:後|之後).*(?:嗎|？|\?)/.test(a);let direct=/^(?:閉關|潛修|潛心修煉|潛心修練|修行|修煉|修練)\s*[零〇一二兩三四五六七八九十百千萬億亿\d０-９]+\s*(?:年|月|天)/.test(a)||/(?:^|在|我想|我要|請|開始|準備|打算|直接|現在|此刻|閉關|潛心|專心|修行期間|修練期間|修煉期間)\s*(?:推進|跳過|快進|略過|等待|度過|過去|前進|流逝)/.test(a)||/^(?:十|百|千|一|二|三|四|五|六|七|八|九|\d)[^，。？?]{0,8}(?:後|過後)$/.test(a);return {value,unit,minutes,question,direct:direct&&!question};}
-// 明確長期行動直接進入歲月推演；其他行動由 rule 自行計算耗時。
+function timeRequest(raw){
+ const a=String(raw||'').trim();
+ const m=a.match(/([零〇一二兩三四五六七八九十百千萬億亿\d０-９]+)\s*(分鐘|小時|週|周|個月|月|年|天|日)/);
+ if(!m)return null;
+ const value=chineseInt(m[1]),unit=m[2]==='個月'?'月':m[2],minutes=value*LONG_TIME_UNITS[unit];
+ if(!Number.isSafeInteger(minutes)||value<1)return null;
+ const question=/(?:幾歲|多少歲|會怎樣|會如何|如果|假如|能不能|可不可以|會不會|\?|？)/.test(a);
+ const directive=/(?:時間\s*(?:推進|快進|跳過|前進)|(?:推進|跳過|快進|略過|等待|度過|讓時間流逝|閉關|潛修|苦修|修練|修煉|修行|潛心修練|潛心修煉|經營|營運|工作|打工|讀書|研讀|學習|研究|遊歷|旅行|睡眠|休息))/.test(a);
+ const historical=/(?:[零〇一二兩三四五六七八九十百千萬億亿\d０-９]+\s*(?:年|月|日|天)前|當年|過去曾經|回憶|以前)/.test(a)&&!/(?:推進|快進|跳過|等待|閉關|開始修煉|開始修練)/.test(a);
+ return {value,unit,minutes,question, direct:directive&&!question&&!historical};
+}
 function actionDurationPlan(action){
- const a=String(action||'').trim(), req=timeRequest(a);
+ const a=String(action||'').trim(),req=timeRequest(a);
  if(req?.question)return {question:true,req};
- // 許可「在推進十年修練」「我想閉關一萬年」與「經營商號三年」；不能把單純回憶「十年前」當成時間指令。
- const leading=/^(?:我(?:要|想|準備|打算|決定|將|在)?|請|現在|開始|繼續|在此|直接|讓我|從今天起|自此)?[\s，,]*(?:在[\s，,]*)?(?:推進|跳過|快進|略過|等待|度過|讓時間流逝|時間前進|閉關|潛修|苦修|修練|修煉|修行|潛心修練|潛心修煉|經營|營運|工作|打工|讀書|研讀|學習|研究|遊歷|旅行|睡眠|休息)/;
- if(req&&(leading.test(a)||req.direct))return {skip:true,minutes:req.minutes,req};
+ if(req?.direct)return {skip:true,minutes:req.minutes,req};
  if(/^(?:等待|度過|推進時間|跳過時間|快進|讓時間流逝|歲月流逝)$/.test(a))return {skip:true,minutes:1440};
  if(/^(?:閉關|潛修|苦修|潛心修練|潛心修煉)(?:修行|修煉|修練)?(?:直到突破|至突破|直到壽終)?$/.test(a))return {skip:true,minutes:30*1440,auto:true};
  return null;
 }
+
 function timeAnswer(st,req){const afterAge=Math.floor((st.ageDays+req.minutes/1440)/YEAR);return `目前你是 ${st.age} 歲。如果單純計算 ${req.value}${req.unit}後的年齡，將約為 ${afterAge} 歲。這只是推算，未實際流逝時間，也不能保證你能活到那時。若要真正快進，請輸入「推進${req.value}${req.unit}」。`}
 // One transaction simulates a whole interval, stopping at death. Regular jobs/travel are not repeated implicitly.
 // 壽元是境界與實際延壽紀錄決定；修為不會因「等待」自動上升。
@@ -431,7 +444,7 @@ function lifeLimit(st){if(st.cultivation?.trueImmortal===true)return Infinity;le
 function mortalityRisk(st){let remaining=lifeLimit(st)-st.age;if(remaining<=0)return 1;let risk=st.cultivation?.level>0?.000004:.00003;if(remaining<10)risk+=.0002;if(remaining<3)risk+=.001;return Math.min(1,risk+Math.max(0,st.illness||0)*.00004+Math.max(0,st.injury||0)*.00005+(st.hp<18?.012:0))}
 function killAtLifespan(st,reason){st.alive=false;st.hp=0;emit(st,'離世',reason+'，於'+st.age+'歲中止歲月推演');st.news.push({at:now(st),text:reason});}
 function isRetreatIntent(action){return /(?:閉關|潛修|苦修|潛心|修煉|修練|修行|參悟)/.test(action)}
-function retreatYear(st){if(!st.alive)return '';if(st.age<9)return '尚未達到家族正式修行年齡';if(!canLearnCultivation(st))return '尚未習得可實踐的功法，不能單靠閉關獲得修為';let cult=st.cultivation,stage=Math.max(0,Math.min(8,cult.level||0));let effort=Math.max(1,Math.floor((cult.aptitude||0)/22));cult.progress=(cult.progress||0)+effort;cult.qi=(cult.qi||0)+effort;
+function retreatYear(st){if(!st.alive)return '';familyCultivationSchool(st);if(st.age<2)return '仍在幼年照護期';if(st.age<6){familySchoolBirthday(st);return '接受師長陪伴的修行啟蒙，尚未獨立引氣';}if(!canLearnCultivation(st))return '尚未習得可實踐的功法，不能單靠閉關獲得修為';let cult=st.cultivation,stage=Math.max(0,Math.min(8,cult.level||0));let effort=Math.max(1,Math.floor((cult.aptitude||0)/22));cult.progress=(cult.progress||0)+effort;cult.qi=(cult.qi||0)+effort;
  // 境界越高，突破所需的修行成果與機緣越難。只攢進度不等於必定突破。
  let needed=[160,300,600,1400,4000,11000,30000,90000,250000][stage];
  if(cult.progress>=needed&&stage<8&&chance(st,Math.max(.025,.62-stage*.07))){cult.progress-=needed;cult.level=stage+1;emit(st,'修行突破','閉關多年後突破至'+REALM_RANKS[cult.level]+'，壽元上限依境界重算');return '突破至'+REALM_RANKS[cult.level];}
@@ -539,7 +552,7 @@ function contextualOpening(st){
 }
 
 function newLife(archives=[],options={}){let st={schema:4,id:'life-'+Date.now()+'-'+Math.floor(Math.random()*999999),seed:(Math.random()*4294967295)>>>0,chapter:0,year:0,day:1,minute:480,ageDays:0,age:0,sex:'',name:'',trait:'',setting:'',location:'',alive:true,health:100,hp:100,hpMax:100,stamina:75,staminaMax:100,hunger:0,illness:0,injury:0,money:0,food:12,inventory:{wood:2,ore:0,tools:0,herbs:0},skills:{learning:0,farming:0,crafting:0,combat:0,trade:0},strength:30,strengthMax:100,knowledge:10,knowledgeMax:100,training:0,cultivation:{aptitude:0,qi:0,level:0,progress:0},assets:[],farm:{progress:0,harvestable:0},business:null,household:{partnerId:null,married:false,engaged:false,dependents:[],pregnancy:null},npcs:[],world:{scarcity:0,grainPrice:2,season:1,tick:0},ledger:[],events:[],chapterHistory:[],news:[],choices:[],choiceSource:'系統建議',story:'新的一世開始。命運與性格各不相同；你可以自由說話、行動，也可以進行世界管理。',archives:archives.map(a=>({id:a.id,name:a.name,age:a.age,summary:a.summary}))};
- rebirthSetup(st,options);st._nameUsed=new Set();st.sex=chance(st,.5)?'女':'男';st.name=birthName(st);let a=rand(st);st.age=a<.14?dice(st,0,8):a<.81?dice(st,9,45):a<.985?dice(st,46,79):dice(st,80,96);st.ageDays=st.age*YEAR+dice(st,0,359);st.trait=pick(st,['凡體','耐勞','健壯','聰穎','體弱','靈敏','異稟']);st.hpMax=st.trait==='體弱'?75:st.trait==='健壯'?115:100;st.hp=st.hpMax;st.staminaMax=st.trait==='耐勞'?125:100;st.strengthMax=dice(st,75,145);st.knowledgeMax=dice(st,75,145);st.strength=dice(st,15,Math.min(65,st.strengthMax));st.knowledge=dice(st,10,Math.min(48,st.knowledgeMax));st.cultivation.aptitude=st.trait==='異稟'?dice(st,55,100):dice(st,0,42);if(st.age<12)st.career={name:'無',rank:1,exp:0,employed:false};for(let i=0;i<8;i++){let n=makeNPC(st,i);n.home=i<5?st.location:pick(st,st.atlas).name;st.npcs.push(n)}establishFamilyAndBackground(st);synthesizePast(st);ensureSociety(st);rebirthIntro(st);st.story=contextualOpening(st);st.choices=sceneChoices(st);if(st.lifePast?.events?.length&&st.age>0)st.story+='\n\n【這一世已經走過的歲月】\n'+st.lifePast.events.join('\n');delete st._nameUsed;return st}
+ rebirthSetup(st,options);st._nameUsed=new Set();st.sex=chance(st,.5)?'女':'男';st.name=birthName(st);let a=rand(st);st.age=a<.14?dice(st,0,8):a<.81?dice(st,9,45):a<.985?dice(st,46,79):dice(st,80,96);st.ageDays=st.age*YEAR+dice(st,0,359);st.trait=pick(st,['凡體','耐勞','健壯','聰穎','體弱','靈敏','異稟']);st.hpMax=st.trait==='體弱'?75:st.trait==='健壯'?115:100;st.hp=st.hpMax;st.staminaMax=st.trait==='耐勞'?125:100;st.strengthMax=dice(st,75,145);st.knowledgeMax=dice(st,75,145);st.strength=dice(st,15,Math.min(65,st.strengthMax));st.knowledge=dice(st,10,Math.min(48,st.knowledgeMax));st.cultivation.aptitude=st.trait==='異稟'?dice(st,55,100):dice(st,0,42);if(st.age<12)st.career={name:'無',rank:1,exp:0,employed:false};for(let i=0;i<8;i++){let n=makeNPC(st,i);n.home=i<5?st.location:pick(st,st.atlas).name;st.npcs.push(n)}establishFamilyAndBackground(st);familyCultivationSchool(st);synthesizePast(st);ensureSociety(st);rebirthIntro(st);st.story=contextualOpening(st);st.choices=sceneChoices(st);if(st.lifePast?.events?.length&&st.age>0)st.story+='\n\n【這一世已經走過的歲月】\n'+st.lifePast.events.join('\n');delete st._nameUsed;return st}
 function arr(v){return Array.isArray(v)?v:[]}
 function migrate(x){if(!x||typeof x!=='object'||typeof x.id!=='string'||!Array.isArray(x.events)||!Array.isArray(x.npcs))throw Error('缺少有效人生 ID、NPC 或事件帳本');let z=clone(x),legacy=nu(z.schema,0)<4;
  z.schema=5;z.seed=nu(z.seed,z.rng||1234567)>>>0;z.chapter=Math.max(0,Math.floor(nu(z.chapter)));z.hp=cap(nu(z.hp,100),0,10000);z.hpMax=Math.max(1,nu(z.hpMax,100));z.staminaMax=Math.max(1,nu(z.staminaMax,100));z.stamina=cap(nu(z.stamina,70),0,z.staminaMax);z.hunger=nu(z.hunger,0);z.food=Math.max(0,nu(z.food,12));z.money=Math.max(0,nu(z.money,0));z.ageDays=Math.max(0,nu(z.ageDays,nu(z.age)*YEAR));z.age=Math.floor(z.ageDays/YEAR);z.year=Math.floor(nu(z.year,1));z.day=cap(Math.floor(nu(z.day,1)),1,YEAR);z.minute=cap(Math.floor(nu(z.minute,480)),0,1439);z.health=nu(z.health,100);z.strength=nu(z.strength,35);z.strengthMax=Math.max(z.strength,nu(z.strengthMax,100));z.knowledge=nu(z.knowledge,20);z.knowledgeMax=Math.max(z.knowledge,nu(z.knowledgeMax,100));z.illness=nu(z.illness);z.injury=nu(z.injury);z.alive=z.alive!==false;z.setting=z.setting||'古代民間';z.location=z.location||'青溪村';z.trait=z.trait||'凡體';z.sex=z.sex||'未知';z.name=z.name||'無名';
@@ -728,8 +741,24 @@ function rule(st,code,targetId,minutes=30){if(['investigateMystery','seekMaster'
   st.battles.push({at:now(st),opponent:n.name,victory,rounds});if(st.battles.length>20)st.battles.shift();
   if(st.hp===0){st.alive=false;text+=' 角色因傷死亡。'}npcMemory(n,st,text);
  }break;
- case 'cultivate':spent=120;familyCultivationSchool(st);if(st.age<9)return fail('你仍年幼；家族有修行傳承，但目前先由族中照顧與授課，不能把嬰幼兒當成獨立修士。可選擇推進歲月接受家族教育。');if(!canLearnCultivation(st))return fail(st.familyEstate?.cultivationSchool?'你已接觸族學，但資質或法門進度尚不足以獨立引氣；可請族中長輩指導。':'你尚未取得可靠的修行指導；靈根不會讓你自動掌握法術。');if(st.cultivation.aptitude<20)return fail('目前缺乏基本靈氣感應資質；可以尋找導師或其他方法，但不能無條件入門');if(st.stamina<12)return fail('體力不足，無法修煉');{let k=dice(st,1,3)+Math.floor(st.cultivation.aptitude/30);st.cultivation.qi+=k;st.cultivation.progress+=k;st.stamina-=12;text=`修煉積累 ${k} 點靈氣；境界仍為 ${st.cultivation.level}。`;}break;
- case 'breakthrough':spent=240;if(!canLearnCultivation(st))return fail('尚未掌握修行功法，無法突破修仙境界。');{let c=st.cultivation,need=(c.level+1)*25;if(c.progress<need||c.qi<need)return fail(`突破需要累積 ${need} 點進度和靈氣`);c.progress-=need;c.qi-=need;let p=cap(.2+c.aptitude/170-c.level*.035,.05,.82);if(chance(st,p)){c.level++;text='突破成功，目前境界 '+c.level+'。'}else{let injury=dice(st,5,22);st.hp=cap(st.hp-injury,0,st.hpMax);st.injury+=Math.ceil(injury/2);text='突破失敗，受到 '+injury+' 點傷害。';if(!st.hp){st.alive=false;text+=' 角色因此死亡。'}}}break;
+ case 'cultivate':spent=120;familyCultivationSchool(st);
+ if(st.age<2)return fail('仍在襁褓，家族照顧與耳濡目染會持續，但不能要求嬰兒獨立修煉');
+ if(st.age<6&&st.familyEstate?.cultivationSchool){
+  const school=st.familyEstate.cultivationSchool;
+  let art=st.cultivation.arts?.find(a=>a?.name==='家傳引氣訣');
+  if(art)art.experience=(art.experience||0)+1;
+  st.skills.learning=Math.min(100,(st.skills.learning||0)+1);
+  text=`在${school.source}長輩的陪同下，練習吐納、辨識靈氣與基礎經脈常識。這屬啟蒙，不代表已能獨立運功。`;break;
+ }
+ if(st.age<6)return fail('年紀尚幼且沒有可靠師長指導；可以先接受照顧與啟蒙，但不能自行練習不明功法');
+ if(!canLearnCultivation(st)){
+  if(st.familyEstate?.cultivationSchool){st.skills.learning=Math.min(100,(st.skills.learning||0)+1);text='家族仍會教導功法常識與安全吐納，但尚未具備獨立引氣能力。';break;}
+  return fail('尚未取得可靠的修行指導；靈根不會讓你自動掌握法術');
+ }
+ if(st.cultivation.aptitude<12){text='完成安全的基礎吐納與學習，但尚未成功感應可運用的靈氣。';break;}
+ if(st.stamina<12)return fail('體力不足，無法進行完整的引氣練習');
+ {let k=dice(st,1,3)+Math.floor(st.cultivation.aptitude/30);st.cultivation.qi+=k;st.cultivation.progress+=k;st.stamina-=12;text=`在已學的法門與指導下練習，引氣進度增加 ${k}，境界仍為 ${st.cultivation.level}。`;}break;
+  case 'breakthrough':spent=240;if(!canLearnCultivation(st))return fail('尚未掌握修行功法，無法突破修仙境界。');{let c=st.cultivation,need=(c.level+1)*25;if(c.progress<need||c.qi<need)return fail(`突破需要累積 ${need} 點進度和靈氣`);c.progress-=need;c.qi-=need;let p=cap(.2+c.aptitude/170-c.level*.035,.05,.82);if(chance(st,p)){c.level++;text='突破成功，目前境界 '+c.level+'。'}else{let injury=dice(st,5,22);st.hp=cap(st.hp-injury,0,st.hpMax);st.injury+=Math.ceil(injury/2);text='突破失敗，受到 '+injury+' 點傷害。';if(!st.hp){st.alive=false;text+=' 角色因此死亡。'}}}break;
  case 'gatherWood':spent=120;if(st.stamina<12)return fail('採集木材需要至少 12 體力');{
   let qty=dice(st,1,4)+Math.floor(st.skills.farming/40);st.inventory.wood+=qty;st.stamina-=12;text=`取得木材 ${qty} 份，庫存 ${st.inventory.wood}。`;}
   break;
