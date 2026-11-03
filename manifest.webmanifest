@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "浮生無界・萬世因果 V8.0 完整江湖人生",
+  "short_name": "浮生無界 V8",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#110f18",
+  "theme_color": "#241c2a",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
