@@ -1,1 +1,17 @@
-{"name": "浮生無界 V8.9 三界諸國", "short_name": "浮生無界", "start_url": "./index.html", "display": "standalone", "icons": [{"src": "icon.png", "sizes": "192x192", "type": "image/png"}]}
+{
+  "id": "./",
+  "name": "浮生無界 V9.0 三界與財力地位指定重生",
+  "short_name": "浮生無界 V9",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#110f18",
+  "theme_color": "#241c2a",
+  "icons": [
+    {
+      "src": "./icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
