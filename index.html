@@ -10,7 +10,7 @@ NPC 保有目標、年齡、關係、記憶與拒絕權；玩家對話必須顯�
 持續擴充：直接修改這份完整版，不要以短篇 Demo 取代它；後續需保持測試案例。
 詳情見同套件的 V5_SPEC.md 及 QA_REPORT.md。
 -->
-<title>浮生無界・萬世因果｜V9.1 三界世界與指定重生整合版</title>
+<title>浮生無界・萬世因果｜V9.1.1 創角與存檔初始化修正版</title>
 <style>
 :root{color-scheme:dark;--bg:#101b22;--card:#1b2d35;--border:#3d5662;--gold:#f0c77e;--ink:#eee9d9;--muted:#b7c8cb;--green:#87cba5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Noto Sans TC",sans-serif}main{max-width:860px;margin:auto;padding:18px 15px 70px}h1{font-size:1.6rem;margin:0;color:var(--gold)}h2{font-size:1.14rem;margin:0 0 10px;color:#ffe1a3}h3{font-size:1rem;margin:12px 0 6px}.sub{color:var(--muted);font-size:.85rem}.panel{padding:17px;border:1px solid var(--border);background:var(--card);border-radius:15px;margin:12px 0}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,input,textarea,select{font:inherit;border-radius:9px}button{padding:10px 12px;cursor:pointer;border:1px solid #e3b56f;background:var(--gold);color:#172129;font-weight:730}button.alt{background:#334c59;color:white;border-color:#557180}button.ghost{background:transparent;color:var(--ink);border-color:#58717c}button.choice{display:block;width:100%;text-align:left;background:#314954;color:white;border-color:#59717a;margin:8px 0}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:3px solid white}textarea,input,select{background:#0e2028;color:white;border:1px solid #77909b;padding:10px;width:100%}textarea{min-height:116px}label{display:block;font-size:.94rem;margin:10px 0 5px}details>summary{cursor:pointer;font-weight:750;color:#e9c98e}details.panel[open]>summary{margin-bottom:12px}.status{border-left:4px solid #bdcdd4;border-radius:6px;background:#283f4c;padding:10px 12px;margin:10px 0}.ok{border-left-color:var(--green)}.bad{border-left-color:#f0908e}.story{white-space:pre-wrap;line-height:2.04;min-height:80px}.clock{font-weight:700;color:var(--gold);font-size:1.13rem}.entry{padding:7px 0;border-bottom:1px solid #435764;font-size:.9rem;white-space:pre-wrap}.hidden{display:none!important}#chapterArea{scroll-margin-top:12px}#topInfo{font-weight:650}#menuStatus{white-space:pre-wrap}.tag{display:inline-block;border:1px solid #5a7680;background:#283f47;padding:2px 8px;border-radius:999px;font-size:.8rem;margin:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.mutedline{font-size:.85rem;color:var(--muted)}.compact button{padding:9px 8px;font-size:.92rem}@media(max-width:540px){main{padding:12px 11px 80px}.panel{padding:14px}.row>*{flex-basis:140px}}
 
@@ -2817,15 +2817,8 @@ function transaction(fn){if(!state||busy||!state.alive)return false;
  if(localStorage.getItem(STORE)!==expected){message('另一個分頁已修改同一人生；這次行動沒有寫入，請重新整理後再操作。','bad');return false}
  try{put(draft);return result}catch(e){message('存檔失敗，未更動現有人生：'+e.message,'bad');return false}}
 function ensureBackup(raw,key){if(!localStorage.getItem(key))localStorage.setItem(key,raw)}
-try{conf=JSON.parse(localStorage.getItem(CONF)||'{}')||{}}catch{conf={}}
-try{let raw=localStorage.getItem(STORE);if(raw){state=migrate(JSON.parse(raw))}else if(localStorage.getItem(INIT)!=='1'){
- let sourceKey=LEGACY_SOURCES.find(k=>localStorage.getItem(k));
- let old=sourceKey?localStorage.getItem(sourceKey):null;
- if(old){let z=migrate(JSON.parse(old));ensureBackup(old,'fusheng_save_original_'+sourceKey);
- let arcKey=sourceKey.replace('_state','_archives');
- let archived=localStorage.getItem(arcKey);if(archived&&!localStorage.getItem(VAULT))localStorage.setItem(VAULT,archived);
- put(z)}
- }}catch(e){loadProblem='存檔讀取或轉移未完成：'+e.message+'。為保護原資料，暫停建立新人生。';state=null}
+// V9.1.1: Delayed save hydration. World constants must exist before migrate()/v85WarmWorld().
+
 function chapter(st,action,text,notes,options=null,source='系統建議'){st.chapter++;st.story='【你的行動／發言】'+action+'\n\n'+text+(notes?'\n\n【規則確認】'+notes:'');st.choices=options||sceneChoices(st);st.choiceSource=source;st.chapterHistory.push({chapter:st.chapter,at:now(st),action,story:st.story});if(st.chapterHistory.length>100)st.chapterHistory.shift();emit(st,'回合',`第 ${st.chapter} 回：${action.slice(0,130)}`,{result:notes});return st}
 function sceneChoices(st){if(st.career?.employed||((st.jobLeads||[]).some(j=>j.status==='尚未應徵'&&j.hub===v81Hub(st))))return employmentChoices(st);const v8=v8SceneChoices(st);if(v8)return v8;if(st.journey)return ['繼續趕路前往'+st.journey.destination,'在途中的安全地點休息'];const speaker=activeSpeaker(st);if(speaker)return [`繼續向${speaker.name}追問剛才的話題`,`聽聽${speaker.name}接下來怎麼說`];let here=st.npcs.filter(n=>n.alive&&n.encountered&&n.home===st.location);let b=st.birth||{};if(st.chapter===0&&st.age>=8){if(b.standing==='貧困')return ['查看家中的口糧和可用工錢','向附近可信的人打聽可做的生計'];if(b.standing==='權貴'||b.standing==='富足')return ['先核對家族公產和自己能動用的資源','詢問親族近期的家務或外界變化'];}if(st.age<7)return ['觀察照顧我的人正做什麼','試著發出聲音，表達眼前的需要'];if(st.hp<35)return ['查看自己的傷勢，想辦法向附近的人求助','檢查身邊可用的物品和遮蔽處'];if(st.food<3)return ['詢問目前所在地的食物來源與價格','查看自己的口糧，想想今天該如何維持生活'];if(b.hook&&st.chapter<3)return [`追查：${b.hook}`,'先看看周圍的人對這件事有何反應'];if(here.length)return [`我問${here[0].name}：「你現在在忙什麼？」`,'留在原地觀察街巷與行人動靜'];return ['仔細觀察眼前的環境與動靜','想想今天最需要處理的一件事']}
 function npcMemory(n,st,event){n.memory.push({at:now(st),event:String(event).slice(0,250)});if(n.memory.length>30)n.memory.shift()}
@@ -4062,6 +4055,16 @@ document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click
  el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
 }));
 
+// Save migration must happen after V85_ROOT_HUBS and all V9 world/store constants initialize.
+try{conf=JSON.parse(localStorage.getItem(CONF)||'{}')||{}}catch{conf={}}
+try{let raw=localStorage.getItem(STORE);if(raw){state=migrate(JSON.parse(raw))}else if(localStorage.getItem(INIT)!=='1'){
+ let sourceKey=LEGACY_SOURCES.find(k=>localStorage.getItem(k));
+ let old=sourceKey?localStorage.getItem(sourceKey):null;
+ if(old){let z=migrate(JSON.parse(old));ensureBackup(old,'fusheng_save_original_'+sourceKey);
+ let arcKey=sourceKey.replace('_state','_archives');
+ let archived=localStorage.getItem(arcKey);if(archived&&!localStorage.getItem(VAULT))localStorage.setItem(VAULT,archived);
+ put(z)}
+ }}catch(e){loadProblem='存檔讀取或轉移未完成：'+e.message+'。為保護原資料，暫停建立新人生。';state=null}
 render();if(loadProblem)message(loadProblem,'bad');
 
 // Single navigation drawer; status, relationships, chronology and map are read-only screens.
