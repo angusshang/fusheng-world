@@ -91,6 +91,8 @@ body.libraryOpen #libraryBackdrop{display:block}body.libraryOpen{overflow:hidden
 .libraryBody .atlas{max-width:100%}
 #chapterArea .story{font-size:1.24rem!important;line-height:2.12!important}
 @media(max-width:540px){.gameHead h1{font-size:1.18rem!important}.gameHead .sub{font-size:.67rem!important}#libraryToggle{font-size:.81rem;padding:8px 9px}#chapterArea .story{font-size:1.2rem!important}}
+
+.financeLedger{white-space:pre-wrap;line-height:1.8;background:#1b2631;border:1px solid #74685c;padding:12px;border-radius:12px;font-size:.91rem}.offlineControls{padding:12px;border:1px solid #8f765a;border-radius:12px;margin:10px 0}.offlineControls select{width:100%;max-width:100%;font-size:.92rem}.offlineControls button{margin-top:8px}
 </style><style>
 /* Narrative-first portrait interface: no instant command shelf. */
 :root{--paper-ink:#352622}
@@ -152,14 +154,14 @@ main{max-width:750px!important;padding:12px 12px 46px!important;margin-inline:au
 #profilePanel #stats,#profilePanel #cultivationStatus,#profilePanel #family,#profilePanel #assets,#profilePanel #npcs,#profilePanel #v5Detail{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;line-height:1.85;font-size:.94rem;padding:12px 10px;margin:8px 0 18px;border-radius:10px;background:#1d2632;border:1px solid #555166}
 #profilePanel h3{font-size:1rem;margin-top:18px;margin-bottom:6px;color:#e8c58e}
 #libraryDrawer .libraryBody{overflow-x:hidden}
-</style></head><body><section id="rebirthOverlay" hidden aria-modal="true" role="dialog" aria-label="選擇重生方式"><div class="rebirthCard"><h2>☯ 選擇這一世的起點</h2><p>三種方式都在同一個宇宙；歷史現世僅涵蓋先秦至清朝，武功與江湖自然存在，仙門洞天隱藏於現世。出生天賦不等於已學會法術。</p><div class="rebirthModes" role="group" aria-label="重生方式"><button type="button" data-rebirth="designated">指定重生</button><button type="button" data-rebirth="random">隨機重生</button><button type="button" data-rebirth="basic" class="active">基本重生</button></div><p id="rebirthExplain">一定出生在現世。身分與地位隨機，可能有靈根卻一輩子不知修仙。</p><div id="designatedOptions" hidden><label for="chosenWorld">出生所在層次</label><select id="chosenWorld"><option value="mortal">下界／凡俗現世（零修為起步）</option><option value="hidden">中界／隱世（成熟修行者常見金丹）</option><option value="upper">上界／仙域（成熟修行者常見元嬰）</option></select><label for="chosenEra">歷史／地域背景</label><select id="chosenEra"><option value="random">隨機選擇時代與地區</option></select><label for="chosenSite">出生地點</label><select id="chosenSite"><option value="random">隨機選擇所在地</option></select><label for="chosenClass">出生身分</label><select id="chosenClass"><option value="random">隨機身分</option><option value="農家子弟">農家子弟</option><option value="市井百姓">市井百姓</option><option value="工匠家庭">工匠家庭</option><option value="江湖武門">江湖武門</option><option value="書香門第">書香門第</option><option value="富商之家">富商之家</option><option value="世家士族">世家士族</option><option value="官宦之家">官宦之家</option><option value="王侯宗室">王侯宗室</option><option value="修仙世家">修仙世家</option><option value="宗門弟子">宗門弟子</option><option value="仙域世族">仙域世族</option></select><label for="chosenStatus">家庭財力／社會地位</label><select id="chosenStatus"><option value="random">隨機地位</option><option value="貧困">貧困</option><option value="平民">普通</option><option value="小康">小康</option><option value="富足">富足</option><option value="權貴">權貴</option></select></div><div class="row"><button type="button" id="rebirthCancel" class="alt">返回</button><button type="button" id="rebirthConfirm">確認開始這一世</button></div><p style="font-size:.78rem">如果已有正在進行的人生，確認時才會封存原人生並建立新人生；取消不影響存檔。</p></div></section><main><div id="libraryBackdrop"></div><aside aria-label="遊戲資料與設定" aria-modal="true" hidden="" id="libraryDrawer" role="dialog"><div class="libraryHeading"><strong>遊戲資料</strong><button aria-label="關閉選單" id="libraryClose" type="button">✕ 關閉</button></div><div class="libraryBody"><details class="panel" id="profilePanel"><summary>人物狀態、家庭與人物關係</summary><h3>角色能力與庫存</h3><div id="stats"></div><h3>修行與世界基準</h3><div id="cultivationStatus"></div><h3>家庭與子女</h3><div id="family"></div><h3>財產與商業</h3><div id="assets"></div><h3>債務、裝備與家產</h3><div id="v5Detail"></div><h3>NPC 自主生活與記憶</h3><div class="npcCards" id="npcCards"></div><div id="npcs"></div><h3>世界事件</h3><div id="news"></div><h3>收支帳本</h3><div id="ledger"></div></details><details class="panel" id="chroniclePanel"><summary>事件經過與歷史摘要</summary><h3>最近 100 回完整劇情</h3><div id="history"></div><h3>事件帳本（最多 800 筆）</h3><div id="events"></div></details><details class="panel" id="mapPanel"><summary>當前世界地圖</summary><p class="sub">地圖是當前地域的道路示意。點目的地只填入行動文字，不會自動瞬移；按「推進下一回」才會檢查體力、道路與行程時間。</p><div aria-label="五處區域的示意地圖" class="atlas"><svg aria-hidden="true" preserveaspectratio="none" viewbox="0 0 600 330" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="mapGround" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#e8d8ae"></stop><stop offset="1" stop-color="#a9bd99"></stop></lineargradient><lineargradient id="mapSea"><stop stop-color="#8ec6bd"></stop><stop offset="1" stop-color="#507c96"></stop></lineargradient></defs><rect fill="url(#mapGround)" height="330" width="600"></rect><path d="M382 250 Q469 190 600 190 L600 330 L386 330 Z" fill="url(#mapSea)" opacity=".9"></path><path d="M0 202 Q105 185 160 210 T300 193 T446 221 L470 330 L0 330 Z" fill="#c4c797" opacity=".6"></path><path d="M64 0 L106 62 L138 17 L177 94 L222 7 L265 88 L292 18 L330 91 L355 0" fill="none" opacity=".43" stroke="#8a9880" stroke-linejoin="round" stroke-width="17"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".9" stroke="#d8e0b8" stroke-width="25"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".96" stroke="#75b0b5" stroke-width="15"></path><path d="M108 95 Q166 127 145 198 T310 183 T483 240" fill="none" opacity=".75" stroke="#90735a" stroke-dasharray="8 10" stroke-width="5"></path><g opacity=".45" stroke="#587a67" stroke-width="4"><path d="M30 180 l14 -31 l14 31z M68 178 l12 -24 l12 24z M387 130 l14 -31 l14 31z M412 143 l11 -25 l11 25z" fill="#5f9666"></path></g></svg><div class="mapPins" id="mapPins"></div><div class="atlasStamp">浮生州域圖 · 示意路程</div></div><div aria-live="polite" class="sub" id="travelHint"></div><div class="row" style="margin-top:12px"><button class="alt" id="mapBack" type="button">返回目前場景</button></div></details><details class="panel" id="settingsPanel"><summary>設定、備份與輪迴</summary><h3>舊版人生與復原</h3><p class="sub">列出此瀏覽器仍保存的舊版人生。切換前會保存目前人生快照；不會合併不同版本的劇情或覆寫舊版存檔。</p><div id="saveSourceList"></div><div class="row"><button type="button" class="alt" id="refreshSources">重新掃描舊人生</button><button type="button" class="alt" id="exportAllSaves">備份全部版本存檔</button></div><label>Cloudflare Worker 網址</label><input id="endpoint" placeholder="https://example.workers.dev"/><label>通行密語（只儲存在你的瀏覽器）</label><input autocomplete="off" id="password" type="password"/><div class="row" style="margin-top:10px"><button class="alt" id="config">儲存 AI 設定</button><button class="alt" id="check">測試 Worker 綁定</button><button class="alt" id="export">匯出 JSON 備份</button><button class="alt" id="import">匯入 JSON 備份</button></div><div class="row" style="margin-top:10px"><button class="alt" id="archive">結束並封存本世</button><button class="ghost" id="discard">結束且不保留本世</button><button class="alt" id="reincarnate">下一世（先封存）</button><button class="alt" id="continueHeir">由成年子女承續人生</button></div><input accept=".json,application/json" class="hidden" id="file" type="file"/><p class="sub">刪除本世只移除 V5 正在遊玩的人生，不動 V3 舊版與已下載的 JSON。已封存人生會保留在 V5 輪迴史；死亡並不保證所有資產可自動繼承。</p></details></div></aside>
-<div class="gameHead"><div><h1>浮生無界 <small>· 萬世因果</small></h1><div class="sub">隨機人生 · 故事主導 · 每回一個行動 <strong style="color:#ffe09d;border:1px solid #b48c50;border-radius:5px;padding:2px 5px;white-space:nowrap">修正版本 V7.0 · 1102F</strong></div></div><span class="versionToken">直式 · 三種重生模式</span><button aria-controls="libraryDrawer" aria-expanded="false" aria-haspopup="dialog" id="libraryToggle" type="button">☰ 遊戲資料</button></div>
+</style><link rel="manifest" href="./manifest.webmanifest"/><meta name="theme-color" content="#241c2a"/></head><body><section id="rebirthOverlay" hidden aria-modal="true" role="dialog" aria-label="選擇重生方式"><div class="rebirthCard"><h2>☯ 選擇這一世的起點</h2><p>三種方式都在同一個宇宙；歷史現世僅涵蓋先秦至清朝，武功與江湖自然存在，仙門洞天隱藏於現世。出生天賦不等於已學會法術。</p><div class="rebirthModes" role="group" aria-label="重生方式"><button type="button" data-rebirth="designated">指定重生</button><button type="button" data-rebirth="random">隨機重生</button><button type="button" data-rebirth="basic" class="active">基本重生</button></div><p id="rebirthExplain">一定出生在現世。身分與地位隨機，可能有靈根卻一輩子不知修仙。</p><div id="designatedOptions" hidden><label for="chosenWorld">出生所在層次</label><select id="chosenWorld"><option value="mortal">下界／凡俗現世（零修為起步）</option><option value="hidden">中界／隱世（成熟修行者常見金丹）</option><option value="upper">上界／仙域（成熟修行者常見元嬰）</option></select><label for="chosenEra">歷史／地域背景</label><select id="chosenEra"><option value="random">隨機選擇時代與地區</option></select><label for="chosenSite">出生地點</label><select id="chosenSite"><option value="random">隨機選擇所在地</option></select><label for="chosenClass">出生身分</label><select id="chosenClass"><option value="random">隨機身分</option><option value="農家子弟">農家子弟</option><option value="市井百姓">市井百姓</option><option value="工匠家庭">工匠家庭</option><option value="江湖武門">江湖武門</option><option value="書香門第">書香門第</option><option value="富商之家">富商之家</option><option value="世家士族">世家士族</option><option value="官宦之家">官宦之家</option><option value="王侯宗室">王侯宗室</option><option value="修仙世家">修仙世家</option><option value="宗門弟子">宗門弟子</option><option value="仙域世族">仙域世族</option></select><label for="chosenStatus">家庭財力／社會地位</label><select id="chosenStatus"><option value="random">隨機地位</option><option value="貧困">貧困</option><option value="平民">普通</option><option value="小康">小康</option><option value="富足">富足</option><option value="權貴">權貴</option></select></div><div class="row"><button type="button" id="rebirthCancel" class="alt">返回</button><button type="button" id="rebirthConfirm">確認開始這一世</button></div><p style="font-size:.78rem">如果已有正在進行的人生，確認時才會封存原人生並建立新人生；取消不影響存檔。</p></div></section><main><div id="libraryBackdrop"></div><aside aria-label="遊戲資料與設定" aria-modal="true" hidden="" id="libraryDrawer" role="dialog"><div class="libraryHeading"><strong>遊戲資料</strong><button aria-label="關閉選單" id="libraryClose" type="button">✕ 關閉</button></div><div class="libraryBody"><details class="panel" id="profilePanel"><summary>人物狀態、家庭與人物關係</summary><h3>角色能力與庫存</h3><div id="stats"></div><h3>修行與世界基準</h3><div id="cultivationStatus"></div><h3>家庭與子女</h3><div id="family"></div><h3>財產與商業</h3><div id="assets"></div><h3>家族／商號／NPC 資產負債表（V7.4）</h3><div id="balanceSheets" class="financeLedger"></div><h3>債務、裝備與家產</h3><div id="v5Detail"></div><h3>NPC 自主生活與記憶</h3><div class="npcCards" id="npcCards"></div><div id="npcs"></div><h3>世界事件</h3><div id="news"></div><h3>收支帳本</h3><div id="ledger"></div></details><details class="panel" id="chroniclePanel"><summary>事件經過與歷史摘要</summary><h3>最近 100 回完整劇情</h3><div id="history"></div><h3>事件帳本（最多 800 筆）</h3><div id="events"></div></details><details class="panel" id="mapPanel"><summary>當前世界地圖</summary><p class="sub">地圖是當前地域的道路示意。點目的地只填入行動文字，不會自動瞬移；按「推進下一回」才會檢查體力、道路與行程時間。</p><div aria-label="五處區域的示意地圖" class="atlas"><svg aria-hidden="true" preserveaspectratio="none" viewbox="0 0 600 330" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="mapGround" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#e8d8ae"></stop><stop offset="1" stop-color="#a9bd99"></stop></lineargradient><lineargradient id="mapSea"><stop stop-color="#8ec6bd"></stop><stop offset="1" stop-color="#507c96"></stop></lineargradient></defs><rect fill="url(#mapGround)" height="330" width="600"></rect><path d="M382 250 Q469 190 600 190 L600 330 L386 330 Z" fill="url(#mapSea)" opacity=".9"></path><path d="M0 202 Q105 185 160 210 T300 193 T446 221 L470 330 L0 330 Z" fill="#c4c797" opacity=".6"></path><path d="M64 0 L106 62 L138 17 L177 94 L222 7 L265 88 L292 18 L330 91 L355 0" fill="none" opacity=".43" stroke="#8a9880" stroke-linejoin="round" stroke-width="17"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".9" stroke="#d8e0b8" stroke-width="25"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".96" stroke="#75b0b5" stroke-width="15"></path><path d="M108 95 Q166 127 145 198 T310 183 T483 240" fill="none" opacity=".75" stroke="#90735a" stroke-dasharray="8 10" stroke-width="5"></path><g opacity=".45" stroke="#587a67" stroke-width="4"><path d="M30 180 l14 -31 l14 31z M68 178 l12 -24 l12 24z M387 130 l14 -31 l14 31z M412 143 l11 -25 l11 25z" fill="#5f9666"></path></g></svg><div class="mapPins" id="mapPins"></div><div class="atlasStamp">浮生州域圖 · 示意路程</div></div><div aria-live="polite" class="sub" id="travelHint"></div><div class="row" style="margin-top:12px"><button class="alt" id="mapBack" type="button">返回目前場景</button></div></details><details class="panel" id="settingsPanel"><summary>設定、備份與輪迴</summary><h3>舊版人生與復原</h3><p class="sub">列出此瀏覽器仍保存的舊版人生。切換前會保存目前人生快照；不會合併不同版本的劇情或覆寫舊版存檔。</p><div id="saveSourceList"></div><div class="row"><button type="button" class="alt" id="refreshSources">重新掃描舊人生</button><button type="button" class="alt" id="exportAllSaves">備份全部版本存檔</button></div><label>Cloudflare Worker 網址</label><input id="endpoint" placeholder="https://example.workers.dev"/><label>通行密語（只儲存在你的瀏覽器）</label><input autocomplete="off" id="password" type="password"/><div class="row" style="margin-top:10px"><button class="alt" id="config">儲存 AI 設定</button><button class="alt" id="check">測試 Worker 綁定</button><button class="alt" id="export">匯出 JSON 備份</button><button class="alt" id="import">匯入 JSON 備份</button></div><div class="row" style="margin-top:10px"><button class="alt" id="archive">結束並封存本世</button><button class="ghost" id="discard">結束且不保留本世</button><button class="alt" id="reincarnate">下一世（先封存）</button><button class="alt" id="continueHeir">由成年子女承續人生</button></div><input accept=".json,application/json" class="hidden" id="file" type="file"/><p class="sub">刪除本世只移除 V5 正在遊玩的人生，不動 V3 舊版與已下載的 JSON。已封存人生會保留在 V5 輪迴史；死亡並不保證所有資產可自動繼承。</p></details></div></aside>
+<div class="gameHead"><div><h1>浮生無界 <small>· 萬世因果</small></h1><div class="sub">隨機人生 · 故事主導 · 每回一個行動 <strong style="color:#ffe09d;border:1px solid #b48c50;border-radius:5px;padding:2px 5px;white-space:nowrap">修正版本 V7.1 · 1102F</strong></div></div><span class="versionToken">直式 · 三種重生模式</span><button aria-controls="libraryDrawer" aria-expanded="false" aria-haspopup="dialog" id="libraryToggle" type="button">☰ 遊戲資料</button></div>
 <details class="panel obsoleteRules"><summary>長期推演：年齡、健康、家庭與世界自主運作</summary><p class="sub">每年採 360 天，逐日處理飲食、家庭消耗、工作、NPC 生活、世界物價、疾病及死亡。推演可能提早中斷，不保證一定存活或完成事業。</p><div class="row"><div><label>經過幾年</label><input id="years" max="100" min="0" type="number" value="0"/></div><div><label>再經過幾天</label><input id="days" max="359" min="0" type="number" value="0"/></div></div><button class="alt" id="jump" style="margin-top:10px">確定推演時間</button></details>
-<nav aria-label="遊戲快捷導覽" class="obsoleteRules" id="bottomNav"><button class="active" data-nav="artScene" type="button"><span>🏞️</span>場景</button><button data-nav="mapPanel" type="button"><span>🧭</span>地圖</button><button data-nav="chapterArea" type="button"><span>📜</span>劇情</button><button data-nav="worldPanel" type="button"><span>⚒️</span>行動</button><button data-nav="profilePanel" type="button"><span>👥</span>人物</button><button data-nav="settingsPanel" type="button"><span>⚙️</span>設定</button></nav><section class="panel" id="menu"><h2>人生主選單</h2><div class="sub" id="menuStatus"></div><div class="row" style="margin-top:10px"><button id="continue">繼續人生</button><button class="alt" id="new">選擇重生方式</button><button class="alt" id="backup">匯出完整備份</button></div><p class="sub">三種重生模式共用同一宇宙；本版首次進入只複製先前直式存檔，保留原檔。新人生會重新抽選年代、文化、國度、地區、家庭、天賦及開場事件。</p></section><section class="panel" id="heroPanel"><div id="topInfo">尚未開始人生</div><div class="clock" id="clock">—</div><div class="sub" id="location"></div><div class="mutedline" id="quickStats"></div>
+<nav aria-label="遊戲快捷導覽" class="obsoleteRules" id="bottomNav"><button class="active" data-nav="artScene" type="button"><span>🏞️</span>場景</button><button data-nav="mapPanel" type="button"><span>🧭</span>地圖</button><button data-nav="chapterArea" type="button"><span>📜</span>劇情</button><button data-nav="worldPanel" type="button"><span>⚒️</span>行動</button><button data-nav="profilePanel" type="button"><span>👥</span>人物</button><button data-nav="settingsPanel" type="button"><span>⚙️</span>設定</button></nav><section class="panel" id="menu"><h2>人生主選單</h2><div class="offlineControls"><label for="offlineMode">敘事模式</label><select id="offlineMode"><option value="auto">自動（有網路優先 AI，斷網用本機敘事）</option><option value="offline">永遠離線（只用本機規則）</option><option value="online">只使用線上 AI（失敗則不執行）</option></select><div class="mutedline" id="offlineStatus">首次須連線開啟一次才能安裝離線網頁；存檔保存在本裝置瀏覽器。</div><button class="alt" type="button" id="cacheOffline">安裝／更新離線資源</button></div><div class="sub" id="menuStatus"></div><div class="row" style="margin-top:10px"><button id="continue">繼續人生</button><button class="alt" id="new">選擇重生方式</button><button class="alt" id="backup">匯出完整備份</button></div><p class="sub">三種重生模式共用同一宇宙；本版首次進入只複製先前直式存檔，保留原檔。新人生會重新抽選年代、文化、國度、地區、家庭、天賦及開場事件。</p></section><section class="panel" id="heroPanel"><div id="topInfo">尚未開始人生</div><div class="clock" id="clock">—</div><div class="sub" id="location"></div><div class="mutedline" id="quickStats"></div>
 <div aria-live="polite" class="resourceStrip">
 <div class="resource"><label>❤️ 生命</label><strong id="artHP">—</strong><div class="meter"><b id="hpFill"></b></div></div>
 <div class="resource"><label>💠 體力</label><strong id="artST">—</strong><div class="meter stam"><b id="stFill"></b></div></div>
-<div class="resource"><label>🪙 銀兩</label><strong id="artMoney">—</strong></div>
+<div class="resource"><label>🪙 貨幣資產</label><strong id="artMoney">—</strong></div>
 <div class="resource"><label>🌾 糧食</label><strong id="artFood">—</strong></div>
 </div>
 <div class="quickActions obsoleteRules"><div class="sub">快速行動 · 使用既有規則結算</div><div class="row"><button class="alt" data-act="work">🔨 工作</button><button class="alt" data-act="forage">🌿 覓食</button><button class="alt" data-act="rest">🍵 休息</button><button class="alt" data-act="social">💬 交談</button></div></div>
@@ -183,6 +185,11 @@ const STORE='fusheng_save_main', PREVIOUS='fusheng_portrait_v2_state', LEGACY='f
 const $=id=>document.getElementById(id), cap=(n,a,b)=>Math.min(b,Math.max(a,n)), nu=(v,d=0)=>Number.isFinite(Number(v))?Number(v):d, clone=x=>JSON.parse(JSON.stringify(x));
 const names=['林秋','柳清禾','陸觀瀾','謝無雙','沈青','秦野','顧芸','韓月棠','周桂','邵紅綾','羅映荷','蘇暮'];
 let state=null,conf={},busy=false,timer=null,fullStory='',loadProblem='';
+const V72_OFFLINE_MODE_KEY='fusheng_offline_mode_v72';
+function v72NarrationMode(){try{return localStorage.getItem(V72_OFFLINE_MODE_KEY)||'auto'}catch{return 'auto'}}
+function v72MustUseOffline(){return v72NarrationMode()==='offline'||(v72NarrationMode()==='auto'&&typeof navigator!=='undefined'&&!navigator.onLine)}
+function v72OfflinePlay(action,minutes){if(contextualSpeechReply(state,action))ensureSceneSpeaker(state);let target=encounterTarget(state,action,$('npcSelect').value),code=dialogueRoute(state,action);const result=finishAction(action,code,minutes,target?.id);completed(result);return result}
+
 function rand(st){st.seed=((Math.imul(1664525,st.seed>>>0)+1013904223)>>>0);return st.seed/4294967296}
 function dice(st,a,b){return a+Math.floor(rand(st)*(b-a+1))}
 function chance(st,p){return rand(st)<cap(p,0,1)}
@@ -243,6 +250,53 @@ function econFormatSilver(v){
  const pieces=Math.floor(copper/ECON_COINS.silverPiece);copper%=ECON_COINS.silverPiece;
  const parts=[gold?gold+'金元寶':'',big?big+'銀元寶':'',pieces?+(pieces/10).toFixed(1)+'兩碎銀':'',copper?copper+'文銅錢':''].filter(Boolean);
  return parts.join('、')||'0 文銅錢';
+}
+// V7.4 財務：只把確定記錄的錢當成現金；估價均標記遊戲參考價，不把未知債務算作零。
+function v72FinancialTables(st){
+ if(!st)return '尚未開始人生';
+ const mortal=econRealm(st)==='mortal';
+ const fmt=v=>mortal?econFormatSilver(Math.max(0,Number(v)||0)):econFormatStones(Math.max(0,Number(v)||0));
+ const unit=mortal?'兩銀值':'下品靈石計價單位';
+ const moneyLine=(label,n)=>label+'：'+fmt(n)+'（'+Math.round((Number(n)||0)*100)/100+' '+unit+'）';
+ const f=st.familyEstate||null;
+ const assetRanges={住屋: [45,210],宅院:[150,800],田地:[20,110],商鋪:[80,420],商號:[70,500],貨棧:[90,550],農田:[20,110],礦場:[100,700],馬匹:[5,30]};
+ function propertyEstimate(a){const count=Math.max(0,Number(a.quantity)||0);const price=assetRanges[a.kind];return price?{low:count*price[0],high:count*price[1]}:null;}
+ let lines=['【玩家個人】',moneyLine('可用現銀',st.money), '私人債務：'+((st.debt!==null&&st.debt!==undefined&&Number.isFinite(Number(st.debt)))?fmt(st.debt):'未登記／待核對')];
+ const personal=(st.assets||[]).filter(a=>a.owner===st.id||a.owner==='player');
+ lines.push('私人登記財產：'+(personal.map(a=>a.name||a.kind).join('、')||'無獨立登記'));
+ lines.push('玩家總身家：需納入全部估值及負債後才能確認');
+ lines.push('', '【家族公產（不得直接當個人現銀）】');
+ if(f){
+  lines.push('家族：'+(f.clanName||'未命名家族'), moneyLine('族庫流動現銀',f.treasury),moneyLine('每月收入',f.monthlyIncome),moneyLine('每月支出',f.monthlyExpenses));
+  let lo=0,hi=0,hasUnknown=false,detail=[];
+  for(const a of (f.estate||[])){const e=propertyEstimate(a);detail.push((a.kind||'其他產業')+' × '+(a.quantity||0)+(e?'（參考估值 '+fmt(e.low)+'～'+fmt(e.high)+'）':'（尚無可靠估值）'));if(e){lo+=e.low;hi+=e.high;}else hasUnknown=true;}
+  lines.push('家族產業：'+(detail.join('；')||'無登記項目'));
+  const debt=(f.debt!==null&&f.debt!==undefined&&Number.isFinite(Number(f.debt)))?Math.max(0,Number(f.debt)):null;
+  lines.push('家族債務：'+(debt===null?'尚未建帳（不能視作沒有債務）':fmt(debt)));
+  if(!hasUnknown && debt!==null)lines.push('家族資產淨值遊戲估值區間：'+fmt(Math.max(0,lo+(f.treasury||0)-debt))+'～'+fmt(Math.max(0,hi+(f.treasury||0)-debt)));
+  else lines.push('家族總身家：待完整估價與負債核對；僅可確認族庫現銀 '+fmt(f.treasury));
+ }else lines.push('尚無家族公產帳本');
+ lines.push('', '【玩家商號】');
+ const b=st.business;
+ if(b){const stockValue=Number(b.stock)||0;const cash=Number(b.cash)||0; const debt=(b.debt!==null&&b.debt!==undefined&&Number.isFinite(Number(b.debt)))?Number(b.debt):null;
+  lines.push('商號：'+(b.name||'未命名'),moneyLine('商號現金',cash),'舊版統一庫存件數：'+stockValue+'（貨品與成本未充分列帳，不冒充存貨價值）','商號債務：'+(debt===null?'尚未建帳':fmt(debt)),'商號總身家：待完整存貨、設備、債權與負債估值');
+ }else lines.push('尚無商號');
+ lines.push('', '【已相遇 NPC 個人財務】');
+ const people=(st.npcs||[]).filter(n=>n.encountered||n.familyRole).slice(0,36);
+ if(!people.length)lines.push('尚未與 NPC 相遇');
+ for(const n of people){lines.push((n.familyRole||n.bond||'居民')+' '+n.name+'｜'+moneyLine('已登記現銀',n.money)+'｜家產／債務：尚未完整建帳（不等於沒有）');}
+ lines.push('', '註：不會因顯示估價而增加金錢；舊存檔缺少的房產價格、欠款、商號股權不會被憑空捏造。');
+ return lines.join('\n');
+}
+function econFamilyFinance(st){
+ const f=st.familyEstate;if(!f)return '家族財務：尚未建立';
+ const mortal=econRealm(st)==='mortal';
+ const fmt=(v)=>mortal?econFormatSilver(v):econFormatStones(v);
+ const val=(n)=>Math.max(0,Number(n)||0);
+ const possessions=Array.isArray(f.estate)?f.estate:[];
+ const goods=possessions.map(x=>`${x.kind||'家產'} ${val(x.quantity)} 處／份`).join('、')||'無登記產業';
+ const net=val(f.monthlyIncome)-val(f.monthlyExpenses);
+ return `【家族財務】\n家族現有流動公款：${fmt(f.treasury)}（${val(f.treasury)} ${mortal?'兩銀值':'下品靈石計價單位'}；不屬於玩家私產）\n每月收入：${fmt(f.monthlyIncome)}｜每月支出：${fmt(f.monthlyExpenses)}｜每月結餘：${net>=0?'+':'-'}${fmt(Math.abs(net))}\n登記產業：${goods}\n家族總身家：尚無可靠總估值（宅產、田地、商號及債務尚未完整估價；不可把族庫誤認為總身家）`;
 }
 function econFormatStones(v){let n=Math.max(0,Math.floor(Number(v)||0));let out=[];for(let [unit,label] of [['extreme','極品'],['high','上品'],['middle','中品'],['low','下品']]){let q=Math.floor(n/ECON_STONES[unit]);n%=ECON_STONES[unit];if(q)out.push(q+'塊'+label+'靈石')}return out.join('、')||'0 塊下品靈石'}
 function econLedger(st,kind,detail){let e=econInit(st);e.trades.push({at:now(st),kind,detail:String(detail).slice(0,220)});if(e.trades.length>150)e.trades.shift()}
@@ -485,7 +539,288 @@ function updateConversationAfterRule(st,action,code,result,targetId){
   keepConversation(st,n,action,code==='familyFundingTalk'?'家族資助與經商商議':null);
  }
 }
+// V7.4 本機意圖規劃器：不需要 Cloudflare，不授權 AI 修改遊戲事實。
+// 回傳單一「主要可結算行動」；話語內容仍原樣傳給敘事器。
+
+// V7.4：非常規行動、犯罪紀錄及地方通緝（所有數值由本機結算，不交給 AI 更改）
+const V74_CRIME_RULES={
+  theft:{label:'竊盜',bounty:12,severity:12},
+  robbery:{label:'搶奪',bounty:35,severity:30},
+  assault:{label:'傷害',bounty:24,severity:22},
+  homicide:{label:'殺人',bounty:180,severity:90},
+  arson:{label:'縱火',bounty:85,severity:70},
+  coercion:{label:'性暴力企圖',bounty:150,severity:90},
+  trespass:{label:'擅闖',bounty:8,severity:7},
+  fraud:{label:'詐欺',bounty:20,severity:15}
+};
+function ensureCrimeState(st){
+  if(!st.crimeV74||typeof st.crimeV74!=='object')st.crimeV74={reputation:0,heat:{},bounties:{},cases:[],detainedUntil:0};
+  const c=st.crimeV74;
+  c.reputation=Number(c.reputation)||0;c.heat=c.heat||{};c.bounties=c.bounties||{};
+  c.cases=Array.isArray(c.cases)?c.cases:[];
+  return c;
+}
+function crimeRegion(st){return String(st.localRegion||st.birth?.country||st.location||'未知地域').split('·')[0];}
+function classifyExtremeAction(raw){
+  const a=String(raw||'').trim();
+  // 描述、疑問、否定與引述不構成執行；避免因 NPC 問話就自動犯罪。
+  if(/^(?:如果|假如|假設|為什麼|聽說|有人說|我曾經|我不想|我不會|不要|別|禁止|能不能|可不可以|是否|如果有人|阻止|制止|勸阻|救下|阻攔|抓住犯人|檢舉|報案)/.test(a))return null;
+  if(/(?:強姦|強奸|性侵|強暴|逼迫性交|非自願性行為)/.test(a))return {type:'coercion',code:'crimeV74'};
+  if(/(?:殺死|殺掉|殺了|殺害|砍死|刺死|弄死)/.test(a) && !/(?:想不想|要不要|怎麼辦|問|說|討論)/.test(a))return {type:'homicide',code:'crimeV74'};
+  if(/(?:搶劫|搶走|搶奪|打劫)/.test(a))return {type:'robbery',code:'crimeV74'};
+  if(/(?:偷走|偷取|行竊|偷竊|扒竊)/.test(a))return {type:'theft',code:'crimeV74'};
+  if(/(?:放火|縱火|燒毀)/.test(a))return {type:'arson',code:'crimeV74'};
+  if(/(?:毆打|揍他|揍她|揍人|打傷|痛毆)/.test(a))return {type:'assault',code:'crimeV74'};
+  if(/(?:闖入私宅|擅闖|私闖)/.test(a))return {type:'trespass',code:'crimeV74'};
+  if(/(?:詐騙|騙取財物|造假帳)/.test(a))return {type:'fraud',code:'crimeV74'};
+  if(/(?:吃屎|吃糞|吃大便|吞食排泄物)/.test(a))return {type:'filth',code:'extremeV74'};
+  if(/(?:自首|向官府投案|投案自首)/.test(a))return {type:'surrender',code:'crimeStatusV74'};
+  if(/(?:查看通緝|查看罪案|我的懸賞|通緝狀態|查看惡名)/.test(a))return {type:'status',code:'crimeStatusV74'};
+  return null;
+}
+function crimeTarget(st,action,targetId){
+  let n=familyTarget(st,action)||(st.npcs||[]).find(x=>x.name&&action.includes(x.name))
+    ||activeSpeaker(st)||(st.npcs||[]).find(x=>x.id===targetId&&x.alive&&x.home===st.location&&x.encountered);
+  return n&&n.alive&&n.home===st.location?n:null;
+}
+function resolveExtremeV74(st,code,targetId){
+  const raw=String(st.pendingAction||'');
+  const parsed=classifyExtremeAction(raw);
+  if(!parsed||parsed.code!==code)return {ok:false,text:'無法辨識非常規行動',minutes:0};
+  const c=ensureCrimeState(st), region=crimeRegion(st);
+  if(code==='crimeStatusV74'){
+    if(parsed.type==='status')return {ok:true,verified:true,kind:'治安紀錄',minutes:0,
+      text:'目前惡名 '+c.reputation+'；'+Object.entries(c.bounties).map(([r,v])=>r+'懸賞 '+v+' 兩銀值').join('；')+'；案件 '+c.cases.length+' 件。'};
+    const amount=Number(c.bounties[region]||0);
+    if(amount<=0)return {ok:false,text:'本地沒有待處理通緝案件；如有外地案件仍須另查',minutes:0};
+    // 投案不等於立刻免罪：紀錄在案並被官府收押，保留司法後續。
+    c.detainedUntil=(st.world?.tick||0)+3;
+    c.cases.push({at:now(st),region,type:'投案',status:'待審',witnessed:true});
+    let adv=advance(st,60);emit(st,'投案','自首後被帶至官府等待審理',{region});
+    return {ok:true,verified:true,kind:'官府',minutes:adv.minutes,text:'你向當地官府投案，已記錄待審案件；通緝不會因口頭自首而立即清除。'};
+  }
+  if(parsed.type==='filth'){
+    st.stamina=Math.max(0,st.stamina-3);
+    st.illness=Math.min(100,(st.illness||0)+dice(st,3,12));
+    const adv=advance(st,15);
+    emit(st,'非常規行為','吞食不潔物造成噁心與疾病風險，未增加任何有益數值');
+    return {ok:true,verified:true,kind:'非常規行為',minutes:adv.minutes,
+      text:'你做出極不衛生的行為，感到噁心不適，疾病風險增加；附近人物可能反感或出面制止。'};
+  }
+  const def=V74_CRIME_RULES[parsed.type], n=crimeTarget(st,raw,targetId);
+  const witnessed=!!n || chance(st,.42); // 公共區域可能有目擊者，但不保證
+  const guard=chance(st, witnessed?.36:.11);
+  let success=false,details='';
+  if(parsed.type==='coercion'){
+    // 不模擬性暴力實施過程；以企圖、抵抗、制止及司法後果結算。
+    details='非自願侵害的企圖遭到抵抗或中止，沒有描寫或計算侵害完成。';
+  }else if(parsed.type==='homicide'){
+    if(!n)details='找不到可核實的當面目標，沒有任何人被宣告死亡。';
+    else {
+      success=chance(st,Math.max(.03,Math.min(.5,.13+(st.skills?.combat||0)/320-(n.skill||0)/420)));
+      if(success){n.alive=false;n.activity='遭致命襲擊身亡';n.encountered=true;
+        if(st.household?.partnerId===n.id){st.household.married=false;st.household.partnerId=null;}
+        details=n.name+'死亡，已記入人物與事件帳本。';}
+      else {st.injury=Math.min(100,(st.injury||0)+dice(st,1,8));details=n.name+'抵抗並逃離，沒有確認死亡。';}
+    }
+  }else if(parsed.type==='assault' || parsed.type==='robbery'){
+    if(n){success=chance(st,.28+(st.skills?.combat||0)/250);n.trust=Math.max(-100,(n.trust||0)-25);n.fond=Math.max(-100,(n.fond||0)-30);
+      if(success){n.health=Math.max(1,(n.health||80)-dice(st,5,20));details=n.name+'受到傷害並求助。';}
+      else details=n.name+'成功閃避或抵抗，並對你失去信任。';
+      npcMemory(n,st,'遭受'+def.label+'，關係惡化');}
+    else details='沒有可核實的目標，企圖引起周圍警惕。';
+  }else if(parsed.type==='theft'||parsed.type==='fraud'){
+    success=chance(st,.25+(st.skills?.trade||0)/500);
+    details=success?'行為得逞但會留下追查線索；未建立具體貨物來源，不憑空增加財產。':'企圖未得逞，未取得財物。';
+  }else if(parsed.type==='arson'){
+    details='引發火險警報，周圍居民試圖制止；建築損失尚未有可核實的財產明細。';
+  }else details='行動遭注意或制止。';
+  const heat=def.severity+(witnessed?20:0)+(guard?25:0);
+  c.heat[region]=Math.min(500,(c.heat[region]||0)+heat);
+  c.reputation=Math.max(-1000,c.reputation-def.severity);
+  if(witnessed||guard){
+    c.bounties[region]=Math.min(100000,(c.bounties[region]||0)+def.bounty);
+  }
+  const crime={at:now(st),type:def.label,region,location:st.location,targetId:n?.id||null,
+    witnessed,guardsAlerted:guard,success,status:(witnessed||guard)?'通緝／追查':'未公開追查'};
+  c.cases.push(crime);if(c.cases.length>100)c.cases.shift();
+  if(n && parsed.type!=='homicide' && parsed.type!=='assault' && parsed.type!=='robbery')npcMemory(n,st,'遭遇'+def.label+'企圖');
+  st.activeConversation=null;
+  if(guard){st.stamina=Math.max(0,st.stamina-8);st.injury=Math.min(100,(st.injury||0)+dice(st,1,5));}
+  const adv=advance(st,30);
+  const legal=(witnessed||guard)?'有人目擊或報案，'+region+'的官府已建立追查／懸賞紀錄。':'暫未查明目擊證詞，案件仍保留可能追查的紀錄。';
+  const message=def.label+'：'+details+legal+(guard?'守衛聞訊到場，追捕壓力增加。':'');
+  emit(st,'違法行為',message,{crime,verified:true});
+  return {ok:true,verified:true,kind:'違法行為',minutes:adv.minutes,text:message};
+}
+function updateCrimeWorldV74(st){
+  const c=ensureCrimeState(st),region=crimeRegion(st);
+  for(const k of Object.keys(c.heat))c.heat[k]=Math.max(0,c.heat[k]-1);
+  // 通緝不因熱度下降自動消除；只有追捕緊迫度逐漸冷卻。
+  if((c.bounties[region]||0)>0 && (st.world?.tick||0)%5===0){
+    if(chance(st,Math.min(.55,.10+(c.heat[region]||0)/700))){
+      st.news.push({at:now(st),text:'地方官府張貼通緝告示，居民與商販提高戒備'});
+      if(st.news.length>100)st.news.shift();
+    }
+  }
+}
+function crimeDisplayV74(st){
+  const c=ensureCrimeState(st);
+  const warrants=Object.entries(c.bounties).filter(([,v])=>v>0).map(([r,v])=>r+' '+v+' 兩銀值');
+  return '｜惡名 '+c.reputation+(warrants.length?'｜通緝 '+warrants.join('、'):'｜目前無公開通緝');
+}
+
+
+// V7.5 武學來源清單：名稱僅採可核對小說或研究資料；全部品級/數值屬《浮生無界》自訂平衡。
+// 來源標籤對應玩家可查看的資料頁，並非將同一出版社不同版本混稱原著。
+const V75_MARTIAL_SOURCES={
+ jinyong:'金庸小說武學；中華書局《金庸小說的神話基因》、中大研究《金庸武學與易理》',
+ dg:'金庸《笑傲江湖》第十回〈傳劍〉',
+ xl:'金庸《射鵰英雄傳》；中大研究《降龍十八掌》十八招名稱',
+ gulong:'古龍《多情劍客無情劍》《絕代雙驕》《陸小鳳傳奇》',
+ liang:'梁羽生《牧野流星》第十九回；《七劍下天山》系列',
+ huang:'黃易《大唐雙龍傳》卷二十七〈井中八法〉及卷十一〈妖女逞威〉',
+ fanren:'忘語《凡人修仙傳》七玄門篇（象甲功）；長春功是仙法，不列凡武',
+ shaolin:'金庸《鹿鼎記》第二十二回：少林長拳、羅漢拳、伏虎拳、韋陀掌入門次序',
+ xu:'烽火戲諸侯《雪中悍刀行》的一品四境為境界，並非一套招式'
+};
+// rank: 1基礎、2下品、3中品、4上品、5頂級、6絕世；power=遊戲自訂戰力基準。
+const V75_MARTIAL_CATALOG=[
+ ['少林長拳',1,12,'拳','shaolin','基本拳理'],['羅漢拳',2,27,'拳','shaolin','攻防基礎'],['伏虎拳',2,33,'拳','shaolin','穩固攻勢'],['韋陀掌',3,46,'掌','shaolin','掌法進階'],['太祖長拳',3,44,'拳','jinyong','剛柔拳法'],
+ ['降龍十八掌',6,112,'掌', 'xl','剛猛、破防'],['九陰真經',6,110,'內功','jinyong','內外兼修'],
+ ['九陽神功',6,106,'內功','jinyong','護體、續航'],['乾坤大挪移',6,104,'內功','jinyong','卸力、轉移'],
+ ['六脈神劍',6,116,'指', 'jinyong','遠距氣勁'],['北冥神功',6,111,'內功','jinyong','吸納內力'],
+ ['易筋經',6,108,'內功','jinyong','恢復、持久'],['獨孤九劍',6,115,'劍','dg','識破招式'],
+ ['葵花寶典',6,117,'內功','jinyong','高速、風險'],['小李飛刀',6,114,'暗器','gulong','精準、制勝'],
+ ['九陰白骨爪',5,91,'爪','jinyong','近身快攻'],['吸星大法',5,92,'內功','jinyong','吸納、反噬風險'],
+ ['一陽指',5,90,'指','jinyong','點穴、制敵'],['凌波微步',5,90,'身法','jinyong','閃避、撤離'],
+ ['蛤蟆功',5,93,'掌','jinyong','蓄勢、反擊'],['太極拳',5,89,'拳','jinyong','以柔制剛'],
+ ['太極劍',5,91,'劍','jinyong','圓轉、拆招'],['小無相功',5,90,'內功','jinyong','模擬招式'],
+ ['神照經',5,90,'內功','jinyong','生命恢復'],['辟邪劍法',5,94,'劍','jinyong','高速、代價'],
+ ['玉女心經',5,90,'內功','jinyong','協作、心法'],['嫁衣神功',5,94,'內功','gulong','內功修練'],
+ ['明玉功',5,94,'內功','gulong','護體、持久'],['靈犀一指',5,90,'指','gulong','制住兵刃'],
+ ['天山劍法',4,72,'劍','liang','先手、連攻'],['奕劍術',5,90,'劍','huang','料敵先機'],
+ ['井中八法',5,91,'刀','huang','戰法、布局'],['天魔大法',6,103,'內功','huang','氣場、牽制'],
+ ['長生訣',6,105,'內功','huang','真氣、恢復'],['象甲功',3,46,'硬功','fanren','體魄、承傷']
+].map(([name,rank,power,category,source,effect])=>({name,rank,power,category,source,effect}));
+const V75_MARTIAL_MOVES={
+ '降龍十八掌':['亢龍有悔','飛龍在天','見龍在田','鴻漸於陸','潛龍勿用','利涉大川','尺蠖之屈','或躍在淵','雙龍取水','神龍擺尾','突如其來','時乘六龍','密雲不雨','損則有孚','龍戰於野','履霜冰至','羝羊觸藩','震驚百里'],
+ '獨孤九劍':['總訣式','破劍式','破刀式','破槍式','破鞭式','破索式','破掌式','破箭式','破氣式'],
+ '天山劍法':['追風逐電'],
+ '井中八法':['戰定']
+};
+function martialStateV75(st){if(!st.martialV75||typeof st.martialV75!=='object')st.martialV75={learned:{},clues:[],streak:0,fights:[],activeFight:null};const m=st.martialV75;m.learned=m.learned||{};m.clues=Array.isArray(m.clues)?m.clues:[];m.fights=Array.isArray(m.fights)?m.fights:[];return m;}
+function martialRankV75(st){const m=martialStateV75(st),vals=Object.entries(m.learned).map(([name,level])=>{const d=V75_MARTIAL_CATALOG.find(x=>x.name===name);return d?Math.min(100,d.power*Number(level)/100):0;});return Math.max(0,Math.min(7,Math.floor((Math.max(0,...vals)+(st.skills?.combat||0)*.32+(st.strength||0)*.18)/22)));}
+function martialManualV75(st,entry){const m=martialStateV75(st);return !!m.learned[entry.name]||m.clues.includes(entry.name);}
+function martialInputNameV75(input){return V75_MARTIAL_CATALOG.filter(x=>String(input).includes(x.name)).sort((a,b)=>b.name.length-a.name.length)[0]||Object.entries(V75_MARTIAL_MOVES).filter(([key,arr])=>arr.some(move=>String(input).includes(move))).map(([key])=>V75_MARTIAL_CATALOG.find(x=>x.name===key))[0]||null;}
+function martialActualMoveV75(input,entry){return entry?(V75_MARTIAL_MOVES[entry.name]||[]).find(move=>String(input).includes(move))||null:null;}
+function martialIntentV75(raw){const a=String(raw||'').trim();
+ if(/^(?:查看|檢視|查閱|打開|列出)?(?:武學圖鑑|武學資料|武功圖鑑|武功目錄|我的武功|武學狀態)$/.test(a))return 'martialCatalogV75';
+ if(/^(?:尋訪武師|尋找武師|打聽武學線索|尋找武功祕笈|尋找武功秘笈|拜訪武館|求教武功)/.test(a))return 'martialSeekV75';
+ if(/^(?:練習|研習|修習|演練|練|學習|參悟|修煉|練習招式)/.test(a)&&martialInputNameV75(a))return 'martialPracticeV75';
+ if(/^(?:比武|切磋|以武切磋)/.test(a))return 'martialFightV75';
+ if(/^(?:戰鬥|對戰|迎戰|交手|戰鬥中|我用|使出|施展|出招|格擋|防守|閃避|撤退|逃離戰鬥)/.test(a)||Object.values(V75_MARTIAL_MOVES).some(moves=>moves.some(move=>a.startsWith(move))))return 'martialTurnV75';
+ if(/^(?:查詢|查看)(?:招式|武功招式)/.test(a))return 'martialCatalogV75';
+ return null;
+}
+function martialKnownSynergyV75(st){const l=martialStateV75(st).learned;
+ const out=[];
+ // 遊戲機制連攜，並非宣稱原著存在此名稱的「組合絕招」。不向尚未達標玩家洩漏。
+ if((l['九陽神功']||0)>=65&&(l['乾坤大挪移']||0)>=65)out.push({tag:'護體卸力協同',guard:12});
+ if((l['獨孤九劍']||0)>=70&&(l['凌波微步']||0)>=65)out.push({tag:'先機身法協同',dodge:12});
+ if((l['降龍十八掌']||0)>=70&&(l['九陰真經']||0)>=70)out.push({tag:'內外合勁協同',attack:12});
+ if((l['北冥神功']||0)>=65&&(l['凌波微步']||0)>=60)out.push({tag:'內息步法協同',escape:12});
+ return out;
+}
+function martialCardV75(st){const m=martialStateV75(st);let own=Object.entries(m.learned).filter(([,v])=>v>0).map(([k,v])=>k+' 熟練 '+v+'%');return '武者評級 '+martialRankV75(st)+'／7；已學：'+(own.join('、')||'尚無')+'；可追查武學線索 '+m.clues.length+' 件。'+(martialKnownSynergyV75(st).length?'你已悟得 '+martialKnownSynergyV75(st).map(x=>x.tag).join('、')+'（遊戲協同效果）。':'');}
+function martialResolveV75(st,code,targetId){let a=String(st.pendingAction||''),m=martialStateV75(st),entry=martialInputNameV75(a);let fail=t=>({ok:false,text:t,minutes:0});
+ if(code==='martialCatalogV75'){
+ const groups=['基礎','下品','中品','上品','頂級','絕世'];
+ const list=V75_MARTIAL_CATALOG;
+ const text='武功共'+V75_MARTIAL_CATALOG.length+'門有文獻或小說名稱依據，非一開始全部取得。\n'+martialCardV75(st)+'\n已知：'+(list.map(x=>x.name+(m.learned[x.name]?'【已學】':m.clues.includes(x.name)?'【有線索】':'【未取得】')+'（'+groups[x.rank-1]+'，'+x.category+'，出處：'+V75_MARTIAL_SOURCES[x.source]+'）').join('；')||'尚無功法線索')+'。\n以「尋訪武師」取得線索；「研習＋功法名」修習已得功法。';return {ok:true,verified:true,kind:'武學圖鑑',minutes:0,text};
+ }
+ if(code==='martialSeekV75'){
+ if(st.age<7)return fail('年紀太小，需要師長陪同識字與習武');if(st.stamina<10)return fail('體力不足，無法尋訪武師');
+ const options=V75_MARTIAL_CATALOG.filter(x=>!m.learned[x.name]&&!m.clues.includes(x.name)&&x.rank<=3);
+ const advanced=V75_MARTIAL_CATALOG.filter(x=>!m.learned[x.name]&&!m.clues.includes(x.name)&&x.rank>=3);
+ const elite=(st.knowledge>=55&&st.skills.combat>=35&&chance(st,.05))?advanced:options;
+ const source=elite.length?elite:options;
+ st.stamina=Math.max(0,st.stamina-10);let text;
+ if(!source.length)text='你訪遍當地武館，但沒有查到新的可信祕笈或師承。';
+ else {const d=source[dice(st,0,source.length-1)];if(chance(st,d.rank>=3?.16:.65)){m.clues.push(d.name);text='你得到「'+d.name+'」的可追查師承線索。這不代表已經學會。來源：'+V75_MARTIAL_SOURCES[d.source];}else text='你打聽到一些傳聞，但尚無可核實的師承或完整練法。';}
+ const adv=advance(st,180);emit(st,'武學尋訪',text);return {ok:true,verified:true,kind:'武學',minutes:adv.minutes,text};
+ }
+ if(code==='martialPracticeV75'){
+ if(!entry)return fail('請輸入已確認的武功名稱，不會自行發明招式');if(!martialManualV75(st,entry))return fail('你尚未取得「'+entry.name+'」的師承或祕笈線索，不能憑空習得。');
+ if(st.stamina<12)return fail('體力不足，不能繼續習武');
+ if(entry.rank>=5&&st.knowledge<24)return fail('缺乏足夠武學理解，高品功法暫時無法入門');
+ const current=Number(m.learned[entry.name]||0),gain=Math.max(1,Math.min(5,1+Math.floor((st.skills.combat||0)/35)+Math.floor((st.knowledge||0)/60)));
+ m.learned[entry.name]=Math.min(100,current+gain);st.stamina=Math.max(0,st.stamina-12);giveSkill(st,'combat',1);
+ const adv=advance(st,120),combos=martialKnownSynergyV75(st);const text='研習「'+entry.name+'」，熟練度 '+current+'% → '+m.learned[entry.name]+'%。'+(combos.length?'已領悟：'+combos.map(x=>x.tag).join('、')+'。':'')+'（不增加修仙靈氣）';emit(st,'習武',text);return {ok:true,verified:true,kind:'習武',minutes:adv.minutes,text};
+ }
+ if(code==='martialFightV75'||code==='martialTurnV75'){
+  let f=m.activeFight;const n=(st.npcs||[]).find(x=>x.alive&&x.home===st.location&&((targetId&&x.id===targetId)||(x.name&&a.includes(x.name))));
+  if(!f){if(!n)return fail('這裡沒有可確認的對手；請指定現場 NPC，不能憑空決鬥。');if(code==='martialTurnV75'&&!/(?:迎戰|交手|對戰|戰鬥|切磋|比武)/.test(a))return fail('目前沒有進行中的戰鬥');
+    if(!chance(st,Math.max(.1,Math.min(.8,.45+(n.trust||0)/320))))return fail(n.name+'不願切磋，尚未發生戰鬥');
+    f=m.activeFight={opponentId:n.id,opponentName:n.name,round:0,playerHP:Math.min(st.hp,70),enemyHP:Math.max(18,Math.min(75,Math.round(n.health*.65))),enemyPower:15+Math.round((n.skill||20)*.45),log:[],mode:'切磋'};
+  }
+  const opponent=(st.npcs||[]).find(x=>x.id===f.opponentId&&x.alive);if(!opponent){m.activeFight=null;return fail('對手已不在現場或不再能戰鬥');}
+  const sy=martialKnownSynergyV75(st), lv=entry?(m.learned[entry.name]||0):0;
+  if(entry&&lv<1)return fail('你尚未學會「'+entry.name+'」，不能直接施展。');
+  let stance=/(?:逃|撤退|脫離)/.test(a)?'retreat':/(?:防守|格擋)/.test(a)?'guard':/(?:閃|躲)/.test(a)?'dodge':'attack';
+  if(st.stamina<3)return fail('體力耗盡，無法正常出招；應先想辦法撤離或休息');
+  const base=(st.skills.combat||0)*.45+(st.strength||0)*.2+(lv/100)*(entry?.power||0)*.5;
+  let out='',dmg=0,received=0;f.round++;
+  const adv=advance(st,3);
+  if(stance==='retreat'){
+    const agility=sy.reduce((sum,x)=>sum+(x.escape||0)+(x.dodge||0),0)+(m.learned['凌波微步']||0)*.15;
+    const escapeChance=Math.min(.90,Math.max(.09,.40+(base-f.enemyPower)*.004+agility*.008-(st.injury||0)*.001));
+    if(chance(st,escapeChance)){m.activeFight=null;st.stamina=Math.max(0,st.stamina-5);out='你成功脫離這場戰鬥，對手仍然在世；先前傷勢與通緝紀錄不會消失。';}
+    else {received=Math.max(1,dice(st,1,8)+Math.floor(f.enemyPower/15));out='撤退失敗，被迫承受追擊。';}
+  }else{
+    const accuracy=Math.min(.92,Math.max(.12,.54+(base-f.enemyPower)*.006+(sy.some(x=>x.attack)? .09:0)));
+    dmg=stance==='attack'&&chance(st,accuracy)?Math.max(1,dice(st,2,7)+Math.floor(base/9)):0;
+    f.enemyHP=Math.max(0,f.enemyHP-dmg);
+    const mitigate=stance==='guard'?5:stance==='dodge'?3:0;
+    const dodgeBonus=sy.reduce((sum,x)=>sum+(x.dodge||0),0)+(m.learned['凌波微步']||0)*.12;
+    if(f.enemyHP>0&&chance(st,Math.max(.10,Math.min(.80,.52+(f.enemyPower-base)*.005-(stance==='dodge'?.22:0)-dodgeBonus*.006))))received=Math.max(0,dice(st,2,8)+Math.floor(f.enemyPower/14)-mitigate-(sy.some(x=>x.guard)?2:0));
+    out=(entry?'施展「'+(martialActualMoveV75(a,entry)||entry.name)+'」':'使用基本攻防')+'：造成 '+dmg+' 傷、承受 '+received+' 傷。';
+  }
+  st.hp=Math.max(0,st.hp-received);st.injury=Math.max(0,(st.injury||0)+Math.floor(received/4));st.stamina=Math.max(0,st.stamina-(stance==='attack'?8:5));f.playerHP=st.hp;f.log.push(out);
+  if(m.activeFight&&(f.enemyHP<=0||st.hp<=0)){
+    if(st.hp<=0){const survive=Math.min(.55,Math.max(.04,.1+(st.skills.combat||0)*.002+(m.learned['神照經']||0)*.0015));if(chance(st,survive)){st.hp=1;st.injury=Math.max(25,st.injury||0);out+=' 你在重創後死裡逃生，生命僅剩 1，暫時失去行動優勢。';}else{st.alive=false;out+=' 傷勢致命。';}}
+    else {opponent.health=Math.max(1,opponent.health-dice(st,1,6));out+=' 你在切磋中勝出。';}
+    m.fights.push({at:now(st),opponent:f.opponentName,rounds:f.round,win:st.hp>0&&f.enemyHP<=0});if(m.fights.length>40)m.fights.shift();m.activeFight=null;
+  }
+  emit(st,'武學交鋒',out,{stance,round:f.round,move:entry?.name||null});return {ok:true,verified:true,kind:'戰鬥',minutes:adv.minutes,text:out+(m.activeFight?' 戰鬥尚未結束，可輸入「格擋」「閃避」「使出已學武功」或「撤退」。':'')};
+ }
+ return fail('尚未建立的武學操作');
+}
+
+function localIntentV73(st,raw){
+ const extreme=classifyExtremeAction(raw);if(extreme)return extreme;
+ const martial=martialIntentV75(raw);if(martial)return {code:martial,type:"martial"};
+ const a=String(raw||'').trim(),person=activeSpeaker(st),last=String((st?.chapterHistory||[]).at(-1)?.story||'');
+ const sceneQuestion=!!(person || (venueScene(st)&&/(?:問你|問道|對你說|招呼|領班|掌櫃|姑娘)/.test(last)));
+ const explicitMove=/(?:說完|講完|答完|回完|轉身|我便|我就|然後).{0,28}(?:離開|走|出門|前往|往|去|回家)|(?:離開|前往|走去|走向|沿著|往|回家|出門|進入).{0,30}(?:鎮上|街上|市集|客棧|酒樓|青樓|妓院|家裡|自家|城門|醫館|學堂)|^(?:回家|出去|出門|離開|走開|去鎮上|去青樓|去妓院|去市集|去客棧|去酒樓)/.test(a);
+ const freeWander=isWanderAction(a);
+ if(movementIntent(a))return {code:'impossibleTravel',type:'travel'};
+ if(freeWander)return {code:'wander',type:'wander'};
+ if(/(?:繼續趕路|繼續旅程|繼續前往目的地)/.test(a))return {code:'continueJourney',type:'travel'};
+ if(explicitMove){const dest=walkTarget(st,a);return dest?{code:'travelTo:'+dest,type:'travel'}:{code:'wander',type:'wander'};}
+ // 先判定是否對現場 NPC 說話，再判斷關鍵字「工作」「開店」「借錢」。
+ if(sceneQuestion && (speakingIntent(a)||/(?:工作|打工|求職|當學徒|賺錢|應徵|幫工|做生意|我想|我打算|我可以|行不行|算了|好吧|不要|可以|同意|拒絕|所以呢|那又如何|為什麼|怎麼樣)/.test(a))){
+   return {code:'chat',type:'conversation',npcId:person?.id||null};
+ }
+ if(/(?:爸|爹|娘|媽|父親|母親|家人).{0,45}(?:借|要錢|給|出資|開店|做生意|投資)/.test(a))return {code:'familyFundingTalk',type:'conversation'};
+ if(/(?:找|尋|打聽|求職|謀職|尋找).{0,18}(?:工作|差事|職缺|學徒|生計)/.test(a))return {code:'searchJob',type:'employment'};
+ // 「我想開店」只是表達意向；只有明確執行才使用既有開業規則。
+ if(/(?:想|打算|計劃|考慮|討論|商量|你覺得|問問).{0,22}(?:開店|開商號|創業)/.test(a))return {code:'chat',type:'conversation'};
+ return {code:null,type:'legacy'};
+}
 function dialogueRoute(st,action){
+ const intent=localIntentV73(st,action);
+ if(intent.code)return intent.code;
  const code=route(action),n=activeSpeaker(st);
  if(explicitConversationExit(action))return code;
  if(contextualSpeechReply(st,action))return 'chat';
@@ -1197,7 +1532,7 @@ function selected(st,id){return st.npcs.find(n=>n.id===id&&n.encountered)||null}
 function assetsCount(st,kind){return st.assets.filter(a=>a.kind===kind&&a.owner===st.id).length}
 function giveSkill(st,type,amount){st.skills[type]=cap(nu(st.skills[type])+amount,0,100)}
 function advance(st,minutes){let remaining=minutes,days=0,notes=[];while(remaining>0&&st.alive){let step=Math.min(remaining,1440-st.minute),end=step===1440-st.minute;st.minute+=step;if(st.minute>=1440){st.minute=0;st.day++;if(st.day>YEAR){st.day=1;st.year++}st.ageDays++;let priorAge=st.age;st.age=Math.floor(st.ageDays/YEAR);if(st.age>priorAge){familySchoolBirthday(st);advanceRealmFormationOnBirthday(st);if(st.longAdvance&&st.retreatMode)retreatYear(st)}}remaining-=step;if(end){days++;let msg=daily(st);if(msg&&notes.length<8)notes.push(msg)}}return {minutes:minutes-remaining,days,notes,dead:!st.alive}}
-function daily(st){let news=[],people=1+st.household.dependents.filter(x=>x.ageDays<18*YEAR).length+(st.household.married?1:0);let foodNeeded=people;
+function daily(st){updateCrimeWorldV74(st);let news=[],people=1+st.household.dependents.filter(x=>x.ageDays<18*YEAR).length+(st.household.married?1:0);let foodNeeded=people;
  // Long skips include ordinary subsistence and caregiving, rather than treating 'wait' as ten years without meals.
  if(st.longAdvance){let guardians=st.npcs.filter(n=>n.alive&&(/父|母|養|監護|祖|叔|姑|伯|嬸|舅/.test(n.familyRole||'')));if(st.age<12&&guardians.length&&chance(st,.992)){st.food+=foodNeeded;news.push('家人照護幼兒的日常飲食')}else if(st.age>=12&&st.hp>28&&chance(st,st.career?.employed?.91:.76)){st.food+=foodNeeded;news.push('維持日常生計與口糧')} }
  // 食物以每人每日一份計算；角色自行維持生活的努力不保證一定成功。
@@ -1261,6 +1596,8 @@ function daily(st){let news=[],people=1+st.household.dependents.filter(x=>x.ageD
  if(st.household.dependents.length){for(const c of st.household.dependents){if(c.age>=18&&c.career!=='未就業'&&st.world.tick%30===0){c.savings+=Math.max(0,Math.floor(c.learning/12)+1)}}}
  if(st.news.length>160)st.news.splice(0,st.news.length-160);if(news.length)emit(st,'日常／世界',news.join('；'));return news.join('；')}
 function rule(st,code,targetId,minutes=30){
+ if(['crimeV74','extremeV74','crimeStatusV74'].includes(code))return resolveExtremeV74(st,code,targetId);
+ if(/^martial/.test(code))return martialResolveV75(st,code,targetId);
  if(code==='econV7'){const transaction=econTxn(st,st.pendingAction||'');if(transaction)return transaction;return {ok:false,text:'經濟行動無法識別，請提供商品名稱、數量及交易方式',minutes:0};}
  if(code==='findFamily'||code==='meetNPC'){let found=discoverPerson(st,code==='findFamily'?(familyTarget(st,st.pendingAction||'')?st.pendingAction:'找爸爸'):(st.pendingAction||'遇見陌生人'),targetId);if(!found.ok)return {ok:false,text:found.text,minutes:0};let adv=advance(st,30);emit(st,'人物相遇',found.text,{personId:found.npc.id,elapsed:adv.minutes,verified:true});return {ok:true,text:found.text,minutes:adv.minutes,verified:true,kind:'人物相遇'};}
 if(['investigateMystery','seekMaster','enterHidden','senseAptitude','studyLaw','publicSpell'].includes(code))return worldAction(st,code);const dest=String(code).startsWith('travelTo:')?String(code).slice(9):null;if(dest)code='travel';let travelArrival=null;let n=familyTarget(st,st.pendingAction||'')||activeSpeaker(st)||ensureSceneSpeaker(st)||(st.npcs||[]).find(q=>q.id===targetId&&q.alive&&q.home===st.location), text='',spent=30,kind='規則',ok=true,verified=true;const fail=t=>({ok:false,text:t,minutes:0}),adult=st.age>=18;let price=st.world.grainPrice;
@@ -1583,7 +1920,7 @@ function renderArt(s){
  const placeArt=V42_SCENES[s.location]||V42_SCENES[s.birth?.art]||V42_SCENES['河岸城'];scene.style.setProperty('--scene-image','url("'+placeArt.image+'")');const hour=Math.floor(s.minute/60),moment=hour>=19||hour<5?'night':hour<8||hour>=17?'dawn':'day';scene.className=moment+' season-'+(s.world?.season||1);const period=moment==='night'?'🌙 夜間':moment==='dawn'?'🌇 晨昏':'☀️ 白日';$('artTime').textContent=period+' · '+String(hour).padStart(2,'0')+':'+String(s.minute%60).padStart(2,'0');$('artSeason').textContent=season[((s.world?.season||1)-1)%4]+' · 第 '+s.chapter+' 回';$('artPlace').textContent=s.journey?('途中：'+s.journey.from+' → '+s.journey.destination+'（約'+Math.round((1-s.journey.remaining/(s.journey.total||s.journey.remaining))*100)+'%）'):(s.location||'旅途中');$('artCaption').textContent=(placeArt.subtitle||'場景示意')+' · '+(s.birth?.era||s.setting||'世界探索')+' · '+(s.alive?'人生進行中':'本世已終');
  const npc=s.npcs?.find(n=>n.id===$('npcSelect').value)||s.npcs?.find(n=>n.alive&&n.encountered)||null;
  $('artNPCName').textContent=npc?npc.name:'旅途中的你';$('artNPCDetail').textContent=npc?(npc.nature+' · '+npc.bond):s.trait||'自由探索';$('artPortrait').src=(npc?.sex==='男'||(!npc&&s.sex==='男'))?ART_M:ART_F;
- $('artHP').textContent=s.hp+' / '+s.hpMax;$('artST').textContent=s.stamina+' / '+s.staminaMax;$('artMoney').textContent=String(s.money);$('artFood').textContent=String(s.food);$('hpFill').style.width=(Math.max(0,Math.min(100,s.hp/s.hpMax*100)))+'%';$('stFill').style.width=(Math.max(0,Math.min(100,s.stamina/s.staminaMax*100)))+'%';
+ $('artHP').textContent=s.hp+' / '+s.hpMax;$('artST').textContent=s.stamina+' / '+s.staminaMax;$('artMoney').textContent=econRealm(s)==='mortal'?econFormatSilver(s.money):econFormatStones(s.money);$('artFood').textContent=String(s.food);$('hpFill').style.width=(Math.max(0,Math.min(100,s.hp/s.hpMax*100)))+'%';$('stFill').style.width=(Math.max(0,Math.min(100,s.stamina/s.staminaMax*100)))+'%';
 }
 
 function renderWorldMap(s){
@@ -1618,8 +1955,8 @@ function renderNPCGallery(s){const box=$('npcCards');box.replaceChildren();if(!s
 function render(animate=false){$('endpoint').value=conf.endpoint||'';$('password').value=conf.password||'';$('continue').disabled=!state;$('backup').disabled=!state;$('new').disabled=!!loadProblem||busy;$('send').disabled=!state||!state.alive||busy;$('save').disabled=!state||busy;$('jump').disabled=!state||!state.alive||busy;$('export').disabled=!state;$('reincarnate').disabled=busy;$('continueHeir').disabled=!state||state.alive||busy;$('archive').disabled=!state||busy;$('discard').disabled=!state||busy;
  $('menuStatus').textContent=loadProblem||(state?`讀到本世：${state.name}，${state.age} 歲，第 ${state.chapter} 回；按「繼續人生」即可。`:'目前沒有進行中的直式人生。首次進入會複製最新可讀取的舊版人生；也可以匯入 JSON。');
  document.querySelectorAll('button[data-act]').forEach(b=>b.disabled=!state||!state.alive||busy);
- if(!state){$('birthInfo').textContent='隨機新人生：每一世重新產生出生條件，不保證與上一世有任何關係。';$('topInfo').textContent='尚無進行中的人生';$('clock').textContent='—';$('location').textContent='';$('quickStats').textContent='';$('chapter').textContent='序章';typing('選擇開始新人生，或匯入備份。');$('choices').replaceChildren();$('choiceLabel').textContent='';for(let id of ['stats','cultivationStatus','family','assets','npcs','news','ledger','history','events','v5Detail'])$(id).replaceChildren();$('npcSelect').replaceChildren();renderArt(null);renderWorldMap(null);renderNPCGallery(null);return}
- let s=state;$('birthInfo').textContent=(s.birth?`${s.birth.era} · ${s.birth.country} · ${s.birth.culture}｜${s.birth.family} · ${s.birth.standing}`:`${s.setting} · ${s.location}｜延續舊版人生`);$('topInfo').textContent=`${s.name}・${s.sex}・${s.age} 歲・${s.setting}${s.alive?'':'【已死亡】'}`;$('clock').textContent=now(s);$('location').textContent='📍 '+s.location;$('quickStats').textContent=`生命 ${s.hp}/${s.hpMax}｜體力 ${s.stamina}/${s.staminaMax}｜銀兩 ${s.money}｜口糧 ${s.food} 份｜壽元 ${lifeLimit(s)===Infinity?'不受自然壽元限制':lifeLimit(s)+'歲'}｜糧價 ${s.world.grainPrice} 銀／份`;$('chapter').textContent=s.chapter?`第 ${s.chapter} 回`:'序章';typing(s.story,animate);
+ if(!state){$('birthInfo').textContent='隨機新人生：每一世重新產生出生條件，不保證與上一世有任何關係。';$('topInfo').textContent='尚無進行中的人生';$('clock').textContent='—';$('location').textContent='';$('quickStats').textContent='';$('chapter').textContent='序章';typing('選擇開始新人生，或匯入備份。');$('choices').replaceChildren();$('choiceLabel').textContent='';for(let id of ['balanceSheets','stats','cultivationStatus','family','assets','npcs','news','ledger','history','events','v5Detail'])$(id).replaceChildren();$('npcSelect').replaceChildren();renderArt(null);renderWorldMap(null);renderNPCGallery(null);return}
+ let s=state;$('birthInfo').textContent=(s.birth?`${s.birth.era} · ${s.birth.country} · ${s.birth.culture}｜${s.birth.family} · ${s.birth.standing}`:`${s.setting} · ${s.location}｜延續舊版人生`);$('topInfo').textContent=`${s.name}・${s.sex}・${s.age} 歲・${s.setting}${s.alive?'':'【已死亡】'}`;$('clock').textContent=now(s);$('location').textContent='📍 '+s.location;$('quickStats').textContent=`生命 ${s.hp}/${s.hpMax}｜體力 ${s.stamina}/${s.staminaMax}｜銀兩 ${s.money}｜口糧 ${s.food} 份${crimeDisplayV74(s)}｜武者 ${martialRankV75(s)} 階｜壽元 ${lifeLimit(s)===Infinity?'不受自然壽元限制':lifeLimit(s)+'歲'}｜糧價 ${s.world.grainPrice} 銀／份`;$('chapter').textContent=s.chapter?`第 ${s.chapter} 回`:'序章';typing(s.story,animate);
  $('choiceLabel').textContent=(s.choiceSource||'系統建議')+'（點一下立即執行）';entries('choices',[],()=>{});$('choices').replaceChildren(...s.choices.slice(0,2).map((x,i)=>{let b=document.createElement('button');b.className='choice';b.textContent=(i+1)+'. '+x;b.disabled=busy||!s.alive;b.onclick=()=>execute(x);return b}));
  $('stats').textContent=`體質：${s.trait}｜力量 ${s.strength}/${s.strengthMax}｜知識 ${s.knowledge}/${s.knowledgeMax}｜法力資質 ${s.worldDiscovery?.knowledge>0?s.cultivation.aptitude:'未知（未曾測靈）'}｜靈氣 ${s.cultivation.qi}｜境界 ${s.cultivation.level}｜修行年數 ${s.cultivation.trainingYears||0}｜修行進度 ${s.cultivation.progress||0}｜疾病 ${s.illness}｜傷勢 ${s.injury}｜飢餓 ${s.hunger}｜木材 ${s.inventory.wood}｜工具 ${s.inventory.tools}｜礦石 ${s.inventory.ore}｜技能 學習${s.skills.learning}／農耕${s.skills.farming}／製作${s.skills.crafting}／武技${s.skills.combat}／交易${s.skills.trade}`;
  $('cultivationStatus').textContent=[
@@ -1627,10 +1964,11 @@ function render(animate=false){$('endpoint').value=conf.endpoint||'';$('password
  '角色實際境界：'+REALM_RANKS[Math.min(8,s.cultivation.level||0)]+'｜靈根資質：'+s.cultivation.aptitude+'｜修行年數：'+(s.cultivation.trainingYears||0),
  '師承：'+(s.familyEstate?.cultivationSchool?.source||'尚未確定')+'｜教導者：'+(s.npcs.find(n=>n.id===s.familyEstate?.cultivationSchool?.teacherId)?.name||'尚未指定'),
  '家傳功法：'+(s.cultivation.arts||[]).map(a=>a.name||String(a)).join('、'),
- '可申請修行配額：'+(s.familyEstate?.resourcePolicy?.annualQuota??0)+'／年；已核撥：'+(s.familyEstate?.resourcePolicy?.granted??0)+'；族庫：'+(s.familyEstate?.treasury??0)+'（不得直接當成私財）',
+ '可申請修行配額：'+(s.familyEstate?.resourcePolicy?.annualQuota??0)+'／年；已核撥：'+(s.familyEstate?.resourcePolicy?.granted??0)+'；'+(s.familyEstate?('家族流動公款：'+(econRealm(s)==='mortal'?econFormatSilver(s.familyEstate.treasury):econFormatStones(s.familyEstate.treasury))):'無家族公款')+'（不得直接當成私財）',
  s.age<11?'未成年：師長陪同培養，依教導逐步感氣與修行，不因生日自動突破。':'境界由個人資質、師承、資源及實際突破決定；本界常見境界並非保底。'
  ].join('\n');
- const partner=s.npcs.find(n=>n.id===s.household.partnerId);$('family').textContent=`${s.familyEstate?'【'+s.familyEstate.clanName+'】家族身分：'+s.familyEstate.role+'；家族資產：'+s.familyEstate.estate.map(x=>x.kind+'×'+x.quantity).join('、')+'；族庫 '+(s.familyEstate.treasury??'—')+'、月收入 '+(s.familyEstate.monthlyIncome??'—')+'、月支出 '+(s.familyEstate.monthlyExpenses??'—')+'、族務權限 '+(s.familyEstate.authority||'無')+'；家族公產不可直接當個人財產。\n親族：'+s.npcs.filter(n=>n.familyRole).map(n=>n.familyRole+' '+n.name+'（'+n.age+'歲／'+REALM_RANKS[Math.min(8,n.cultivationLevel||0)]+'／'+(n.trainingRole||'親族')+'）'+(n.alive?'':'（已故）')).join('、')+'\n':''}伴侶：${partner?partner.name:'無'}（已婚：${s.household.married?'是':'否'}；婚約：${s.household.engaged?'是':'否'}）；子女 ${s.household.dependents.length} 人；生育事件：${s.household.pregnancy?'進行中':'無'}。`+s.household.dependents.map(c=>`\n${c.name} ${c.age} 歲／健康 ${c.health}／學習 ${c.learning}／親密 ${c.bond}／職業 ${c.career}／儲蓄 ${c.savings}`).join('');
+ const partner=s.npcs.find(n=>n.id===s.household.partnerId);$('family').textContent=`${s.familyEstate?'【'+s.familyEstate.clanName+'】家族身分：'+s.familyEstate.role+'；家族資產：'+s.familyEstate.estate.map(x=>x.kind+'×'+x.quantity).join('、')+'；'+econFamilyFinance(s)+'；族務權限 '+(s.familyEstate.authority||'無')+'；家族公產不可直接當個人財產。\n親族：'+s.npcs.filter(n=>n.familyRole).map(n=>n.familyRole+' '+n.name+'（'+n.age+'歲／'+REALM_RANKS[Math.min(8,n.cultivationLevel||0)]+'／'+(n.trainingRole||'親族')+'）'+(n.alive?'':'（已故）')).join('、')+'\n':''}伴侶：${partner?partner.name:'無'}（已婚：${s.household.married?'是':'否'}；婚約：${s.household.engaged?'是':'否'}）；子女 ${s.household.dependents.length} 人；生育事件：${s.household.pregnancy?'進行中':'無'}。`+s.household.dependents.map(c=>`\n${c.name} ${c.age} 歲／健康 ${c.health}／學習 ${c.learning}／親密 ${c.bond}／職業 ${c.career}／儲蓄 ${c.savings}`).join('');
+ $('balanceSheets').textContent=v72FinancialTables(s);
  $('assets').textContent=`住屋 ${assetsCount(s,'住屋')}、田地 ${assetsCount(s,'田地')}；耕作 ${s.farm.progress}%／成熟 ${s.farm.harvestable} 批；家族產業：${s.familyEstate?.estate?.map(a=>a.kind+'×'+a.quantity).join('、')||'無'}（不可直接支用）；商號：${s.business?s.business.name+'（現金 '+s.business.cash+'，庫存 '+s.business.stock+'，員工 '+s.business.staff+'，累計損益 '+s.business.profit+'，'+(s.business.active?'營運':'暫停')+'）':'尚無'}。`;
  let npcSelect=$('npcSelect'),last=npcSelect.value;npcSelect.replaceChildren(...s.npcs.filter(n=>n.encountered).map(n=>{let o=document.createElement('option');o.value=n.id;o.textContent=`${n.name}（${n.nature}，${n.alive?'在世':'已故'}）`;return o}));if(s.npcs.some(n=>n.id===last&&n.encountered))npcSelect.value=last;
  entries('npcs',s.npcs.filter(n=>n.encountered),n=>`${n.name}｜${n.age} 歲｜${n.alive?'在世':'已故'}｜${n.nature}｜工作 ${n.job}｜所在 ${n.home}｜境界 ${REALM_RANKS[Math.min(8,n.cultivationLevel||0)]}｜資質 ${n.cultivationAptitude??'未測'}／修行${n.trainingYears||0}年｜${n.familyRole||'居民'}｜目標 ${n.goal}｜目前 ${n.activity}｜信任 ${n.trust}／好感 ${n.fond}｜關係 ${n.bond}｜配偶 ${s.npcs.find(q=>q.id===n.family?.spouseId)?.name||'無'}／子女 ${n.family?.children||0}｜記憶 ${n.memory.length} 件`);
@@ -1640,8 +1978,24 @@ function render(animate=false){$('endpoint').value=conf.endpoint||'';$('password
  $('v5Detail').textContent+='\n'+econStatus(s);
  entries('news',s.news.slice(-20).reverse(),e=>`${e.at}｜${e.text}`);entries('ledger',s.ledger.slice(-25).reverse(),e=>`${e.at}｜${e.reason}｜${e.amount>=0?'+':''}${e.amount} 銀｜餘額 ${e.balance}`);entries('events',s.events.slice(-90).reverse(),e=>`${e.at}｜${e.type}｜${e.description}`);history();renderArt(s);renderWorldMap(s);renderNPCGallery(s);
 }
+function localDialogueV73(st,action,speaker){
+ const a=String(action||''),character=speaker.nature||'謹慎';
+ let line='你說的我聽見了，但我得先弄清楚你的意思。';
+ if(/(?:找工作|求職|應徵|學徒|打工|幫工|做工|賺錢)/.test(a)){
+   line=/自私|多疑|謹慎|精明/.test(character)?'你想找活做？先說說會做什麼、能做多久。工錢和規矩可不能隨口答應。':'你是想在這裡找差事？先說說你擅長什麼，我再看看是否有能幫上的地方。';
+ }else if(/(?:開店|開商號|做生意|借錢|資助|銀兩|本錢)/.test(a)){
+   line=/自私|多疑|謹慎|精明/.test(character)?'做生意要有本錢，也要知道賣什麼、賣給誰。你先說個章程，我才有辦法考慮。':'我明白你的打算，不過帳要算清楚。你想先從哪一筆生意做起？';
+ }else if(/(?:你覺得|怎麼看|如何|怎麼樣|所以呢)/.test(a)){
+   line='我還在聽。你剛才說的事要看具體條件，你願意再說得仔細些嗎？';
+ }else if(/(?:不同意|不要|算了|拒絕)/.test(a)){
+   line='既然你不願意，我不會替你決定。不過先把這件事說清楚，免得往後生出誤會。';
+ }
+ return `${speaker.name}（${character}）聽完你說「${a.slice(0,120)}」，沒有突然離場。${speaker.name}答道：「${line}」\n\n這是當面的交談，並不代表對方已經給錢、錄取、簽約或答應其他條件。`;
+}
 function offlineNarration(st,action,result){
+ if(['違法行為','非常規行為','官府','治安紀錄'].includes(result?.kind))return '【'+now(st)+'｜'+st.location+'】\n\n'+result.text+'\n\n'+(result.kind==='違法行為'?'目擊者、地方官府與當事人可能記住此事；後續追捕及人物關係依保存的案件資料延續。':'接下來可以自由決定行動，但先前已成立的事件不會自動抹消。');
  const b=st.birth||{},speaker=activeSpeaker(st),n=st.npcs.find(q=>q.alive&&q.home===st.location&&action.includes(q.name));
+ if(speaker && result?.kind!=='旅行' && !explicitConversationExit(action))return `【${b.era||st.setting}・${st.location}｜${now(st)}】\n\n${localDialogueV73(st,action,speaker)}`;
  const pieces=[`【${b.era||st.setting}・${st.location}｜${now(st)}】`];if(speaker)pieces.push(`【持續對話】${speaker.name}（${speaker.familyRole||'相識'}）仍在場，正在和你談${st.activeConversation.topic||'剛才的話題'}。你的話是說給${speaker.name}聽，不是自言自語。`);if(['人物相遇','尋找工作','應徵結果'].includes(result.kind))pieces.push(result.text);
  const contextual=relevantMemories(st,action);const recentWorld=contextual.history.map(h=>h.description).slice(-2);
  if(recentWorld.length)pieces.push('此地近期變動：'+recentWorld.join('；')+'。');
@@ -1670,9 +2024,10 @@ async function execute(action){if(!state||busy||!state.alive)return;if(!String(a
  const minutes=30;
  if(oneActionOnly(action))return message('每回合只能執行一個主要行動。請先完成目前這一步，再安排下一步；沒有一鍵連續趕路、工作和修煉。','bad');
  if(movementIntent(action))return message('你尚未學會有效的傳送能力，不能直接瞬移到別處。此回未扣時間。','bad');
- if(!conf.endpoint||!conf.password){let target=encounterTarget(state,action,$('npcSelect').value),code=dialogueRoute(state,action);const result=finishAction(action,code,minutes,target?.id);completed(result);return}let target=encounterTarget(state,action,$('npcSelect').value),code=dialogueRoute(state,action);const expectedSave=localStorage.getItem(STORE);busy=true;render();message(`正在生成第 ${state.chapter+1} 回；回應成功前不修改存檔。`);$('chapterArea').scrollIntoView({behavior:'smooth',block:'start'});
+ if(v72MustUseOffline()||(!conf.endpoint||!conf.password)&&v72NarrationMode()!=='online'){v72OfflinePlay(action,minutes);return}if(!conf.endpoint||!conf.password)return message('線上模式需要先設定 Worker 網址與密語；未執行本回。','bad');if(contextualSpeechReply(state,action))ensureSceneSpeaker(state);let target=encounterTarget(state,action,$('npcSelect').value),code=dialogueRoute(state,action);const expectedSave=localStorage.getItem(STORE);busy=true;render();message(`正在生成第 ${state.chapter+1} 回；回應成功前不修改存檔。`);$('chapterArea').scrollIntoView({behavior:'smooth',block:'start'});
  try{let preview=clone(state);preview.pendingAction=action;let ruling=rule(preview,code,target?.id,minutes);delete preview.pendingAction;if(ruling.ok)updateConversationAfterRule(preview,action,code,ruling,target?.id);if(!ruling.ok){busy=false;render();message('行動不成立：'+ruling.text+'（時間與存檔都沒有改動）','bad');return}
- let contract=narrativeContract(state,preview,action,ruling,code);let speakerNow=activeSpeaker(preview);let context=[`【必須遵守的對話連續性】${speakerNow?'目前正在與'+speakerNow.name+'（'+(speakerNow.familyRole||'相識')+'，NPC ID '+speakerNow.id+'）於'+preview.location+'當面交談；話題：'+(preview.activeConversation?.topic||'延續前文')+'。即使玩家本回沒有再說「爸爸」或名字，也必須由此人繼續回話，不得改成自言自語、換人或無故離場。':'此回沒有已確認的持續對話對象，不得虛構特定人物已在場。'}只有經規則明確確認的移動、離場、死亡才可改變NPC在場事實。`,`已知人物與生活狀態：${JSON.stringify(relevantMemories(state,action))}；已發生的過往：${JSON.stringify(state.lifePast?.events||[])}；近期地方變動：${JSON.stringify((state.society?.history||[]).slice(-4))}。人物家族公產不得視為個人私產。`, `世界設定：${state.setting}，${state.location}，出生資料：${JSON.stringify(state.birth||{})}；時間：${now(state)}。重生層次：${state.worldDiscovery?.realm||"mortal"}；角色實際知道的修仙常識：${state.worldDiscovery?.knowledge||0}；角色已知入口：${JSON.stringify(state.worldDiscovery?.knownEntrances||[])}；不得洩漏隱藏入口及其他世界真相；未取得師承不可施法。現世凡人可能終生不知道仙門存在，上界出生者也可能不知凡間。人物不能瞬移、不能隔空對話，玩家本回只執行一個主行動。`,`【本回由程式確認的結果】${ruling.text}。不得描寫與此矛盾的成功、財產、死亡或婚姻。`,`【行動與敘事一致性】${code==='searchJob'?'本回只打聽職缺，尚未應徵、上工、領薪；若玩家說「去鎮上」，但規則未變更所在地，不得描寫已到鎮上。':''}${code==='applyGenericJob'?'只有規則確認錄取才能描寫受雇；絕不可直接領薪。':''}請以結算後地點${preview.location}、時間${now(preview)}敘事；不得自創已發生的離開、旅行或改變職位。`,`【時間與對話硬性約束】本回結算後為${now(preview)}，當地時刻${String(Math.floor(preview.minute/60)).padStart(2,'0')}:${String(preview.minute%60).padStart(2,'0')}；19:00至05:00為夜間，不可描寫午後陽光、正午或白日景象。玩家原話：「${action}」；若是對話，必須先讓對象直接回應此話，不得只寫無關環境描寫。親屬不得當陌生人。`,`角色：${state.name}，${state.age} 歲；銀兩 ${preview.money}，生命 ${preview.hp}。`,`家庭：已婚 ${preview.household.married}，子女 ${preview.household.dependents.length}。`,`資產：住屋 ${assetsCount(preview,'住屋')}；田地 ${assetsCount(preview,'田地')}。`,`親屬名冊（姓名不可改）：${preview.npcs.filter(n=>n.familyRole).map(n=>n.familyRole+'='+n.name+'（'+(n.alive?'在世':'已故')+'）').join('；')}；本回相遇對象：${ruling.kind==='人物相遇'?ruling.text:'無新人物'}。不得另創同名或替代父母，若玩家找爸爸只能使用名冊父親。`,`NPC 事實：${preview.npcs.filter(n=>n.encountered).slice(0,4).map(n=>n.name+' '+n.nature+'／'+n.goal+'／'+n.bond+'／信任'+n.trust+'／記憶'+n.memory.slice(-1).map(m=>m.event).join('')).join('；')}`, ...preview.events.slice(-3).map(e=>e.type+':'+e.description)];
+ let contract=narrativeContract(state,preview,action,ruling,code);
+ if(['crimeV74','extremeV74','crimeStatusV74'].includes(code)){contract.ruleResult=ruling.text;contract.crimePolicy='不可描寫性侵害過程、犯罪教學或強迫性行為；只描寫企圖、拒絕、目擊、調查與後果；不許 AI 自行撤銷通緝或憑空加減錢。';}let speakerNow=activeSpeaker(preview);let context=[`【必須遵守的對話連續性】${speakerNow?'目前正在與'+speakerNow.name+'（'+(speakerNow.familyRole||'相識')+'，NPC ID '+speakerNow.id+'）於'+preview.location+'當面交談；話題：'+(preview.activeConversation?.topic||'延續前文')+'。即使玩家本回沒有再說「爸爸」或名字，也必須由此人繼續回話，不得改成自言自語、換人或無故離場。':'此回沒有已確認的持續對話對象，不得虛構特定人物已在場。'}只有經規則明確確認的移動、離場、死亡才可改變NPC在場事實。若有犯罪或性暴力企圖，僅以非露骨方式敘述抵抗、制止及司法後果，禁止增添侵害細節。`,`已知人物與生活狀態：${JSON.stringify(relevantMemories(state,action))}；已發生的過往：${JSON.stringify(state.lifePast?.events||[])}；近期地方變動：${JSON.stringify((state.society?.history||[]).slice(-4))}。人物家族公產不得視為個人私產。`, `世界設定：${state.setting}，${state.location}，出生資料：${JSON.stringify(state.birth||{})}；時間：${now(state)}。重生層次：${state.worldDiscovery?.realm||"mortal"}；角色實際知道的修仙常識：${state.worldDiscovery?.knowledge||0}；角色已知入口：${JSON.stringify(state.worldDiscovery?.knownEntrances||[])}；不得洩漏隱藏入口及其他世界真相；未取得師承不可施法。現世凡人可能終生不知道仙門存在，上界出生者也可能不知凡間。人物不能瞬移、不能隔空對話，玩家本回只執行一個主行動。`,`【本回由程式確認的結果】${ruling.text}。不得描寫與此矛盾的成功、財產、死亡或婚姻。`,`【行動與敘事一致性】${code==='searchJob'?'本回只打聽職缺，尚未應徵、上工、領薪；若玩家說「去鎮上」，但規則未變更所在地，不得描寫已到鎮上。':''}${code==='applyGenericJob'?'只有規則確認錄取才能描寫受雇；絕不可直接領薪。':''}請以結算後地點${preview.location}、時間${now(preview)}敘事；不得自創已發生的離開、旅行或改變職位。`,`【時間與對話硬性約束】本回結算後為${now(preview)}，當地時刻${String(Math.floor(preview.minute/60)).padStart(2,'0')}:${String(preview.minute%60).padStart(2,'0')}；19:00至05:00為夜間，不可描寫午後陽光、正午或白日景象。玩家原話：「${action}」；若是對話，必須先讓對象直接回應此話，不得只寫無關環境描寫。親屬不得當陌生人。`,`角色：${state.name}，${state.age} 歲；銀兩 ${preview.money}，生命 ${preview.hp}。`,`家庭：已婚 ${preview.household.married}，子女 ${preview.household.dependents.length}。`,`資產：住屋 ${assetsCount(preview,'住屋')}；田地 ${assetsCount(preview,'田地')}。`,`親屬名冊（姓名不可改）：${preview.npcs.filter(n=>n.familyRole).map(n=>n.familyRole+'='+n.name+'（'+(n.alive?'在世':'已故')+'）').join('；')}；本回相遇對象：${ruling.kind==='人物相遇'?ruling.text:'無新人物'}。不得另創同名或替代父母，若玩家找爸爸只能使用名冊父親。`,`NPC 事實：${preview.npcs.filter(n=>n.encountered).slice(0,4).map(n=>n.name+' '+n.nature+'／'+n.goal+'／'+n.bond+'／信任'+n.trust+'／記憶'+n.memory.slice(-1).map(m=>m.event).join('')).join('；')}`, ...preview.events.slice(-3).map(e=>e.type+':'+e.description)];
  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),32000);let response;try{response=await fetch(conf.endpoint,{method:'POST',headers:{'content-type':'application/json','x-game-password':conf.password},body:JSON.stringify({action:action+'\n\n'+directorPrompt(contract),minutes,state:publicStoryState(preview),recent:[directorPrompt(contract),...context.slice(-3)]}),signal:controller.signal})}finally{clearTimeout(timeout)}
  let data=await response.json();if(!response.ok||typeof data.story!=='string'||!data.story.trim())throw Error(data.error||'AI 沒有回傳故事');
  // 避免 AI 回答期間使用者在另一個分頁改動存檔：檢查目前本頁 ID 與回合數仍一致。
@@ -1686,7 +2041,10 @@ async function execute(action){if(!state||busy||!state.alive)return;if(!String(a
  let options=ruling.kind==='尋找工作'?employmentChoices(preview):(parsed.options.length===2?parsed.options:sceneChoices(preview));chapter(preview,action,parsed.story,ruling.verified?ruling.text:'此意圖缺少專用規則，尚未認定獲得結果。',options,ruling.kind==='尋找工作'?'工作線索後續選項':(parsed.options.length===2?'AI 劇情選項':'系統依場景建議'));
  try{put(preview)}catch(e){throw Error('AI 已返回，但存檔寫入失敗：'+e.message)}
  busy=false;render(true);$('action').value='';message(`第 ${state.chapter} 回完成・已儲存・${now(state)}。${ruling.text}`,'ok');$('chapterArea').scrollIntoView({behavior:'smooth',block:'start'});
- }catch(e){busy=false;render(false);message('這一回未執行，時間及存檔未改動：'+(e.name==='AbortError'?'AI 回應逾時':e.message),'bad')}}
+ }catch(e){busy=false;
+  // 僅在真正的網路斷線時降級；401 密語錯誤、資料衝突和規則失敗不得重做並重複結算。
+  if(v72NarrationMode()==='auto'&&((typeof navigator!=='undefined'&&!navigator.onLine)||e instanceof TypeError||e.name==='AbortError')){render(false);message('AI 連線失敗，改由本機規則與敘事結算此回。','ok');try{v72OfflinePlay(action,minutes)}catch(err){message('離線回合失敗：'+err.message,'bad')}return;}
+  render(false);message('這一回未執行，時間及存檔未改動：'+(e.name==='AbortError'?'AI 回應逾時':e.message),'bad')}}
 function saveExport(){if(!state)return message('目前沒有遊戲存檔','bad');let data={app:'浮生無界',schema:5,created:new Date().toISOString(),state,archives:getArchives()},blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='浮生無界-直式敘事版-完整備份-'+Date.now()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);message('已產生 JSON 完整備份；密語不在檔案內。','ok')}
 function archivedState(st){return {id:st.id,name:st.name,age:st.age,summary:'終於 '+now(st)+'；第 '+st.chapter+' 回，'+(st.alive?'自行結束':'死亡'),chapter:st.chapter,death:!st.alive,events:st.events.slice(-25),ended:now(st)}}
 function endLife(keep,restart=false){if(busy)return;if(!state&&restart){let z=newLife(getArchives());try{put(z);render();$('menu').classList.add('hidden');message('新一世開始','ok')}catch(e){message('無法建立人生：'+e.message,'bad')}return}if(!state)return;if(!confirm(keep?'結束此世並封存？此世會從遊玩欄位移除。':'確定放棄此世，不保留 V5 目前人生？此操作無法復原，已下載的 JSON 不受影響。'))return;
@@ -1804,5 +2162,17 @@ render();if(loadProblem)message(loadProblem,'bad');
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!drawer.hidden)setOpen(false)});
  // If choosing a map destination fills the free-action box, close the drawer to reveal it.
  document.getElementById('mapPins').addEventListener('click',e=>{if(e.target.closest('button'))setTimeout(()=>setOpen(false),50)});
+})();
+
+// V7.3 可安裝離線網頁。只有在 https:// 網站才能註冊 Service Worker。
+(function v72SetupOffline(){
+ const mode=$('offlineMode'),status=$('offlineStatus'),btn=$('cacheOffline');
+ if(!mode)return;mode.value=v72NarrationMode();
+ const update=()=>{status.textContent=(navigator.onLine?'網路可用':'目前離線')+'；敘事模式：'+({auto:'自動切換',offline:'本機規則',online:'線上 AI'}[mode.value]||'自動')+'。離線存檔存在本裝置，請定期匯出 JSON。'};
+ mode.addEventListener('change',()=>{try{localStorage.setItem(V72_OFFLINE_MODE_KEY,mode.value)}catch{}update()});
+ window.addEventListener('online',update);window.addEventListener('offline',update);update();
+ if(!('serviceWorker' in navigator)||!/^https?:$/.test(location.protocol)){btn.textContent='單檔模式（無法安裝快取）';btn.disabled=true;return;}
+ const registration=navigator.serviceWorker.register('./sw.js',{scope:'./'}).then(reg=>{status.textContent='離線網頁已登記。請先連網開啟本頁一次，再從主畫面啟動；存檔保存在此裝置。';return reg}).catch(e=>{status.textContent='離線快取未能安裝：'+e.message;return null});
+ btn.addEventListener('click',async()=>{const reg=await registration;if(!reg)return;try{await reg.update();const worker=reg.active||reg.waiting||reg.installing;if(worker){worker.postMessage({type:'CACHE_OFFLINE'});status.textContent='已要求更新離線資源。請連網完成後再斷網測試。'}}catch(e){status.textContent='更新失敗：'+e.message}});
 })();
 </script></body></html>
