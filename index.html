@@ -10,7 +10,7 @@ NPC 保有目標、年齡、關係、記憶與拒絕權；玩家對話必須顯�
 持續擴充：直接修改這份完整版，不要以短篇 Demo 取代它；後續需保持測試案例。
 詳情見同套件的 V5_SPEC.md 及 QA_REPORT.md。
 -->
-<title>浮生無界・萬世因果｜V9.0 三界世界與指定重生整合版</title>
+<title>浮生無界・萬世因果｜V9.1 三界世界與指定重生整合版</title>
 <style>
 :root{color-scheme:dark;--bg:#101b22;--card:#1b2d35;--border:#3d5662;--gold:#f0c77e;--ink:#eee9d9;--muted:#b7c8cb;--green:#87cba5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Noto Sans TC",sans-serif}main{max-width:860px;margin:auto;padding:18px 15px 70px}h1{font-size:1.6rem;margin:0;color:var(--gold)}h2{font-size:1.14rem;margin:0 0 10px;color:#ffe1a3}h3{font-size:1rem;margin:12px 0 6px}.sub{color:var(--muted);font-size:.85rem}.panel{padding:17px;border:1px solid var(--border);background:var(--card);border-radius:15px;margin:12px 0}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,input,textarea,select{font:inherit;border-radius:9px}button{padding:10px 12px;cursor:pointer;border:1px solid #e3b56f;background:var(--gold);color:#172129;font-weight:730}button.alt{background:#334c59;color:white;border-color:#557180}button.ghost{background:transparent;color:var(--ink);border-color:#58717c}button.choice{display:block;width:100%;text-align:left;background:#314954;color:white;border-color:#59717a;margin:8px 0}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:3px solid white}textarea,input,select{background:#0e2028;color:white;border:1px solid #77909b;padding:10px;width:100%}textarea{min-height:116px}label{display:block;font-size:.94rem;margin:10px 0 5px}details>summary{cursor:pointer;font-weight:750;color:#e9c98e}details.panel[open]>summary{margin-bottom:12px}.status{border-left:4px solid #bdcdd4;border-radius:6px;background:#283f4c;padding:10px 12px;margin:10px 0}.ok{border-left-color:var(--green)}.bad{border-left-color:#f0908e}.story{white-space:pre-wrap;line-height:2.04;min-height:80px}.clock{font-weight:700;color:var(--gold);font-size:1.13rem}.entry{padding:7px 0;border-bottom:1px solid #435764;font-size:.9rem;white-space:pre-wrap}.hidden{display:none!important}#chapterArea{scroll-margin-top:12px}#topInfo{font-weight:650}#menuStatus{white-space:pre-wrap}.tag{display:inline-block;border:1px solid #5a7680;background:#283f47;padding:2px 8px;border-radius:999px;font-size:.8rem;margin:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.mutedline{font-size:.85rem;color:var(--muted)}.compact button{padding:9px 8px;font-size:.92rem}@media(max-width:540px){main{padding:12px 11px 80px}.panel{padding:14px}.row>*{flex-basis:140px}}
 
@@ -170,7 +170,7 @@ main{max-width:750px!important;padding:12px 12px 46px!important;margin-inline:au
 <div class="resource"><label>🌾 糧食</label><strong id="artFood">—</strong></div>
 </div>
 <div class="quickActions obsoleteRules"><div class="sub">快速行動 · 使用既有規則結算</div><div class="row"><button class="alt" data-act="work">🔨 工作</button><button class="alt" data-act="forage">🌿 覓食</button><button class="alt" data-act="rest">🍵 休息</button><button class="alt" data-act="social">💬 交談</button></div></div>
-<div class="birthInfo" id="birthInfo">現世歷史止於清朝；洞天入口需要機緣才能發現，靈根不等於仙法。</div></section><section aria-label="當前地域的插畫氛圍" class="dawn" id="artScene">
+<details class="panel" id="cityBusinessHelp"><summary>🏪 城鎮店鋪與開店教學（V9.1）</summary><p>輸入「查看商店」或「查看青樓」列出城中多家商戶；「查看店鋪 完整店名」查看資訊；「拜訪店鋪 完整店名」走到指定店鋪。</p><p>想自己經營：先到本地商鋪街，輸入「開店 茶館 清風茶館」，或選擇米行、客棧、酒樓、青樓等店型。可重複開設不同名稱的商店；建立後於店面使用「查看我的店鋪」「管理店鋪 完整店名」「店鋪進貨 5」「店鋪營業」「店鋪雇員」。店鋪金錢和玩家私房錢分帳。</p></details><div class="birthInfo" id="birthInfo">現世歷史止於清朝；洞天入口需要機緣才能發現，靈根不等於仙法。</div></section><section aria-label="當前地域的插畫氛圍" class="dawn" id="artScene">
 <div class="sceneTop"><div class="sceneBadge" id="artTime">🌇 黃昏 · 故事尚未開始</div><div class="sceneBadge" id="artSeason">🌸 城鎮風景</div></div>
 <button class="alt atlasShortcut" id="openAtlas" type="button">🧭 查看世界地圖</button>
 <div class="sceneBottom"><div class="sceneIntro"><div class="sceneEyebrow">旅途中的此刻 / SCENE</div><h2 class="scenePlace" id="artPlace">浮生世界</h2><div class="sceneDesc" id="artCaption">場景美術為通用示意，不代表精確歷史地點</div></div>
@@ -1904,7 +1904,7 @@ function v8Intent(st,raw){
  if(/^(?:財務總覽|家族身家|總資產|產業鏈|生計紀錄|生產紀錄|經濟系統)$|^(?:查看|查詢|檢視)(?:全家資產|家族身家|財務總覽|總資產|產業鏈|生計|生產紀錄|經濟系統)|^(?:開設工坊|創辦工坊|設立工坊|製作|生產|加工|燒製|鍛造|播種|耕種糧食|種植糧食|栽種棉麻|種植棉麻|收割作物|農田收成|收穫農作物|收成棉麻|僱用鏢師|雇鏢師|護鏢委託|商號雇員薪資|發放工錢|支付工資|查詢契約|契約總覽|我的契約|查看契約|學館教書|教授學生|教學授課|代人送貨|運輸接案|承運商貨)/.test(a))return {code:'v8Economy',type:'economy'};
  return null;
 }
-function rule(st,code,targetId,minutes=30){if(code==='polityV89')return {ok:true,verified:true,kind:'三界勢力',minutes:0,text:v89PolityStatus(st)};if(code==='realmMapV89')return {ok:true,verified:true,kind:'三界圖志',minutes:0,text:v89RealmStatus(st)};if(code==='sectMapV89')return {ok:true,verified:true,kind:'門派圖鑑',minutes:0,text:v89SectStatus(st)};
+function rule(st,code,targetId,minutes=30){if(code==="v91Market")return v91Run(st,st.pendingAction||"");if(code==='polityV89')return {ok:true,verified:true,kind:'三界勢力',minutes:0,text:v89PolityStatus(st)};if(code==='realmMapV89')return {ok:true,verified:true,kind:'三界圖志',minutes:0,text:v89RealmStatus(st)};if(code==='sectMapV89')return {ok:true,verified:true,kind:'門派圖鑑',minutes:0,text:v89SectStatus(st)};
  if(code==='v83RichSearch')return v84RichSearch(st,st.pendingAction||'');
  if(code==='v84Contract')return v84Contract(st);
  if(code==='populationStatusV88'){const town=v84Town(st),p=v88ScenePopulation(st,town);return {ok:true,verified:true,kind:'人口概況',minutes:0,text:'【'+town.hub+'人口估算】聚落類型：'+p.type+'；行政轄區人口約 '+p.administrativePopulation+' 人；聚落常住人口約 '+p.settlementResidents+' 人；戶數約 '+p.households+' 戶；你所在的「'+st.location+'」現場估計約 '+p.scenePresent+' 人。這些是分層統計模擬，不等於已創建 '+p.settlementResidents+' 位獨立 NPC；具體人物須另查戶籍與店家。'};}
@@ -2013,7 +2013,7 @@ function localIntentV73(st,raw){
  if(/(?:想|打算|計劃|考慮|討論|商量|你覺得|問問).{0,22}(?:開店|開商號|創業)/.test(a))return {code:'chat',type:'conversation'};
  return {code:null,type:'legacy'};
 }
-function dialogueRoute(st,action){
+function dialogueRoute(st,action){if(v91Intent(action))return "v91Market";
  const direct=employmentIntent(action);if(direct && /(?:查看工作契約|應徵|面試|查看本地職缺|打聽|詢問|找工作|找個工作|短工|農活|跑腿|職缺)/.test(String(action)) && !/^(?:我想|我打算|你覺得)/.test(String(action).trim()))return direct;
  const intent=localIntentV73(st,action);
  if(intent.code)return intent.code;
@@ -2086,7 +2086,7 @@ function weightedStatus(st){const n=dice(st,1,100);let t=0;for(const [k,p] of ST
 function realmPool(layer){return layer==='upper'?UPPER_WORLDS:layer==='hidden'?HIDDEN_WORLDS:MORTAL_WORLDS}
 const HISTORICAL_COORDS={"洛邑":[112.45,34.62],"曲阜":[116.99,35.59],"邯鄲":[114.49,36.61],"臨淄":[118.33,36.82],"咸陽":[108.72,34.36],"櫟陽":[109.22,34.66],"函谷關":[110.87,34.53],"渭水村":[108.9,34.4],"長安":[108.95,34.27],"茂陵邑":[108.57,34.31],"弘農":[110.7,34.52],"洛陽":[112.45,34.62],"潁川":[113.85,34.03],"陳留":[114.4,34.8],"南陽":[112.53,33.01],"建業":[118.78,32.06],"壽春":[116.79,32.57],"會稽":[120.6,29.99],"建康":[118.78,32.06],"壽陽":[116.79,32.57],"彭城":[117.2,34.26],"廣陵":[119.42,32.4],"大興城":[108.95,34.27],"江都":[119.42,32.4],"汴水渡":[114.4,34.8],"潼關":[110.25,34.55],"終南山麓":[108.97,33.95],"開封":[114.3,34.79],"成都":[104.06,30.67],"金陵":[118.78,32.06],"江陵":[112.24,30.33],"汴京":[114.3,34.79],"蘇州":[120.62,31.32],"杭州":[120.16,30.25],"揚州":[119.42,32.4],"臨安":[120.16,30.25],"紹興":[120.58,30],"平江府":[120.62,31.32],"明州":[121.55,29.87],"大都":[116.4,39.91],"泉州":[118.67,24.87],"平江":[120.62,31.32],"南京":[118.78,32.06],"蘇州府":[120.62,31.32],"杭州府":[120.16,30.25],"徽州府":[118.34,29.72],"成都府":[104.06,30.67],"錦江岸":[104.09,30.64],"青羊宮外":[104.03,30.67],"龍泉驛":[104.27,30.55],"北京城":[116.4,39.91],"揚州府":[119.42,32.4]};
 function historicalAtlas(w,st){const list=w.sites.map((name,i)=>({name,point:HISTORICAL_COORDS[name],i}));if(!w.period||!list.every(x=>x.point))return list.map(({name,i})=>({name,x:[19,74,29,68][i],y:[25,27,73,70][i],sym:["🏘️","⛰️","🌾","⛩️"][i],group:w.country}));let xs=list.map(x=>x.point[0]),ys=list.map(x=>x.point[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);return list.map(({name,point,i})=>({name,x:Math.round(12+76*(point[0]-x0)/Math.max(1,x1-x0)),y:Math.round(12+76*(y1-point[1])/Math.max(1,y1-y0)),sym:["🏘️","⛰️","🌾","⛩️"][i],group:w.country}));}
-// V9.0：財力不是地位。個人錢袋確定額度；族庫只供家族授權使用。
+// V9.1：財力不是地位。個人錢袋確定額度；族庫只供家族授權使用。
 const V90_PURSE={貧困:[0.2,2],平民:[4,18],小康:[35,120],富足:[200,800],權貴:[1000,3500]};
 function v90InitialPurse(st,tier,realm){const range=V90_PURSE[tier]||V90_PURSE.平民;const n=Math.round((range[0]+rand(st)*(range[1]-range[0]))*100)/100;return realm==='mortal'?n:Math.max(1,Math.floor(n));}
 function v90FinalizeBirthWallet(st){const initial=Number(st.birth?.startPurse)||0;const tier=st.birth?.wealthTier||st.birth?.standing||'平民';
@@ -3560,6 +3560,192 @@ function v84RichSearch(st,a){
  const adv=advance(st,45);return {ok:true,verified:true,kind:'尋訪人物',minutes:adv.minutes,
   text:'你在'+st.location+'實際認識'+present.name+'（'+present.job+'），她的家世與資產屬其家庭所有。她仍可自主決定是否繼續交談。'};
 }
+
+// V9.1: 城市多商戶及玩家多店鋪。所有金錢與貨物轉移有相對帳戶；不假造已接觸NPC。
+const V91_TYPES=[
+ ['米行','商鋪街','糧食',40,.07,.045],['茶館','茶館','茶葉',35,.065,.04],['客棧','客棧','住宿服務',90,.13,.065],
+ ['酒樓','酒樓','農產',75,.12,.065],['醫館','醫館','藥材',80,.13,.07],['布莊','商鋪街','布匹',65,.15,.085],
+ ['木作坊','工坊','木器',85,.18,.105],['車行','貨棧','運輸服務',100,.18,.095],['鏢局','鏢局','護鏢服務',140,.25,.14],
+ ['青樓','青樓','娛樂服務',140,.24,.11],['藝館','青樓','娛樂服務',110,.20,.10],['書坊','商鋪街','書冊',65,.12,.06],
+ ['鐵匠鋪','工坊','鐵器',95,.20,.12],['錢莊','商鋪街','金融服務',180,.10,.05],['雜貨舖','商鋪街','日用品',45,.10,.06],
+ ['丹藥坊','商鋪街','丹藥',160,.30,.17],['靈器坊','工坊','靈器',200,.36,.20],['符籙鋪','商鋪街','符籙',120,.24,.13]];
+const V91_FIRST=['同興','醉月','聽雨','春風','錦華','安平','廣源','長興','吉祥','雲來','清風','福臨','瑞祥','青雲','四海','永泰','望江','德昌','萬福','天香','月華','和順','千秋','金玉','天寶','玉泉','百草','松鶴','明月','萬象','九霄','星河'];
+function v91Hash(t){let n=2166136261;for(const c of String(t)){n^=c.charCodeAt(0);n=Math.imul(n,16777619);}return n>>>0;}
+function v91Realm(st){return typeof v89RealmOf==='function'?v89RealmOf(st):econRealm(st);}
+function v91Type(t){return V91_TYPES.find(a=>a[0]===t)||null;}
+function v91Price(st,n){return v91Realm(st)==='mortal'?n:Math.max(1,Math.ceil(n*3));}
+function v91Town(st,hub=v81Hub(st)){
+ const town=v84Town(st,hub);
+ if(!Array.isArray(town.businesses91)){
+  const count=Math.min(460,Math.max(7,Math.round((town.population88?.settlementResidents||4800)/1400)+9));
+  const counts={};const businesses=[];
+  // 此名冊按人口決定規模，只有查詢／互動時才展開具體NPC，減輕存檔體積。
+  for(let i=0;i<count;i++){
+   const choices=V91_TYPES.filter(t=>v91Realm(st)!=='mortal'||!['丹藥坊','靈器坊','符籙鋪'].includes(t[0]));
+   const idx=(v91Hash(hub+':type:'+i)+i*3)%choices.length;
+   const typ=choices[idx];counts[typ[0]]=(counts[typ[0]]||0)+1;
+   const seq=counts[typ[0]],prefix=V91_FIRST[(v91Hash(hub+':name:'+i)+i)%V91_FIRST.length];
+   const name=hub+'·'+prefix+typ[0]+(seq>1?'第'+seq+'號':'');
+   businesses.push({id:'v91-'+v91Hash(hub)+'-'+i,name,kind:typ[0],city:hub,site:hub+'·'+typ[1],product:typ[2],ownerId:'v91-owner-'+v91Hash(hub)+'-'+i,
+    ownerName:'待實際接觸店主',cash:v91Price(st,Math.round(65+(i%11)*9)),stock:Math.round(8+i%8),retail:v91Price(st,typ[4]),cost:v91Price(st,typ[5]),
+    staff:Math.floor(i%4),closed:false,playerOwned:false,recordType:'background',createdTick:town.builtAt||0});
+  }
+  town.businesses91=businesses;
+ }
+ // V9.1 原有九家商戶保留，不額外複製、也不改動既有契約和薪水。
+ const ids=new Set(town.businesses91.map(b=>b.id));
+ for(const s of town.shops){if(ids.has(s.id))continue;town.businesses91.push({id:s.id,name:s.name,kind:s.product||'原有商戶',city:hub,site:s.site,ownerId:s.ownerId,
+  ownerName:st.npcs.find(n=>n.id===s.ownerId)?.name||'當地店主',playerOwned:false,recordType:'legacy',legacyId:s.id});ids.add(s.id);}
+ for(const shop of (st.businesses91||[]))if(shop.city===hub){
+  const idx=town.businesses91.findIndex(x=>x.id===shop.id);
+  if(idx>=0)town.businesses91[idx]=shop;else town.businesses91.push(shop);
+  ids.add(shop.id);
+ }
+ // 既有 V9.1 的單店存檔也能出現在城鎮名冊，財務仍由舊商號系統管理。
+ if(st.business?.city===hub){const b=st.business,id=b.shopId91||('v91-old-'+String(st.id||st.name));b.shopId91=id;
+  if(!ids.has(id)){town.businesses91.push({id,name:b.name,kind:'舊版商號',city:hub,site:hub+'·商鋪街',ownerId:st.id,
+   ownerName:st.name,playerOwned:true,recordType:'legacyPlayer',legacyId:id});}}
+ return town;
+}
+function v91Select(st,action,ownOnly=false){
+ const t=v91Town(st);const q=String(action||'').replace(/\s/g,'');
+ const matches=t.businesses91.filter(b=>(!ownOnly||b.ownerId===st.id)&&(q.includes(b.name.replace(/\s/g,''))||q.includes(b.id)));
+ if(matches.length===1)return matches[0];
+ if(matches.length>1)return null;
+ const short=t.businesses91.filter(b=>(!ownOnly||b.ownerId===st.id)&&q.includes(b.name.split('·').at(-1)));
+ return short.length===1?short[0]:null;
+}
+function v91Listed(st,action){
+ const t=v91Town(st),q=String(action||'');
+ const filter=(V91_TYPES.map(x=>x[0]).find(x=>q.includes(x))||(/妓院|花街|青樓/.test(q)?'青樓':null));
+ let shops=t.businesses91.filter(b=>!filter||b.kind===filter||(filter==='青樓'&&b.kind==='藝館'));
+ if(/我(?:的)?店|名下|自營/.test(q))shops=shops.filter(b=>b.ownerId===st.id);
+ const count=shops.length,page=Math.max(1,Math.min(100,Number(q.match(/第\s*(\d+)\s*頁/)?.[1]||1))),per=12,part=shops.slice((page-1)*per,page*per);
+ const names=part.map(b=>b.name+'〔'+b.kind+'／'+b.site+'／'+(b.closed?'歇業':b.playerOwned?'玩家經營':'營業')+'〕');
+ return {ok:true,verified:true,kind:'城鎮商戶名冊',minutes:0,text:'【'+t.hub+'商戶名冊】本城登記 '+t.businesses91.length+' 家店鋪，其中符合條件 '+count+' 家；第 '+page+'/'+Math.max(1,Math.ceil(count/per))+' 頁：'+(names.join('；')||'無相符商戶')+'。輸入「查看店鋪 店名」可看詳情，「查看商店 第2頁」翻頁；「開店 茶館 店名」建立自己的新店。這是可保存的店家名冊，不等於所有店主已具備完整自主NPC人生。'};
+}
+function v91Existing(st,action){
+ const town=v91Town(st),s=v91Select(st,action);
+ if(!s)return v81No('找不到指定店家，或店名有多個相符；請先查「查看商店」，再輸入完整店名。');
+ const shop=s.recordType==='legacy'?town.shops.find(x=>x.id===s.legacyId):s;
+ const b=s.recordType==='legacyPlayer'?st.business:shop;
+ const cash=Number(b?.cash)||0,stock=Number(b?.stock)||0;
+ return {ok:true,verified:true,kind:'店鋪資訊',minutes:0,text:'【'+s.name+'】類型：'+s.kind+'；地址：'+s.site+'；店主：'+(s.ownerId===st.id?st.name:s.ownerName||'尚未結識')+'；狀態：'+(s.closed?'歇業':'營業')+'；'+(s.ownerId===st.id?'可用現金 '+cash+'、庫存 '+stock+'、雇員 '+(Number(b?.staff)||0):'對外公開資料不包含店主完整帳簿')+'。實際交易須在店內或相應街區。'};
+}
+function v91Active(st,action){
+ const own=(st.businesses91||[]).filter(b=>!b.closed),named=v91Select(st,action,true);
+ return named&&named.recordType==='player'?named:own.find(b=>b.id===st.activeShop91)||own[0]||null;
+}
+function v91Start(st,action){
+ if(st.journey)return v81No('旅行途中不能隔空開店。');
+ if(!['商鋪街','市集','鎮上','青樓','茶館','酒樓'].includes(v82Place(st)))return v81No('請先前往當地商鋪街、市集、鎮上或花街，確認選址後才能開店。');
+ const match=String(action||'').trim().match(/^(?:開店|開設店鋪|創辦店鋪|設立店鋪|開設商號|創辦商號)\s*(\S+)\s*(.*)$/);
+ if(!match)return v81No('請輸入「開店 茶館 清風茶館」或「開店 青樓 醉月樓」。未指定店型和店名時只提供規劃，不自動扣錢。');
+ const kind=match[1],type=v91Type(kind);
+ if(!type)return v81No('目前可設立的類型：'+V91_TYPES.filter(t=>v91Realm(st)!=='mortal'||!['丹藥坊','靈器坊','符籙鋪'].includes(t[0])).map(t=>t[0]).join('、'));
+ if(v91Realm(st)==='mortal'&&['丹藥坊','靈器坊','符籙鋪'].includes(kind))return v81No('凡俗城鎮不能直接經營高階仙道商行。');
+ let name=(match[2]||'').trim();if(name.length<2||name.length>24)return v81No('請提供 2～24 字的獨立店名，不能使用空白或過長名稱。');
+ const town=v91Town(st),full=town.hub+'·'+name;
+ if(town.businesses91.some(b=>b.name===full))return v81No('本城已有同名商戶，請改用另一個店名。');
+ const capital=v91Price(st,type[3]);
+ if(st.money<capital)return v81No('創辦'+kind+'需要個人可用資金 '+capital+(v91Realm(st)==='mortal'?'兩銀值':'下品靈石')+'；家族公款不能未經同意直接支付。你目前只有 '+st.money+'。');
+ const site=town.hub+'·'+type[1],cash=v85Round(capital*.75),fee=v85Round(capital-cash);
+ if(!money(st,-capital,'創辦'+full))return v81No('可用資金不足，開店未成立。');
+ const id='player-shop-'+(st.id||'player')+'-'+(st.shopSequence91=(Number(st.shopSequence91)||0)+1);
+ const shop={id,name:full,kind,city:town.hub,site,product:type[2],ownerId:st.id,ownerName:st.name,cash,stock:0,retail:v91Price(st,type[4]),cost:v91Price(st,type[5]),staff:0,
+  closed:false,playerOwned:true,recordType:'player',createdTick:st.world.tick||0,lastSaleTick:-1,lastPayrollTick:-1,earnings:0,expenses:fee};
+ st.businesses91=st.businesses91||[];st.businesses91.push(shop);town.businesses91.push(shop);st.activeShop91=id;
+ town.marketTreasury.cash=v85Round(town.marketTreasury.cash+fee);
+ town.ledger.push({tick:st.world.tick,from:st.id,to:id,amount:cash,reason:'新店實收資本'});
+ town.ledger.push({tick:st.world.tick,from:st.id,to:town.marketTreasury.id,amount:fee,reason:'租用店面、設備與辦理費'});
+ const adv=advance(st,120);
+ return {ok:true,verified:true,kind:'創辦店鋪',minutes:adv.minutes,text:'已在'+town.hub+'設立「'+full+'」〔'+kind+'〕，地址 '+site+'；個人支付 '+capital+'，其中 '+cash+' 成為商店營運資金、'+fee+' 付給本地店面與服務供應方。已登記在城鎮名冊。尚無貨物與員工；可以到店使用「店鋪進貨 5」「店鋪雇員」「店鋪營業」「查看我的店鋪」。'};
+}
+function v91Run(st,action){
+ const a=String(action||'').trim();
+ if(/^(?:查看|查詢|逛|尋找)(?:本地|當地|城內|全城|附近|我的)?(?:商店|店鋪|商戶|青樓|妓院|茶館|客棧|酒樓)(?:\s*第\s*\d+\s*頁)?$/.test(a)||/^查看(?:我的|名下|自營)店鋪(?:\s*第\s*\d+\s*頁)?$/.test(a))return v91Listed(st,a);
+ if(/^(?:查看店鋪|查詢店鋪|打聽店鋪)\s+\S+/.test(a))return v91Existing(st,a);
+ if(/^(?:前往店鋪|拜訪店鋪|進入店鋪)\s+\S+/.test(a)){
+  if(st.journey)return v81No('仍在長途旅行中，須先抵達城鎮。');
+  const s=v91Select(st,a);if(!s)return v81No('找不到這家店。請先使用「查看商店」或「查看青樓」取得完整店名。');
+  if(v81Hub(st)!==s.city)return v81No('該店位於 '+s.city+'，必須先完成前往該城鎮的旅程。');
+  if(s.closed)return v81No('該店目前已歇業。');
+  const from=st.location;st.location=s.site;st.activeVenueShop91=s.id;
+  const adv=advance(st,35);
+  return {ok:true,verified:true,kind:'拜訪實體店鋪',minutes:adv.minutes,text:'從 '+from+' 前往 '+s.name+'，抵達 '+s.site+'，此刻正在拜訪的是「'+s.name+'」，並非自動進入同類的其他商家。店主與服務內容仍需由實際互動確認。'};
+ }
+ if(/^(?:開店|開設店鋪|創辦店鋪|設立店鋪|開設商號|創辦商號)(?:\s|$)/.test(a))return v91Start(st,a);
+ if(/^(?:查看我的店鋪|我的店鋪|查看自營商號)$/.test(a))return v91Listed(st,'查看我的店鋪');
+ if(/^管理店鋪\s+/.test(a)){
+  const b=v91Select(st,a,true);if(!b||b.recordType!=='player')return v81No('找不到你名下這間店鋪。');st.activeShop91=b.id;
+  return {ok:true,verified:true,kind:'管理商戶',minutes:0,text:'現在管理 '+b.name+'（'+b.site+'），現金 '+b.cash+'、庫存 '+b.stock+'、雇員 '+b.staff+'。交易操作必須實際到店。'};
+ }
+ if(/^(?:店鋪進貨|店鋪營業|店鋪雇員|店鋪發薪|店鋪提領|關閉店鋪|店鋪歇業)/.test(a)){
+  const b=v91Active(st,a);if(!b)return v81No('尚未擁有 V9.1 店鋪，請先到商鋪街「開店 茶館 清風茶館」。');
+  if(st.journey||st.location!==b.site)return v81No('目前人在 '+st.location+'，店鋪位於 '+b.site+'。請先前往當地店面再操作，不能隔空經營。');
+  const town=v91Town(st,b.city),qty=Math.min(50,Math.max(1,Number(a.match(/\d+/)?.[0]||5)));
+  if(/^店鋪進貨/.test(a)){
+   const product=b.product;
+   const suppliers=Object.values(town.supply||{}).filter(s=>s.stock>0&&town.shops.some(x=>x.supplierId===s.id&&x.product===product));
+   const supplier=suppliers.sort((x,y)=>y.stock-x.stock)[0];if(!supplier)return v81No('本城尚無此貨品的可交割供應商庫存；不會憑空補貨。');
+   const n=Math.min(qty,supplier.stock),amount=v85Round(n*b.cost);
+   if(n<1||b.cash+1e-8<amount)return v81No('商店資金不足或供應者庫存不足，需要 '+amount+'，店內只有 '+b.cash+'。');
+   if(!v85MoneyTransfer(st,b,supplier,amount,'玩家店鋪有來源進貨',{town,from:b.id,to:supplier.id,goods:{name:product,qty:n}}))return v81No('資金轉移未成功，交易取消。');
+   supplier.stock-=n;b.stock+=n;b.expenses=v85Round((b.expenses||0)+amount);
+   const adv=advance(st,90);return {ok:true,verified:true,kind:'店鋪進貨',minutes:adv.minutes,text:b.name+' 從 '+supplier.id+' 取得 '+product+' '+n+' 件，實付 '+amount+'，店鋪庫存 '+b.stock+'，不從玩家私人錢包重複扣款。'};
+  }
+  if(/^店鋪營業/.test(a)){
+   if(b.closed)return v81No('這間店已歇業。');if(b.arrears>0)return v81No('店鋪拖欠員工薪水 '+b.arrears+'，請先補足資金並支付工資。');if(b.stock<1)return v81No('尚無可出售存貨。');
+   if(b.lastSaleTick===st.world.tick)return v81No('本店當日已結算一班營業，不能同日無限刷交易。');
+   const n=Math.min(b.stock,Math.max(1,2+b.staff),Math.floor((town.householdCash+1e-8)/b.retail));
+   if(n<1)return v81No('本城居民沒有足夠可支配現金，暫無成交。');
+   const amount=v85Round(n*b.retail);if(town.householdCash<amount)return v81No('居民資金不足。');
+   town.householdCash=v85Round(town.householdCash-amount);b.cash=v85Round(b.cash+amount);b.stock-=n;b.earnings=v85Round((b.earnings||0)+amount);b.lastSaleTick=st.world.tick;
+   town.ledger.push({tick:st.world.tick,from:town.hub+'-households',to:b.id,amount,reason:'玩家商戶零售',goods:{name:b.product,qty:n}});
+   const adv=advance(st,240);return {ok:true,verified:true,kind:'店鋪營業',minutes:adv.minutes,text:b.name+' 售出 '+n+' 件'+b.product+'，由城鎮居民支付 '+amount+'，店鋪現金 '+b.cash+'，剩餘庫存 '+b.stock+'。'};
+  }
+  if(/^店鋪雇員/.test(a)){
+   if(b.staff>=8)return v81No('小型店面最多八名店員。');if(b.cash<v91Price(st,12))return v81No('店鋪資金不足以預留薪資。');
+   b.staff++;b.payrollDueTick=b.payrollDueTick||st.world.tick+7;const adv=advance(st,120);
+   return {ok:true,verified:true,kind:'店鋪招募',minutes:adv.minutes,text:b.name+' 新增一位匿名雇員名額，現有 '+b.staff+' 人。薪資需於每週實際結算；此階段尚未生成具名、具完整生活的NPC。'};
+  }
+  if(/^店鋪發薪/.test(a)){
+   if(b.staff<1)return v81No('沒有受雇員工。');if(!b.arrears&&(!b.payrollDueTick||b.payrollDueTick>st.world.tick))return v81No('目前沒有到期應付工資，不能提前重複支付。');
+   const wage=v91Price(st,1.2),amount=v85Round(b.arrears||b.staff*wage);if(b.cash<amount)return v81No('店鋪現金不足支付 '+amount+'，請先籌措資金。');
+   b.cash=v85Round(b.cash-amount);town.householdCash=v85Round(town.householdCash+amount);b.lastPayrollTick=st.world.tick;b.arrears=0;b.payrollDueTick=st.world.tick+7;
+   town.ledger.push({tick:st.world.tick,from:b.id,to:town.hub+'-households',amount,reason:'玩家店鋪員工薪資'});
+   return {ok:true,verified:true,kind:'支付工資',minutes:30,text:'已從 '+b.name+' 轉出 '+amount+' 作為 '+b.staff+' 名員工本週工資。店鋪現金 '+b.cash+'。'};
+  }
+  if(/^店鋪提領/.test(a)){
+   const amount=v85Round(Math.min(Number(a.match(/\d+(?:\.\d+)?/)?.[0]||10),Math.max(0,b.cash-v91Price(st,5))));
+   if(amount<=0)return v81No('營運資金不足，須保留至少 '+v91Price(st,5)+'。');
+   if(!money(st,amount,'提領 '+b.name+' 營運金'))return v81No('錢袋未能入帳，提領取消');b.cash=v85Round(b.cash-amount);
+   town.ledger.push({tick:st.world.tick,from:b.id,to:st.id,amount,reason:'店主提領'});
+   return {ok:true,verified:true,kind:'提領',minutes:30,text:'從 '+b.name+' 提領 '+amount+'，個人與商戶帳戶保持分離。'};
+  }
+  if(/^(?:關閉店鋪|店鋪歇業)/.test(a)){
+   if(b.staff>0||b.arrears>0)return v81No('請先處理受雇員工及欠薪，不能直接關店。');if(b.stock>0)return v81No('尚有 '+b.stock+' 件貨物，需要清倉、轉讓或處理存貨後才能關店。');
+   b.closed=true;b.closedTick=st.world.tick;return {ok:true,verified:true,kind:'商店歇業',minutes:60,text:b.name+' 已停止營業，記錄保留於本城，不會消失。剩餘帳款留在店內，待依法清算。'};
+  }
+ }
+ return v81No('商店指令不完整。可用：查看商店、查看青樓、開店 茶館 店名、查看我的店鋪、管理店鋪 店名、店鋪進貨 5、店鋪營業、店鋪雇員、店鋪發薪、店鋪提領 10、店鋪歇業。');
+}
+function v91PayrollDaily(st){
+ const tick=st.world?.tick||0;
+ for(const b of st.businesses91||[]){
+  if(b.closed||b.staff<1||!Number.isFinite(b.payrollDueTick)||tick<b.payrollDueTick)continue;
+  const town=st.world?.towns84?.[b.city];if(!town)continue;
+  const unit=v91Price(st,1.2),wage=v85Round(b.staff*unit);
+  const prior=Number(b.arrears)||0,amount=v85Round(prior+wage);
+  if(b.cash>=amount){b.cash=v85Round(b.cash-amount);town.householdCash=v85Round(town.householdCash+amount);
+   b.arrears=0;b.lastPayrollTick=tick;town.ledger.push({tick,from:b.id,to:town.hub+'-households',amount,reason:'玩家店舖定期發薪'});
+  }else b.arrears=amount;
+  b.payrollDueTick=tick+7;
+ }
+}
+const v91PreviousEmploymentDaily=v84EmploymentDaily;
+v84EmploymentDaily=function(st){v91PreviousEmploymentDaily(st);v91PayrollDaily(st);};
+function v91Intent(action){const a=String(action||'').trim();return /^(?:查看|查詢|逛|尋找)(?:本地|當地|城內|全城|附近|我的)?(?:商店|店鋪|商戶|青樓|妓院|茶館|客棧|酒樓)(?:\s*第\s*\d+\s*頁)?$|^(?:查看店鋪|查詢店鋪|打聽店鋪|管理店鋪|前往店鋪|拜訪店鋪|進入店鋪)\s+|^(?:開店|開設店鋪|創辦店鋪|設立店鋪|開設商號|創辦商號)(?:\s|$)|^(?:我的店鋪|查看我的店鋪|查看自營商號|店鋪進貨|店鋪營業|店鋪雇員|店鋪發薪|店鋪提領|關閉店鋪|店鋪歇業)/.test(a);}
 
 function employmentIntent(x){
  const t=String(x||'').trim();
