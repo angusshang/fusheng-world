@@ -10,7 +10,7 @@ NPC 保有目標、年齡、關係、記憶與拒絕權；玩家對話必須顯�
 持續擴充：直接修改這份完整版，不要以短篇 Demo 取代它；後續需保持測試案例。
 詳情見同套件的 V5_SPEC.md 及 QA_REPORT.md。
 -->
-<title>浮生無界・萬世因果｜V8.1 百業・農牧・宗門整合版</title>
+<title>浮生無界・萬世因果｜V8.2 實地產業・地籍・漁業・宗門一致性版</title>
 <style>
 :root{color-scheme:dark;--bg:#101b22;--card:#1b2d35;--border:#3d5662;--gold:#f0c77e;--ink:#eee9d9;--muted:#b7c8cb;--green:#87cba5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Noto Sans TC",sans-serif}main{max-width:860px;margin:auto;padding:18px 15px 70px}h1{font-size:1.6rem;margin:0;color:var(--gold)}h2{font-size:1.14rem;margin:0 0 10px;color:#ffe1a3}h3{font-size:1rem;margin:12px 0 6px}.sub{color:var(--muted);font-size:.85rem}.panel{padding:17px;border:1px solid var(--border);background:var(--card);border-radius:15px;margin:12px 0}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,input,textarea,select{font:inherit;border-radius:9px}button{padding:10px 12px;cursor:pointer;border:1px solid #e3b56f;background:var(--gold);color:#172129;font-weight:730}button.alt{background:#334c59;color:white;border-color:#557180}button.ghost{background:transparent;color:var(--ink);border-color:#58717c}button.choice{display:block;width:100%;text-align:left;background:#314954;color:white;border-color:#59717a;margin:8px 0}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:3px solid white}textarea,input,select{background:#0e2028;color:white;border:1px solid #77909b;padding:10px;width:100%}textarea{min-height:116px}label{display:block;font-size:.94rem;margin:10px 0 5px}details>summary{cursor:pointer;font-weight:750;color:#e9c98e}details.panel[open]>summary{margin-bottom:12px}.status{border-left:4px solid #bdcdd4;border-radius:6px;background:#283f4c;padding:10px 12px;margin:10px 0}.ok{border-left-color:var(--green)}.bad{border-left-color:#f0908e}.story{white-space:pre-wrap;line-height:2.04;min-height:80px}.clock{font-weight:700;color:var(--gold);font-size:1.13rem}.entry{padding:7px 0;border-bottom:1px solid #435764;font-size:.9rem;white-space:pre-wrap}.hidden{display:none!important}#chapterArea{scroll-margin-top:12px}#topInfo{font-weight:650}#menuStatus{white-space:pre-wrap}.tag{display:inline-block;border:1px solid #5a7680;background:#283f47;padding:2px 8px;border-radius:999px;font-size:.8rem;margin:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.mutedline{font-size:.85rem;color:var(--muted)}.compact button{padding:9px 8px;font-size:.92rem}@media(max-width:540px){main{padding:12px 11px 80px}.panel{padding:14px}.row>*{flex-basis:140px}}
 
@@ -170,7 +170,7 @@ main{max-width:750px!important;padding:12px 12px 46px!important;margin-inline:au
 <button class="alt atlasShortcut" id="openAtlas" type="button">🧭 查看世界地圖</button>
 <div class="sceneBottom"><div class="sceneIntro"><div class="sceneEyebrow">旅途中的此刻 / SCENE</div><h2 class="scenePlace" id="artPlace">浮生世界</h2><div class="sceneDesc" id="artCaption">場景美術為通用示意，不代表精確歷史地點</div></div>
 <div class="scenePortrait"><img alt="通用古風人物插畫" id="artPortrait" src="data:image/webp;base64,UklGRvIsAABXRUJQVlA4IOYsAAAwlgCdASrSAMQAPpE8l0glo6IhMXjvALASCWwAwFu+C//nebHyr3k/VPv/nY62+1vNEfV/6vrM/u3o49E3zJebt/2P2596n9/9LP0t//N7On999TPzl/WF/xe//6eDyp/X+EP5F9R/pvzL9jDLX176lnzT8Rfx/8L6U/9DxF+TWoL+af0//eeLXuO9//4PoHe6n3f9j/Hx1dPBX/h/xPwAfz7+zf9717/43jHfk/+j7BP9W/z/qyf5X/3/1npO+tvYN/YVKxQhW2yGnwRWPcrQvj/Tm4AFSNvoLw+mV05DEnKMLXX3oyPCNciED/gPA3yegMsRKb8o2JkvHUq68f+yh7Ao/nTAuTfzw4//DcdFbA4TlGS2C4A3MYpLIczwRjNSsmcb93RGNhrIjFync0cP6PwgDqSnomSdJ93vL11fPNRYjdIuIU0Iq31jhof5sPVCP1zRcg3gTFHb/6gKtBBLQ/kFa/xxYg7fTDd2dGAcblmHGnVHYXucqi3p5flYQjDi+jVVzjn46SR3yLzpuUIkQMtvXvCfl/i8Hlyck/XVl/SibBPHXdbEZY1Y0SXJTwbxwTabJe8PRAb7ukN2SmgK08dMm7dm0kLwyaBZ6wFyJvHzvTm7ngef5CG2xZVlXqfhNGsPeLorbPe7sFP5X16xb7I+upuK/+omvhSXOrNJxMmBUd2bjRrCmyYge8Z3M+a9z2pQivI4fLLcAe6tRu8bB6aw7XQNHcj7R0sECj+0hRerGU3wsCHW1PaDAbc18qqmGlFpgnGdanv1TaqFw3zHOq8JdoYDR0UzL5yOZ/p7wZEh3aYhB9dNh/jueS9pccplInC0WMupzuA8wegVOC7r8crXRWzAb/gtpf/W0SLyKkh4o7KxUe/5UIpp8xtSJcY/c83kqjb6Fz2F1xM+9KP4fkeTHSg2Efdespd2V9UgJUH2uBIU563hizIe+PVBcRYublUaxvzWh8Aml/g/mZMH7dGZXfefntddi1AEMeXJBoUxaJL237d1euVRCSecbMcP5lsvMCZJKzNqsYCRM6QIDuGJfwQ/aHQXYbMJyrsrfbJqTCjlBwl93Tlm1Y+6fzLFGqtZIQl6/Y6tC7zNRfgEQXNvh3jt+0FftEHLUXA7BrsTlyyC+N0yk+M6+JNX0xRIoeus92kLEaXdJHbJ+4G4Lr1xSMYxkj54q96V/LG/E/2N0O4n2MVsHSMeHKcJqMnq9DAefM06cJ2ffBi22tBUTEOPB2pwLbaxcLnjvbxFSk4sApJhatARPJadAKgKiAi38rf7zYSzEPK0F3qUd4OcEZMU/tPCZqpXz07S6/E71GTpqUJqPBMY2g53v4EzaUXbBqRzZXaH6rmgmXlAlPQv0qYQxWdRSHI2MhTMjvkP5QyMzl7W6RAATv9VhSFt2QIt+sUUfxr1/t0r/nrmT34Y32S6BH8a91iBFyNO/T07cpeOg9BRS12tvoQiPbrHBWbrxaAPExVhE3wY0SFwRZliTK7tdrWTjCET33J0m4TFpdBdilQOZpHDB24ujsR4OO0ddTLGFTzlfPjomb9L+jCMO1eRWCi/OxQnUKDyiaCsVS/HzB+nKu5FRSJp3rvPC7zQWKws8LDNxNeAAP7wS1pnr42TuLui2qlRKS0u+6RegXXVm4NsN9BViGFbdUMxuZEozqif/6Ovv6qO3/DVt/t2d//MqDQmlMC3gmzk31bJYhAx1zR9btbA+u+QuuyN/cXLPMHbgYqk2Slkx93wwRlKP7M0qfoOffmzup2/qpOBkTFXDttYeDzTTNzh/s2m57gM3tZoM93RkZNvsY157a8J5N2qH0Z9O7g+MhzBovb6h7l/mdStP/ZOWJIeJLygCbfuw2SqWy2dsbGROEwrhxpc1hXAWTAqybBp+I0AZtAcg0Yx/qKDJSjIW3FUrHdiZaM5u3l8XvJJDkdJpnf+SC2cWiI7JeMCoOdJQ8uqtRWkFXMRgS2tlQP30o96FwWr8qHh1kQ2Xszskpz7Ujj+N0RPSKopgLLjdBX4xCCA+TuN6KQDit8v+73v/ZFBRbM2R9w/AHYuIXEWxY7SB4ejuCERmPQaN+BOdZyfh5ypHskXKG7d6WZllONfl6AR4/myGtoOi+I7bH1MbB29CDMMYCAdWise2ajnszT4UpUzAo3Eb1OO+LTwqd7Sf2rrcTjPZqVIOSIGcDQkEZMo9hw84vlSnbBqnQHUjatuZn3RkcaEf/28bDptW0W+YOO9qv6s/PRyb6UcjV76+ocEY4TzlPDWabh+jOKMt4XhjEEiGwFQRWl83OHOiyUukIoTG+2xEB6DgxPfBM7bnDl9wgipwgbVWSdJGPO5s+3NZLASfrfODWJ4GiC9xKiklosrVJa3l8UBHXhfed6NfBhWl3qbc3VVFqhKzMk0GZlUFQB+6eNy+e0yAoGh7zKAwRSEgk+7wVCA9wlrBMeGk6OhOjbWMo3TxKl1eKS27Leb2MAtWPTKF8XJVKCeLwl8Oo+3uIQDKFmRoBLtoj6c2QoKTFJ9jhu5z76W67OgGzere5y4UXFLBKkbayQ7DGTVqlscEuHIR7NrURCR8k1l36YpZHn4M6KPABafvD/ofP/y3FNn1l3JdtKJzPTE42QUNLX/TV7NDT1gT0vZmdLFlODGC1/KkQaCgtR9TR/6szcRXbUB42Fj9xzA5I4EaDDa3218833txCXzJkLTFaAdp5ARa5rlriBIKwcEt/Bpy0ibJBhOnmH5uD7BBQDfb/az8zY+V5Ovp3GjnzXAzacMFTkuf7Eov/g8fqmtYMme5A24oRqz8SmQjFZKo4V2YMUeM0psoAOX9m3jlvG5UJ478L/AnijL7218ekl+r0bi7JXF3+ZkA2un73HcM0ZA6BGY8O00DYNpgZCN+XQPTAhvMhqJEzDKAF6NMLFmWhq8dolHVZv9964l8HvPyBd25BW+T5IlR+tzQ2oKm6atFFIXLnQItCdxs5a/pLJSjhSAW4JwmZbOvKO+icQzuwoarkoCXxfOraOVwjr+j7D+OWfVCOPFhbLAWQVqgtb2MNa2/2cEHjF4JZvq2gMiDKMZ5m3pFX/l//94y41HyegLzpRUyFSOSe3vdbEj0bWfghl4C/Aq1MFTYH+Vv5bQkCnFPqOrk5k/T+gHksPh06v9B/xNripxJSesSw9zKmzOmFodCSHgiYqBW+g8zGceyhbMB3TFuA0bjOecfnMgVMJV5gNtXH8W4auHF5Ssbj/fG+saZ6d4YXVQt0iA1AOgyIiuvTpyh8D8zqtNFtZ49AIeI7u8kDIpk3bItZ8vF+Q+tECNJ4XUvuC4hwG+4PWlAHtEyZJHNu5Y5c4qXvTXcXs+B52SnhP8TqHIRk1Ov5WkOoGE0iWqMK69Rrgm36JoJRIk87SvuQq0Mz8bopFq+/a6oYaKnKrug9IdUae3E/lU992ybWs3bObC6mz4omnxTGb1/K4A/bd8ICR7FC50eaJi7y7MFrM87wHrS57n44bndFowIecVZrx0pjguZa/dEqsqpyj7K2EUDbi+uxhmkGj/llaNTIcW4Grz96lj5/FOpRQMGgswMJmZNm6HrWBdvz8VlT1Qu6Sfkn/QhEb7yEdra0j8i5RBWdvpr2FJ8nyy/zTopcf3oBMJSU68DphipY0jaouYhmpe6GSV8N6kjug22uMFS6nEFJzJcHjftGa4J9K+W5RJMtVEZO55Gj7uWokPf44wU5qZFt7qzv4PDByGEpe9eEuJ3qtmvuc6gDWhjvBPsp+MWetSx/quXgOYx0mRU/uRFzXA2KkJFWWLg7kfQeRaGi3YBm8KGsByzj6H5C1XffRTrkPUBhQGQ7ZlzWBVPWIV6FRMfhulUjTDxCjSb5nDZXZXTimZRhSr/5ZHz4hXXDlOCUsfa6kd03vvEvQaD+JlNB+jXI1aPb5OeuMFuINOW5t8+5KeoBuYWo894L91GYQnZaa7FE8D+mpAfWV5X9pprZYabjQN8MZq7kpZqaHKufJOYOlrygCMCj7uslBj7Jhy2bs5MEC/9q6u/nJ5k5ioa67AFy99t6YxVYMeMPEFVGRilhwNBO377Pp4nCopU7TiIQZ/YATO1LB/k/LUP//C2vpAxk98GsANRbvcllbDNMx/Avv5sZA3QjLBTMOr5Y5yZVprIIefcPi+uA/mmweGLZmA7Ci54gDu3Jj3lGG5rHqZDSuW/dx9h1fWhhlaep3yKXZWUfOukh8nKL13lg7o9+MsNZNIf5wwW4ixu53e1JrltrsM+cbMy0xkf62a7hdQsjTpV/6r6KvbX2f6P15NzKgcy0lJKK1Fyrl7n5/+21/0amJQTDTq6ChvBYjPDw4kwlVQNbmkvJJPx1s+cc1fyXFJ2samkZu1FI7ST0CaTxlN2+G2rNXisC6T1B6ga8evwkO7OIUrWpvbvBzkEQMPLvBB8Cc+VyKHEYg0Wu3ARUeqkXWzoPfADLyAbeCMIK4nHLHR3oDVTW+ZMxAMIgDBnwWGQvygE6riJKZeQJ/asEpd+GIpULmzA/9DUeangyk9hirPpmO/EPrbt5Nb2Vs+P2rfBi+6dkQDJ7pvzozyf75XWh1YnYQQeLE0/Q6CeNTXwIf5xO1Sw0C7eUK3lw+bJsmokOJ8L+omJiKmwwt0LcDx5aceXwBQ5PNu1Qsv08bSX9V4gu3WQtBenASuqplVTllc3ZKr8bLw8+WAvk3+FBFWAzielMaHrM+Z1J4bkmpsyfRm5ric2uTk99MqV96UJGOudIr4i0XFr8LmuhNdyYVnBnD/Pe/5VR+hDXfAbfuYQU+yIL89ksn+u/Vm5YqfI5UC3Wsg1TKDAK+5yBK7TQrshIoVvB/Ccq1VXryPBbLWuLBYr3420xMzA7bdBQJmXq29N53auUEcnIsBJuMrPrxxO7nJSg90dNmOr/kQ/ZuUjDbiJbyMUil25ZLnm55ABYIBOD8dXauRSDlZ4s4yn9qQ2gd5NvHXgs18bc8xuCo7ZZ4uqBwztGROHqirVIIQX0q9lSo6LPeMUVEw/Ww7zXZoc9RdsReYY5nTBKzuBV/KdFkUff95S64ir9zNhQUWHZ1lTem+Gxl/sHTQe+FheAB1AnPiXZvJbQVjJlhglv1DV2gHI5W8yXWgod2nteH3ARXdBCqSczTZOSUbG4zJqtSAiUMudNVvA1YZYMdJmHq+02E3qpCZds0ljKgkZJ6MrMVyZs4fJpkFRlUVPS8IQ+4IbL7r2eYNQq7czqZ3t48pjx+cYzPoWldk3IEuQjdsdE9JYAeCfdy5anPBeTq8RO+gEyddEUF4s+R5VqHuaioU9s/K80ta7Nky/2tjuhCe7ohSdkM/yINZeEeepzrM5/HzVekwE/JR2zn59g7Q+CYkuVQGK2EJoKZIP6ggCMj7EkvV7+X72kSdv15e4P8cAEaqY4W319xsJtpZ+P6itRjW4wFtjmEsCoKbCnd1Y2M3EBjH1zK81yYf9e8wN2Os8/cI/BKQ3QSAUG6yJJbsy6J3jMzufipl7+FptmAXfLzgtX7oQZwMMlzx/4T1oogyX41aTewIeN9Zj7QfCvJu0lwEKTPHaT5gG6j7EHD7GkNLA6qO0BtIEn0LaNweg7OwGDgmTJn11WzDNd5IEM2CMXfVqco6+mK58+k8REiKktIAhJEWQYDgErHolrYb4+kTy6IWSfKeroDeYPXt98kfqKeT5sRsgPRDSTH4NIIFf1vAtu3g/xFcCK9gM4yKOWZTINSsxohBHR3IGLKBZ5Q1M7ffYbcSL0dEwmpzZCGMbQSvlHLvd8nv7JuY6nRjdpP+ZpNxo7Z7WKWdpdeJ8bPBPxs6wduiwR6Jbou9U0VOB3Y69S44yfwxr+RA2Uq2C1E0c3YwBZMftZ9frVqMltMfHwtLo2Y7FQJXqyd0mAsgliYTp7L9Ch/ST+B8xflQlyY2m4cCXh4WO1Xr5WIUbcHVqf/4+hYWsB+FV7RmKrnUpSgHSo9lcKXvWHnXj5A3MW++fShwU7wrVOOdr7CPqd5liYM+HzQfcQ6Xfxy4/oJbcB3vF52fvSClf5NfvE4fC9002I0tfZsaq9Hrv7+BygN1+b/UjF61QABgK1gfLTtWQvf8XE4b5U2hwEaD5mP7idh1dh15fmXAeCymQ+V0JAmoRY27OX5VqmKdusqO1JopYZkGRs6n65kAFjAxI7WEGO4T10JxRiHPCoLAwhbwmhbxlzUssaAoRQPVOjICyF8Ac3mfwgeTns8Lud2ediNlphvse3dXRMrgPbyUW83dQ2EU/0eFZmV8yC/gTsd0swqLiDzBdiJS5SbXknmtzWG608moAhu4nKRKFceLKTx3F9kCH/cWxiSWowk6Upv7RhZhevlVwaGmQe4r5WY/ArtxkA8clDAgABQcsD395YPmt1Zb2HzvbRI3h1ThpNoZGBxZcxZBhV83E4r0lT2UYAQJR2TSyFe6GSiOqv6Pa0Rml0e7/vhuYuVxfANK4FQbyMiuT0ffviNxZJ7RY1sxM5dhXOIFbJUll5A9Oy7Hbvwzqoiqz5rZzTENpVBlSCVbbWKK+eO2RPBFBWbxGKBLEntuFheOuvOMoWehGXucrloLrUTM7RtkGXRZYVczTHa/U2oMgkC0TyIFQzSBo0LNbcuvyPNuuXNHYrO99WUHxa2du2jf0pIdKy6AuZJ5uw11hacuaLf7hReWdsvhdAQxGT0kc9coDtBZW3RZv2eeehtUMp9ZCSBBpoA0ekHe+nlUPfhF1mOzdEUWHdjwJMXzV/xS86Zf/iOk6K73DZC9XrW1O4lH5p3zpJTzw23JgbV/jLQ1VlhWtNgywoz2oZR9nErRiH6pbTGoIitGpVjI1Yx58nT89sKapnCLxx2Xsq7W8eueV9BBslVtofO0asUZQgCqvgABw9OYLYyJLjv+EzUtRqg2Oj31KdB5etVIYVUupwWDeR1gXrhAeHoPW78NMR2U+u9oyacA3+sXH4DqKDFhSoxAl5bHL14WwwmrUto8FP0UfNGDr/PhKLJWtfuiVPF/Dqf5S4g0HjbRuGLk4fwFDGh8EdVN809nI4PM45HgmaboFa5wpDJ0yuovRW8dNz3rZi9J3RPEdRpMjTuh9e0AobxWj5avmRAb576gyG2ljBW6d+jYTKo7YP9iIYxJvGqyVkLHzdxoREs8uNKXNX67ostI34QNFucmSyCt+w6EafVK1CmYkP+/MsqVrLRQcWWMTxbsz8ZnBWvji7BT5xnYX1X8s7/j+6iFzTW5ceqotoAUVnkefVtIBN+rSrhFMROEIWws5ZrykYsj8j0/1oSE6hSYNGD9gkdvV+fQcc+Pi9J1iVz+38jj7cWT7RCRRvqXfaUdvb9kVS0uhyzfFCuVLrDFc9fYYMUOnkID4RA3yKkSxWPWu46DWjYM1pVJPJGi+UBhw0khSKY6XSPDeYDhmm0yAQ1kVIBaDAYKiF1dpXCj/nAnvoeHErNuUm6k7gzXM7ml2Ul7Qc3m0l6wiGzGJV1nB1lmzScykjuMY/Nkli/uQw4jMqiCMajvm73ZchSAClSQhrV5s8RSh3PDJwlOnNgNgQB5lFLE2Twh/xIrSJBF9+71FmD2KqZggASRX62ubaM6nMbomGTT1bqFgEZmjmxeJNVzRwdMlbwgZhVsdnkOXtAzgB5aRtDuqgKsDYF8RD4jNmpif/c0cp0leow/W0eqEH55WQPeGaWMZxvksyvKQOzcTP0lYhg+g/pXWKSjJHmBI7djm6WkB3k9pyp4QRovX5gD5LapAawnld6jkex6VJu1Yqs4FpjjU9ULrfJkFSEQz2K5uH1uG8DA92O1VZ9gcEqBkVoyhb5v+UHxwv7DZ6VXKm9NiyATwF0BjXyJtubEqfEfNwWtCtExtS1vWcxZ7OwfVjtsH/+ybCE9XNfwY3JejkggbEVdVQqNZzDVZO2NiY01Rtta1ocrg9EBUrn7GdJlG1bObDkx7n/QrX/yRQH5NyEq3Sd7M+fE6xufKnil9N1dF8HshJ2cxlP7gK+LJhxqQ9c5XL+TxPp6uvhBek+cIZqLtqg/cLXPLq5Izxt+TsYnlf8eAWKMAFg35fL9Lhu6bdO0NEKE+oyNXgT/60oX4MGajNKiylMtfnXywTFowJiMyIUgaG5kH6aYKBQZU4U1HKr+vWOaA3boNwHpL8zm25lg6J/Hk+d4is1jSYMKT5W7zSmRvzzGmNM+tf3ilOn0VLUpFhJ4dHJ2p5R0EMfCz89bUe5+h5XVtaxzvQnMKdp4f0lFUuBeGzEE32Ebog31WMCqS909PDiMKHdGANpl4vt7zUsh6BmTayD1Tq+ofreVe5b0AWp22No0AdNkrbSj+XYBqgl5wkoDqPhKT9ekW6WhmmZOPjMtqj+ZrzWD1xujzr/MpQXqxMQEMbB6KxVDmM3303hkWyvq3I9wz4dom7h29Ak3ynOvhAQi6708fJSNSWQXNevLp6GPMQnEHb931ZaidsbrpGn0Si9pl1wUJYvQN5R/shqlFNaK4Uw60MgMbzRpd8JVvI5/xwkVHFRircl4brB1k3lfTVc2VEkqukG1c+63C0LoAIo8k9yKUvj51q9YMx7sxk9ZkoDqWBmRSDLPqykaQgrpzku1SmsOgNhMNuzyrDnrMtSabSYVchnDMHMGQ3Aycx5x+BYbLhI4C0p3tQSQuoysDwSAzOrSGd78HQv88pk8pOGKfKBtHbiTh8XjBBjkGpPJjcUYYWWQ57NuJRegJvXQGZCebWv+CJapGZtBmueD6PF6+/POy0h6Y9zflCyk8oyz7JvB3/zbxThi53kDuSGDXQPG5QGNziWUkP8HO4a3GkFMmnkc0ibw/VH0mcX3qlGmyaPMRF45n2+s0QJTg3PZzZQzutewAzRXWxOIET7HKL3nqZVI1IU7fpo/8RfJ5D7CP2mFPuwZC6k2uB4o55W00rzHnLRfiFWRUhetiEGmHW5WJU1CHaBdzQTh65WC3OulXAUHAGrJdQ1Ywgq65l3a2dMQON5TypMS5IvBXjZ+KeGri+XTnaDnfF2LmoXHBWkmNqP39ePlx3tKJh9PKJBMBD1yTF4xaTQzf1CZhAm1c2mNidFiTvlk0HNiSQk6yFE761QuPlzCj9QvU64jbY10iIm0/nHt4dwhanQu23YbBkQ1wCDA7EULPeNJuTn2HLsYJrKVQVp4QUFLvygWoWHzFT3eft3pn/qIW5uvHTMHn2olqY2kHhERYHgCfn8zo4vaJbtvaVrmxWwPnWZEjR1DrXEgLditLEsyQcw8Taq630SuUZdwVyNgjJjqHXnUlamv/JW4Bg3XOIr9j9YIYpvs5SDjHAsFjbSXpVkJdhNFdxWgNpS7fJDjD2JdcjtCCS82kZhZ5jlYcA+uJ+67ggdUmJnBzKMaMKoU+FsDxs9jkdO6EF7niF6MTAR6D8GTKxy/CNCl4rUaW1Qd5fBLDMzLP8bcTR0KhAosCMdJa8Fxd5kRmwwcjporTgkh1EftcJPryEFOvQIJ5gCaTNFETGi9QFG7afn7PKKuO+KPRHU0khFks/C0HP+iIs5NU/TEOtMykfv7Z/M8cyOeicSL8tDp5XBKVnvpIYmWmldqHY+zumzus6V+mIvwIyO/JzpWi9cVovTgWEPV48d/DG8Bs4pvpaEvYeUOKMMIHToYCyTSg31NpMU+D3JeRDvdYjGS5+Z7ZTdG57uPPxRRbkHyD9nJcZFLy59xOHPOE27IlUnktxVgBXh6TjUwCKIPM57pbxntPiqY8VdQLMRPIF3+tOdhBgLZOnJvG8xw2GTUI9KRcqVFoAA5CFUW9EHbgCZc+JJTQIslOhxBCsBz+gaDFs96fV8PFaVZc9Ow86g/WYTfsjhhYEl9w5VqvNPZCAIDu30HmejZSU1ufcBjHpvJ+ALm/0GTgSO056Iqy+3x1qeuh1G3SI+iKObYQZOnVAW53AWz/pI03hBX1kl6/WORAYbIkEGDU3Lor13R2AZ/uSBG8DUtWaBdjI1wMpfxq0/Ekrcg9pYVF/UOanlzh8XGxIB4AdwfOsIYagXhgXggDnkp4OaJ119E2u16ESnwyLVr5FtteBMtsN6tlmjimdFzxVd/WHlS4grb4HynW8L9tr5QV7tWLYzEl2IGZVQP/5knWmAPeS9iW301bRQQXFX24dsNyZH2AnxydIyfH4CxogdKEJPDISehn5tKkEf97f2VxUOgWvkKnuynarc6G8UKXOmxLV0wPO/vow45EPNq2RxGOUq8JCz/zSbBH/pmzrvRiUh6yA64W5Gy4tsKEjfSzY9qlqx8E+/7HDXoY479Mtagq72VRG3Y5QXD5YHckggvdCnOQ2zkNW4+vYfxtGEkWcKKonPyPkX900T6uJbu9Hha54Y9KMCwaav8TL/e1dMmP+CbvIVjO5NIDh/Agp4vIFCP1rHp0VeVgL5agt5II873BPF/rrca55lCFwH2Utz/7uR5RGAixXh5XYZiC2cfkf90IfgZ2WO+3XipRNj2C7od7I+D+ZzUUvLOCA1p+UBBZQP+Nu8WueF08OJ30HxG/nBf4mAhPhSr/dixt5gptELozU/NJVjmfhpkIs36OHOmVPfrhI7I0ZtXAtTLclsYZQP0vKXw4A7jAHA5wlsAHVwWKZUAhhmcQVdeyDYnk7nphnXdZGXo4qposOMCdmOVEviQg5Jn8Ay+e8Kk8p8DfMudhepKodqQZfsl8WOSDInhBe7PILoX3Nv3uW8l9z9SA/PW5D2PKOJLoPFjPxLEBTd1fsgKuUMekM0udeDuvkas9JH/yGPCY2oOP8QKrU5WM6pMhOKCdq2ibZD+Z70QzQl3jXFJXnxRHqgypKdqw2yVNxbu005e3RIIwJO58clgzx7agpq8q2n5wbzAgqga2HmwwRqucBxZeGvymi7SnQpdHzxP6eTYLwZCiSIJ+BklH3p2gHPtJ+qkLyUxbSy0dToV2mw4C8zbQhhwjTYxhKgwfHW8wAUCuTf9C+n5AB/nPFQvfgSeC7MYAfABUjDf9cz4QTSbaV6www3aZBISU+UvpBv3/ZLjFk5AAG7B13iet6Fdjvyp7MPQh8nJraaLH9TjF/0yn4M7wcL6mOH4tHh98p1T8WzvmPwxNtdXAbdHHuo0+kYcrAybD2ZIPp4BVuNjPK/UTcPrkmjYkyejjDwN/kR/fAgaK4mv1vijMoqV2LiJ9xcvapg9LchkzHuBFgpDZypmCtqFx6e21RHv1cl0iDW6AzP0QtZCpalKwr4CPc6tfXHTcN2P4XWBDYZqYZQ3ykh4TUoE5q5VCgpe+0lUr7JOjtuGP39cwHBDySXR23qNUyMJ1Zt6uaM1aqFnXA47Ed4tlWpTU3NT7oLIfQSyUJW6x00JJJBVqz1Beo8scqwSlymWR4Nt8AE0Adou2E4Sh+sAMNc6gZxCHl3DptAiSVGc8nmHjzcaWrNJm0S8GFEU8UW+0DzQv2hKVC/F8z3iCBzKyGa0kIEvonvKMAOtlVEPpuVF49XuupmWwtXvCX3T9u/4wocx7fLtkLN3oMtkB6Zp4FMycRYVmuNZCytnSMq+bdLveemiYR/l2FVnnHpzH8OCEkVp+iKypl44dqCv5P9SftDWhRSfakL617eI6qIBEbS6Q9RyDREQaZd2yy+lO+UWlv8l1YSHmJHbXh6WcGz1fRcD5D8UmlG2ZEddoAJmsi2WXCHqgVVVPWvSsDMttqemgqkoz+CPwcrXTDnWWznxs9vGA3tk0dKbsnzcNAaWXp65wEaizecoml2JkfgBkFZtMLZRkC8KyVWtwfMjtB/yfJjquGa9rYeN9EvVWQQgP/5clQu8dkk8VwC9egunf/2yHmsZyowbuxoyCrVJGtYXlMjM5BYZoS1IlL+KTh1bDU+e1q4zk5NzeXs6yffWEWcHUvf7UMYke6q3vkcws6GulBAjKTSY4QNZilHNMd4DZZnAv+jcUWxYRqoxEAxNwvQkn2v7iggG2EDfH8IVGNL/5nWczasGSVJ9f/43DaV2Pn3NHTORPfztVftUuDd76AQQAudFD1K0fIa62QKpbemTt6g2IX/jVBLCAPiOy/GtYZMUs5jEU7WiJ66qd6LM06nQx6JZWs+g0tCV6BJGpaOD1fdeMEdRySQPPpDZqFzb0acdQoowCXvZWpevMSCqR8mHJN6jag1HslWHQ+FySgjDSqJFo7uQb4eeEJOez72InCmSlzRXLcGkTGSZKWZ4m89/3j0tT5je34yVIQ9I3OvRk4VRepvuXdt4WYelUsHZEByC3xKvtm6UqJ6gp2tzJlbgf1lYWocHdMpeZCzVs4OaqaONyCQ9tt5VokD8qGcMmtt5+ce6t4NvFI8ms46fsLulHK51IANICHBejqtTtE065x3mPEquoLqfopsgM6vMsk2/SNhGPT90rqSPxq35l5LVEpsaTaLbZVy6+7WkesJ+YTIRIw8M9RVy3VrYsI8MlRevaIStqBCNI8OGtEM54itfhjYYXlonYUxqZ5tfImRmpQgCl1nIqrifncwHIVgsHD5XHNilh2kc+F5/08wWlCTcVca+33xutn/snqAdnDQpxJzUym5XWDTEZU1Jq12i3qS4f8z8EZ17L9fTx9OLzNN3hXyOEzdizSYICjGFNqXcm6zIpPtd9xGf+evuE3+Ad7aaJXnx3FueyVNPwSqRmMRGH1nVoqFiD/weJJr2pzHIp/dUHzJdSlz4qG9Ss8H7X25JTcrMXCpaqK1OLlevkdAsl6llPj37MqKOZvBYjTYdUtnu2vLr+bApZ17q1NscKG90h6KMVWoOPOoes5rZcaUT1Qac3HmQXNPURqAgUSLDyIgUm8VfNLdNf3Ul4gJs4swnsHDJuSSfHSmvYTk4Fm1VkamqdVcMpID/SHfQp1FFIxu7IfhSf1c9UwwfSqMHdcu5m/yuwnncOFfWqWkNrssTCmAtMuKoBfvwqCRxK3JW8howVcZlLMbsqnNOrInhYjYOs2BHrTf74CkYpklTexNlrbrbZId/nOmvbNJlHeZRBz8eadPmePGWD5ciU8ihWsMZMEUonhWYFmtI6sm8SPU9psQ2FDPhsx2FtULyeZQkx4c0mTjL7ZZIoTjnaviJFfKYeaEfLMiazxWw3URy5c6yMeVYRozbrjmYxWIjxAuhETVyYwX4AOL/sTNPIKfAh2Rc+8hzRQR74HgW6snb8+aF97o5IZiGi/870Bc8REKhYotdDbUCcoASlYG0pdRtE9wWyhl+UYWtMcKLcV2SUWphj0fItcgxzvA1rKltViohsZYqfnCKjX1bTd+vOBi9T7gCjiRF88tcvgDiVbEzrih6PGnM5CyeULuZzH1qD9k2Of5BQPYDUOOwDLPsmyfBJ2SoeLLBhBmiW2avIJROLYQBDzwUbP8r+a/C/rph9UVHrNFTIaXmLskRC4VaBKUZ740ym8myUFJJhMl6dpVt+IUTJnyxXK8OgMQnuYMnyXWgQ0j3i4DdmOfa6LcQuQfuxGpCLA9pIZSi0R1P9Nkwe223CFlfh7dl2tVMMFfPxIu/SAJMkrBSCMdz4UANmkz1j5Q5mQsxDe1WTUrnnXZF++k7A3plQqba8LxcgVQpTl1G8F8xsYKc6LXg+TE2RM3ld7Hapst39tBT+ecEL1ScPZFFI2MHhPChN8dVqP22NPuEZjZ1DrIwLdZI38WU2prnJvO0LY0gMccgi2gdg6Ne6xaACCQDX1TQ4lfCqp8JSJ+Wo7goiQvh58FWNAQ1rD3HVrvuGcZ4mdjYdrNOZzHOlSoSEcnuRBi/LamPpo6jfq2CiZ7VcwPT68NUepzSM781wY6oeeOIiIInfMQVozCul8MiTc5J5G7/DsktMipKj5bh9UAQC6ek3ahgzkyTvCoc8ohdW1l/vZDFSxmPHySO38eZP/RrEMp7pY2g54J6W6yryOhnJCoJVJW8mWd4Pj1PiT8Ti3kWCTwHQ3XIrq0lJFypd4FIXWFFRthiwiWcDrhAmO6922dHNNMkw2kCCHsoeZYdZylBBHq3jfB2pGfM6x1SoFOC1DdjUtElL2bu/TIe3RGdYL5+UasolPHC0K6PVh8/TnwggLOwNKfXm6hEezEiwivUTBhuylKiNbT9cahbVvwNeEdW/nLNFo2p/ycUnqGDldsL0Z5njS6VscRGc+0cIP4+2liIES1qlw4V1F+Lk7P8SpDkQtpl/GWUblR2LGtc2vK1yy1mg0XDfBEqYVIPxLhLbh2udneq9AIjus+tsEfna3KSySBfTFQUSGvj/m8GPp7XLgpvzpMAUOdkHFNaheI3+Z+v4IxcpTA80Hr37OoNQS1p8K2O0GKxWc/aqmTwEJmMOrEhbNP5MYgLPni5w1rPYcQf96e0Ny4rud7VmjL58h2OoAYkCVNCte9wzjLA4WuUALqN2uEthLT2tAPjdHo7XBr3rYnQM6wYFKj24mUX6fo8xlfCx/gKSnGcjDI3kCMmteApdFLVdxaMAp9Bqwwxv1sqP2ml4B6DKw+b9FWJ5MrwcsDZcIxwjGWU7otwN0QdwHKtcrCQ6T0oGpHJ8CWYt7/0BmL1sedNV/SikWeln63SuNylKwzIUv8gWjjxq4B8hWjUlfHSFIYbQPAjLn1h8v3lPOyvcIvm+a/hovoiAXNZRHNY2Dzp067xluUSAswPWP+sXnepQpQezd7g3sPUyr8jAij3o4y+MoSHoBcy2FAq5318LfuyD6CxZ2swuGSlbIrn1rLn5pz6X7HtOXB0McvDnJAs09lY/5L7kVcOGtZOMHt7qf6i/ipvfnaU9tTS1S2321gFDorwEDyjkDozB+jxCrFBEgoxDs6A57h2oKUWFC0DE8NdhO+uFIebZb3PDOnEhD6sJv6uT+MogEUX2qscTkvE/a0FZqSHWkkYS37o4JC3PyEMedAU+sqbJuoE1ovullTN0gVMkoDUTAXCoBa7fzj0Y53p+q0IYQzjdTimICkHURQcNFDgD8t4RgLIHvgVdjyOYM8Zy3TwUQqcSwKz/TB8msnvwzq3iW/1O2V561JdGMUY0qiJRxZ5X6lyVLaJvmPOzDnVwGi0HqsEZQTa+MBT/9KbrUHMK4Jpi1T9LAG3ZHWD33fFI0KCtSFHMm4NyavcKgL4krkAvRDvQFJ6OTl7jPffgceKVGsM0ih7FpVDj9wH9VvKpK+4EWRTL+GlFnbznKvJBLINfk6mWC/XGRe//y7dN7oMcxPYANesoVznndszKbi723hohsOw4sq7RonBuHhMFe5t2HTvlzboFx8xG/VWDdoeC+Nseq9ZGd96aZ7yxXG2ggMZsXgso87zy5VQp+gJzo4OOMmWMFqTwIB+9xzx9QnNVujm/9Xj5KLOIJFFcQ0w7cYV7uywO5fl01dXwSEDbmL8bRTLgGCJIQSSkQkd9a986449LTwc6eABaDKa4dqvvAAA"/><div><strong id="artNPCName">人間眾生</strong><span id="artNPCDetail">每個人都有自己的命運</span></div></div></div>
-</section><section class="panel" id="chapterArea"><h2 id="chapter">序章</h2><div aria-live="polite" class="status" id="progress" role="status">準備就緒</div><div class="story" id="story"></div><button class="alt hidden" id="showAll">立即顯示全文</button><h3>眼前可以採取的兩個行動</h3><div class="sub" id="choiceLabel">建議依當前情境產生；你也可以完全不選。</div><div id="choices"></div></section><section class="panel" id="freePanel"><h2>由你決定下一步</h2><details class="panel" style="margin:8px 0;padding:10px"><summary>V8.1 百業與門派｜實際操作範例</summary><p class="sub">農牧：農田總覽、種植 稻米 1 格、澆水、收割、購買 雞 1 隻、餵食牲畜、收取畜產。<br>採集：釣魚、採礦、採集、升級礦鎬。<br>加工交易：開設工坊、加工 麵粉 1 批、委託榜、交付委託 委1。<br>仕途：仕途總覽、讀書備考、參加科舉、履行官職。<br>門派：門派總覽、加入宗門 青岳武門、門派帳本、門派任務、請求晉升、請教門派武功 少林長拳、門派擴建 演武場、退出門派。<br>所有職業和門派共享金銀銅、庫存、時間、身體、位置與 NPC 資料。</p></details><details class="panel" style="margin:8px 0;padding:10px"><summary>V8.1 操作指南｜武林、追捕、百業與旅行</summary><p class="sub">武學：查看武學圖鑑、練習內功、練習輕功、查看武館、拜師 城南武館、向師父請教 少林長拳；查看江湖勢力、加入黑風幫、幫會任務、退出幫會。<br>戰鬥：切磋 NPC 姓名、出招、格擋、閃避、運功、留手、撤退。<br>司法：查看通緝、逃跑、藏匿、交涉、投降、請求審理。<br>經濟：財務總覽、查看契約、購買 棉麻 3 件、開設工坊、生產 布匹 1 件、播種糧食、收割作物、僱用鏢師。<br>旅行：繼續趕路、旅途狀態、折返。</p></details><textarea id="action" placeholder="這回只描述一件事，例如：我向眼前的掌櫃問：「昨夜城門為何封閉？」"></textarea><p class="sub" id="autoTimeNote" data-build="auto-time-20261102">行動耗時由遊戲規則決定，不需手動填分鐘。說話、買賣、工作、旅行各有時間；可以直接輸入「閉關一萬年」「等待三個月」「修煉十年」，長期推進會處理成長、壽元與途中死亡。「十年後我幾歲？」只是提問，不會跳時間。</p><div class="row" style="margin-top:10px"><button id="send">推進下一回</button><button class="alt" id="save">儲存人生</button></div><p class="sub">每次只做一個主要行動。沒有已學會的術法就不能瞬移；不同地方的人不能隔空對話。未連線 AI 時仍可用規則與本地敘事遊玩。</p></section><details class="panel obsoleteRules" id="worldPanel"><summary>統一世界操作：家庭、職業、交易、戰鬥、修煉</summary>
+</section><section class="panel" id="chapterArea"><h2 id="chapter">序章</h2><div aria-live="polite" class="status" id="progress" role="status">準備就緒</div><div class="story" id="story"></div><button class="alt hidden" id="showAll">立即顯示全文</button><h3>眼前可以採取的兩個行動</h3><div class="sub" id="choiceLabel">建議依當前情境產生；你也可以完全不選。</div><div id="choices"></div></section><section class="panel" id="freePanel"><h2>由你決定下一步</h2><details class="panel" style="margin:8px 0;padding:10px"><summary>V8.2 產業實地作業與地籍｜實際操作範例</summary><p class="sub">農牧：地籍總覽（甲／分／厘／畝）、前往農田、購買田地、種植 稻米 1 格、澆水、收割；畜牧需到畜舍。<br>採集：先前往河畔／魚塘再釣魚或撒網；漁網需在市集購買。採礦先到礦坑，伐木先到林間。<br>加工交易：開設工坊、加工 麵粉 1 批、委託榜、交付委託 委1。<br>仕途：仕途總覽、讀書備考、參加科舉、履行官職。<br>門派：門派總覽、先前往對應收徒處、加入宗門 青岳武門、門派帳本、門派任務、請求晉升、請教門派武功 少林長拳、門派擴建 演武場、退出門派。<br>所有職業和門派共享金銀銅、庫存、時間、身體、位置與 NPC 資料。</p></details><details class="panel" style="margin:8px 0;padding:10px"><summary>V8.1 操作指南｜武林、追捕、百業與旅行</summary><p class="sub">武學：查看武學圖鑑、練習內功、練習輕功、查看武館、拜師 城南武館、向師父請教 少林長拳；查看江湖勢力、加入黑風幫、幫會任務、退出幫會。<br>戰鬥：切磋 NPC 姓名、出招、格擋、閃避、運功、留手、撤退。<br>司法：查看通緝、逃跑、藏匿、交涉、投降、請求審理。<br>經濟：財務總覽、查看契約、購買 棉麻 3 件、開設工坊、生產 布匹 1 件、播種糧食、收割作物、僱用鏢師。<br>旅行：繼續趕路、旅途狀態、折返。</p></details><textarea id="action" placeholder="這回只描述一件事，例如：我向眼前的掌櫃問：「昨夜城門為何封閉？」"></textarea><p class="sub" id="autoTimeNote" data-build="auto-time-20261102">行動耗時由遊戲規則決定，不需手動填分鐘。說話、買賣、工作、旅行各有時間；可以直接輸入「閉關一萬年」「等待三個月」「修煉十年」，長期推進會處理成長、壽元與途中死亡。「十年後我幾歲？」只是提問，不會跳時間。</p><div class="row" style="margin-top:10px"><button id="send">推進下一回</button><button class="alt" id="save">儲存人生</button></div><p class="sub">每次只做一個主要行動。沒有已學會的術法就不能瞬移；不同地方的人不能隔空對話。未連線 AI 時仍可用規則與本地敘事遊玩。</p></section><details class="panel obsoleteRules" id="worldPanel"><summary>統一世界操作：家庭、職業、交易、戰鬥、修煉</summary>
 <div class="sub">這裡的按鈕可不經 AI 直接完成規則判定，更新事件帳本與角色數值。若規則不允許，會明確拒絕，不會假裝已成功。</div>
 <h3>日常與技能</h3><div class="row compact"><button class="alt" data-act="work">打零工 4 小時</button><button class="alt" data-act="forage">覓食 2 小時</button><button class="alt" data-act="rest">睡眠休息 8 小時</button><button class="alt" data-act="buyFood">購糧 3 份</button><button class="alt" data-act="sellFood">出售糧食 3 份</button><button class="alt" data-act="study">學習 2 小時</button><button class="alt" data-act="train">體能訓練 2 小時</button><button class="alt" data-act="craft">製作簡易工具 3 小時</button></div>
 <h3>職業發展與升遷</h3><div class="row compact"><button class="alt" data-act="seekTrade">應徵商販</button><button class="alt" data-act="seekCraft">應徵工匠</button><button class="alt" data-act="seekGuard">應徵護衛</button><button class="alt" data-act="resignJob">辭去工作</button></div>
@@ -1413,6 +1413,40 @@ const V81_GUILD_KINDS=[
  {name:'夜行盟',type:'黑道幫派',alignment:'邪',fee:8,threshold:10,lessons:['小擒拿手'],treasury:190}
 ];
 const V81_RANKS=['記名弟子','外門弟子','內門弟子','核心弟子','親傳弟子','執事','長老','掌門'];
+// V8.2 共用世界一致性：單位、地籍、現場工作、組織與獨立 NPC 商業
+const V82_AREA={jia:9699.17,fen:969.917,li:96.9917,mu:666.6667,plot:10};
+const V82_GUILD_BASE={'青岳武門':'武館','百草醫宗':'醫館','四海鏢盟':'鏢局','墨工坊聯':'工坊','玄霄仙門':'宗門','夜行盟':'民居巷'};
+function v82Hub(st){return econHub(st)}
+function v82Place(st){return String(st.location||'').split('·').at(-1)}
+function v82Site(st,type){let x=v82Place(st);const locations={farm:['農田','田間'],livestock:['畜舍'],fish:['河畔','魚塘'],net:['河畔','魚塘'],mine:['礦坑'],forage:['林間','田間','郊野小道'],workshop:['工坊'],market:['市集','商鋪街','貨棧'],exam:['學塾','衙門外'],guild:['武館','宗門','鏢局','醫館','工坊','民居巷']};return !!(locations[type]||[]).includes(x)}
+function v82AreaText(m){let sqm=Math.max(0,Number(m)||0);return sqm.toFixed(1)+'平方公尺（'+(sqm/V82_AREA.jia).toFixed(3)+'甲／'+(sqm/V82_AREA.fen).toFixed(2)+'分／'+(sqm/V82_AREA.mu).toFixed(2)+'市畝）'}
+function v82AreaInput(a){const m=String(a).match(/(\d+(?:\.\d+)?)\s*(甲|市畝|畝|分|厘|平方公尺|平方米|格|畦)/);if(!m)return {sqm:10,plots:1,label:'1小畦'};const n=Number(m[1]);if(!(n>0&&n<=1000))return null;const unit=m[2],v=unit==='甲'?V82_AREA.jia:unit==='分'?V82_AREA.fen:unit==='厘'?V82_AREA.li:(unit==='市畝'||unit==='畝')?V82_AREA.mu:unit==='格'||unit==='畦'?10:1;let sqm=n*v;return {sqm,plots:Math.max(1,Math.ceil(sqm/10)),label:m[0]};}
+function v82PlotRecords(st){
+ const l=v81State(st),hub=v82Hub(st);l.land82=l.land82||[];
+ // 舊存檔僅認可有「本人所有權」並有具體所在地的田地；舊田一塊暫採1分，來源標示為遷移估計。
+ for(const a of st.assets||[]){if(!['田地','農田'].includes(a.kind)||a.owner!==st.id||!a.location)continue;
+  if(!l.land82.some(x=>x.assetId===a.id))l.land82.push({assetId:a.id,owner:st.id,hub:String(a.location).split('·')[0],sqm:Number(a.areaSqm)||V82_AREA.fen,source:a.areaSqm?'原存檔':'舊田暫估1分',rights:'所有權',kind:'農地'});
+ }
+ return l.land82.filter(x=>x.owner===st.id&&x.hub===hub&&x.rights==='所有權'&&x.kind==='農地');
+}
+function v82FieldArea(st){return v82PlotRecords(st).reduce((n,x)=>n+Math.max(0,Number(x.sqm)||0),0)}
+function v82Guard(st,type){if(!v82Site(st,type))return v81No('目前所在地「'+st.location+'」不是'+({farm:'農田／田間',livestock:'畜舍',fish:'河畔／魚塘',net:'河畔／魚塘',mine:'礦坑',forage:'林間／田間／郊野',workshop:'工坊',market:'市集／商鋪街／貨棧',exam:'學塾／衙門外',guild:'門派收徒處'}[type]||type)+'。請先實際前往相應場所；不會隔空產生商品或完成工作。');return null}
+function v82GuildWorld(st){let l=v81State(st);l.organizations82=l.organizations82||{};for(const f of V81_GUILD_KINDS){if(!l.organizations82[f.name])l.organizations82[f.name]={name:f.name,kind:f.type,alignment:f.alignment,base:String(st.birth?.site||st.localRegion||v82Hub(st)).split('·')[0]+'·'+V82_GUILD_BASE[f.name],owner:'org:'+f.name,treasury:f.treasury,members:5,lessons:f.lessons.slice(),stores:{grain:10,ore:5},rankSlots:[999,20,10,5,2,2,1,1],leader:'NPC掌門',missions:0,facilities:{演武場:1,藏經閣:1,藥圃:0,工坊:0}};}return l.organizations82}
+function v82GuildOrg(st,f){const orgs=v82GuildWorld(st);return orgs[f.name]}
+function v82DailyTrade(st){
+ const l=v81State(st),tick=st.world.tick;if(l.trade82Tick===tick)return;l.trade82Tick=tick;
+ // 真正的商行需求在每日世界更新產生，且訂單由 NPC 商社現金預先保留，不因玩家打開委託頁才生成。
+ if(tick%5!==0)return;
+ const regions=new Set([v82Hub(st),...v82PlotRecords(st).map(x=>x.hub),...Object.keys(v8State(st).economy?.markets||{})]);
+ for(const hub of [...regions].filter(Boolean).slice(0,8)){
+  const hasOpen=l.community.some(x=>x.hub===hub&&x.status==='待交貨');if(hasOpen)continue;
+  const firm=econEnsureFirms(st,hub).find(x=>x.cash>=12);if(!firm)continue;
+  const options=['grain','vegetable','fish','cloth','egg','flour','ore','medicine'];const code=options[Math.floor(rand(st)*options.length)],qty=2+Math.floor(rand(st)*3),pay=Math.round(econPrice(st,code,hub)*qty*1.15*100)/100;
+  if(!Number.isFinite(pay)||pay<=0||firm.cash<pay)continue;
+  firm.cash-=pay;l.community.push({id:'委'+(l.community.length+1),hub,from:firm.name,code,qty,pay,firmName:firm.name,status:'待交貨',created:tick,expires:tick+14,issuer:'npc-autonomous'});
+ }
+}
+
 function v81State(st){
  const w=v8State(st);
  if(!w.life81)w.life81={fields:[],animals:[],career:{office:0,examPoints:0,lastExam:-999},tools:{hoe:1,axe:1,pick:1,rod:1},daily:{},guild:null,guildStates:{},community:[],seasonSeen:-1,history:[]};
@@ -1437,25 +1471,25 @@ function v81Land(st){return assetsCount(st,'田地')+st.assets.filter(x=>x.kind=
 function v81Farm(st,a){
  const life=v81State(st),hub=v81Hub(st),season=v81Season(st),tick=st.world.tick;
  if(/(?:查看農田|農田總覽|農牧總覽|農場總覽)/.test(a)){
-  const fields=life.fields.filter(x=>x.hub===hub).map(x=>`${x.crop}×${x.plots}格：${x.status}，水分${x.water}，已生長${x.progress}/${x.days}日，品質${x.quality}星`);
+  const fields=life.fields.filter(x=>x.hub===hub).map(x=>`${x.crop}×${x.plots}小畦（${(x.areaSqm||x.plots*10).toFixed(1)}㎡）：${x.status}，水分${x.water}，已生長${x.progress}/${x.days}日，品質${x.quality}星`);
   const livestock=life.animals.filter(x=>x.hub===hub).map(x=>`${x.kind}${x.id} 健康${x.health}、親密${x.affection}、${x.fedToday?'已餵食':'未餵食'}`);
-  return {ok:true,verified:true,kind:'農牧帳本',minutes:0,text:`【${v81Now(st)}】本地可耕權屬 ${v81Land(st)} 塊；${fields.join('；')||'沒有作物'}；牲畜：${livestock.join('；')||'沒有牲畜'}。`};
+  return {ok:true,verified:true,kind:'農牧帳本',minutes:0,text:`【${v81Now(st)}】本地本人農地 ${v82AreaText(v82FieldArea(st))}，地籍${v82PlotRecords(st).length}筆；${fields.join('；')||'沒有作物'}；牲畜：${livestock.join('；')||'沒有牲畜'}。`};
  }
  if(/^(?:種植|栽種|播種)/.test(a)){
   const crop=Object.keys(V81_CROPS).find(k=>a.includes(k));if(!crop)return v81No('請指定作物，如：種植 稻米 2 格、種植 棉花 1 格');
-  const c=V81_CROPS[crop],q=v81Int(a);
+  const c=V81_CROPS[crop],area=v82AreaInput(a),q=area?.plots||0;if(!area||q>500)return v81No('面積不合理；每次最多耕作500小畦，可分批播種');
   if(!c.season.includes(season))return v81No(crop+'不適合本季播種；目前是'+V81_SEASONS[season]+'季');
-  if(!v81Land(st))return v81No('沒有本人名下可用農田；不可直接把家族田產當成私人土地');
+  const gate=v82Guard(st,'farm');if(gate)return gate;if(!v82FieldArea(st))return v81No('本地沒有本人名下已登記面積的田地；家族土地與異地田地不可混用');
   const planted=life.fields.filter(x=>x.hub===hub&&['生長中','已成熟'].includes(x.status)).reduce((n,x)=>n+x.plots,0);
-  if(planted+q>v81Land(st)*6)return v81No('可耕田格不足，目前已用 '+planted+' 格');
+  if((life.fields.filter(x=>x.hub===hub&&['生長中','已成熟'].includes(x.status)).reduce((n,x)=>n+(x.areaSqm||x.plots*10),0)+area.sqm)>v82FieldArea(st)+.01)return v81No('本地可耕面積不足：已使用 '+(planted*10).toFixed(0)+'㎡，想新增 '+area.sqm.toFixed(1)+'㎡');
   if(v81Stock(st,c.goods)<q*c.seed)return v81No('種子不足：需 '+ECON_GOODS[c.goods].name+'×'+q*c.seed+'，可先在市集購入');
   if(st.stamina<q*4)return v81No('體力不足以耕作 '+q+' 格');
   econTake(st,hub,c.goods,q*c.seed);st.stamina-=q*4;
-  life.fields.push({id:'田'+(life.fields.length+1),crop,plots:q,hub,progress:0,days:c.days,water:0,need:c.water,status:'生長中',quality:1,regrow:c.regrow||0,lastWater:-1,lastWorked:tick});
-  return v81Drain(st,Math.min(420,70*q),'耕種播種',`在${hub}播種${crop} ${q}格，消耗${q*c.seed}份種子，須每天澆灌並照顧，${c.days}天為標準生長期。`);
+  life.fields.push({id:'田'+(life.fields.length+1),crop,plots:q,areaSqm:area.sqm,owner:st.id,hub,progress:0,days:c.days,water:0,need:c.water,status:'生長中',quality:1,regrow:c.regrow||0,lastWater:-1,lastWorked:tick});
+  return v81Drain(st,Math.min(420,70*q),'耕種播種',`在${hub}播種${crop} ${area.label}（${area.sqm.toFixed(1)}㎡，${q}小畦），消耗${q*c.seed}份種子，須每天澆灌並照顧，${c.days}天為標準生長期。`);
  }
  if(/^(?:澆水|灌溉|灑水|澆灌)/.test(a)){
-  const active=life.fields.filter(x=>x.hub===hub&&x.status==='生長中'&&x.lastWater!==tick);
+  const gate=v82Guard(st,'farm');if(gate)return gate;const active=life.fields.filter(x=>x.hub===hub&&x.status==='生長中'&&x.lastWater!==tick);
   if(!active.length)return v81No('本地沒有需要澆灌的作物，或本日已經澆水');
   const q=active.reduce((n,x)=>n+x.plots,0),cost=Math.max(2,Math.ceil(q/(life.tools.hoe||1)));
   if(st.stamina<cost)return v81No('澆水體力不足');
@@ -1463,7 +1497,7 @@ function v81Farm(st,a){
   return v81Drain(st,Math.min(240,q*12),'農田澆水',`已為${active.length}批、${q}格作物澆水；每日照料能提升成長與品質。`);
  }
  if(/^(?:收割|採收|收成)/.test(a)){
-  const wanted=Object.keys(V81_CROPS).find(x=>a.includes(x));const ready=life.fields.filter(x=>x.hub===hub&&x.status==='已成熟'&&(!wanted||x.crop===wanted));
+  const gate=v82Guard(st,'farm');if(gate)return gate;const wanted=Object.keys(V81_CROPS).find(x=>a.includes(x));const ready=life.fields.filter(x=>x.hub===hub&&x.status==='已成熟'&&(!wanted||x.crop===wanted));
   if(!ready.length)return v81No('沒有符合條件的成熟作物，不能提前收割');
   const summary=[];for(const f of ready){const def=V81_CROPS[f.crop],qty=Math.max(1,Math.round(def.yield*f.plots*(.65+f.quality*.13)));
     econPut(st,hub,def.goods,qty);summary.push(f.crop+' '+qty+'份（品質'+f.quality+'星）');
@@ -1479,9 +1513,9 @@ function v81Animal(st,a){
  if(/^(?:查看牲畜|畜舍總覽|查看畜舍|查看牧場)/.test(a))return v81Farm(st,'農牧總覽');
  if(/^(?:購買|飼養|養殖|買)/.test(a)){
   const k=Object.keys(V81_ANIMALS).find(x=>a.includes(x));if(!k)return v81No('請指定雞、鴨、山羊、綿羊或牛');
-  if(v81Land(st)<1)return v81No('需有本人可使用的田地或畜舍才能安置牲畜');
+  const gate=v82Guard(st,'livestock');if(gate)return gate;if(v82FieldArea(st)<V82_AREA.li)return v81No('需於本地持有至少1厘土地並在畜舍作業才能安置牲畜');
   const q=Math.min(6,v81Int(a)),def=V81_ANIMALS[k];
-  if(life.animals.filter(x=>x.hub===hub&&x.alive).length+q>v81Land(st)*5)return v81No('畜舍容納量不足');
+  if(life.animals.filter(x=>x.hub===hub&&x.alive).length+q>Math.floor(v82FieldArea(st)/V82_AREA.li)*5)return v81No('畜舍容納量不足');
   if(st.money<def.cost*q)return v81No('購置費不足，需 '+(def.cost*q)+' 兩銀值');
   // 購買款進入商販帳，而非消失。商販不足時仍可售，因玩家付出現銀。
   const firm=econEnsureFirms(st,hub)[0];if(!firm)return v81No('本地無畜牧交易商');
@@ -1490,7 +1524,7 @@ function v81Animal(st,a){
   return v81Drain(st,80*q,'畜牧購置',`購得${k}${q}隻，支付${def.cost*q}兩；需飼料與照護，不會每天自動無成本產出。`);
  }
  if(/^(?:餵食|餵養|餵牲畜|飼養照顧)/.test(a)){
-  const animals=life.animals.filter(x=>x.alive&&x.hub===hub&&!x.fedToday);
+  const gate=v82Guard(st,'livestock');if(gate)return gate;const animals=life.animals.filter(x=>x.alive&&x.hub===hub&&!x.fedToday);
   if(!animals.length)return v81No('沒有需要餵食的牲畜，或今日已餵');
   const need=animals.reduce((n,x)=>n+V81_ANIMALS[x.kind].consume,0);
   if(v81Stock(st,'grain')<need)return v81No('飼料不足，需糧食 '+need+' 份；不會憑空產出');
@@ -1500,7 +1534,7 @@ function v81Animal(st,a){
   return v81Drain(st,Math.min(270,30*animals.length),'畜舍餵食',`已餵養${animals.length}隻牲畜，消耗糧食${need}份；健康及親密度提升。`);
  }
  if(/^(?:收蛋|擠奶|剪羊毛|收取畜產|收畜產)/.test(a)){
-  const ready=life.animals.filter(x=>x.alive&&x.hub===hub&&x.ready>0);
+  const gate=v82Guard(st,'livestock');if(gate)return gate;const ready=life.animals.filter(x=>x.alive&&x.hub===hub&&x.ready>0);
   if(!ready.length)return v81No('目前沒有可以收取的畜產；需要持續餵養並經過生產期');
   const found={};for(const x of ready){const d=V81_ANIMALS[x.kind];found[d.produce]=(found[d.produce]||0)+x.ready;x.ready=0;}
   for(const [id,q] of Object.entries(found))econPut(st,hub,id,q);
@@ -1510,25 +1544,45 @@ function v81Animal(st,a){
 }
 function v81Wild(st,a){
  const l=v81State(st),tick=st.world.tick,hub=v81Hub(st),skill=st.skills||{};
- const kind=/釣魚|垂釣|捕魚/.test(a)?'fish':/採礦|挖礦|下礦/.test(a)?'mine':'forage';
+ const kind=/撒網|下網|網捕|張網/.test(a)?'net':/釣魚|垂釣|捕魚/.test(a)?'fish':/採礦|挖礦|下礦/.test(a)?'mine':'forage';
+ const gate=v82Guard(st,kind);if(gate)return gate;
  if(!l.daily[hub])l.daily[hub]={tick:-1,counts:{}};const day=l.daily[hub];
  if(day.tick!==tick){day.tick=tick;day.counts={};}
- const n=day.counts[kind]||0;if(n>=4)return v81No('本地今日已採集多次，資源暫時不足，明天再試或換地方');
- if(st.stamina<12)return v81No('體力不足');st.stamina-=12;
+ const n=day.counts[kind]||0,limit=kind==='net'?2:4;if(n>=limit)return v81No('本地今日該類資源已採取多次，請明日再試或前往另一合法作業水域');
+ const stamina=kind==='net'?22:12,minutes=kind==='net'?200:120;
+ if(st.stamina<stamina)return v81No('體力不足');
  const lv=kind==='fish'?(l.tools.rod||1):kind==='mine'?(l.tools.pick||1):(l.tools.axe||1);
- const odds=Math.min(.94,.48+lv*.07+(skill[kind==='fish'?'fishing':kind==='mine'?'mining':'farming']||0)*.004);
- const win=chance(st,odds);day.counts[kind]=n+1;
- if(!win)return v81Drain(st,90,kind==='fish'?'釣魚':'野外採集','這次沒有取得可用資源，但消耗了時間與體力；可再試或改善工具。');
+ // 網捕有獨立漁網設備與磨損，沒有漁網不可僅靠一句話變出工具。
+ if(kind==='net'){
+  l.gear82=l.gear82||{net:0,netDurability:0};
+  if(l.gear82.net<1||l.gear82.netDurability<10)return v81No('缺少可使用的漁網，請在市集購買漁網；漁網具有耐久度');
+  l.gear82.netDurability=Math.max(0,l.gear82.netDurability-10);
+ }
+ st.stamina-=stamina;day.counts[kind]=n+1;
+ const odds=Math.min(.94,(kind==='net'?.5:.48)+lv*.07+(skill[kind==='net'||kind==='fish'?'fishing':kind==='mine'?'mining':'farming']||0)*.004);
+ const win=chance(st,odds);
+ if(!win)return v81Drain(st,minutes,kind==='net'?'撒網捕魚':kind==='fish'?'釣魚':'野外採集','這次沒有捕獲或取得可用資源；已花費時間、體力與適用工具耐久。');
  let id='medicine',qty=1;
  if(kind==='fish'){id='fish';qty=1+Math.floor(lv/3);giveSkill(st,'fishing',1);}
+ else if(kind==='net'){id='fish';qty=2+Math.floor((skill.fishing||0)/12)+Math.floor(rand(st)*3);giveSkill(st,'fishing',2);}
  else if(kind==='mine'){id=chance(st,.08)?'gem':chance(st,.28)?'coal':'ore';qty=id==='gem'?1:1+Math.floor(lv/2);giveSkill(st,'mining',1);}
  else{id=chance(st,.3)?'medicine':chance(st,.5)?'wood':'vegetable';qty=1+Math.floor(lv/3);giveSkill(st,'farming',1);}
  econPut(st,hub,id,qty);
- return v81Drain(st,120,'採集所得',`於${hub}取得${ECON_GOODS[id].name}×${qty}，已加入本地倉庫。`);
+ return v81Drain(st,minutes,kind==='net'?'漁網捕撈':'採集所得',`於${st.location}取得${ECON_GOODS[id].name}×${qty}，已加入${hub}本地倉庫。`);
 }
+function v82FishGear(st,a){
+ if(!v82Site(st,'market'))return v81No('漁網需在市集或商鋪街向商販購買，不能隨處變出');
+ const l=v81State(st),cost=8;
+ if(st.money<cost)return v81No('漁網需8兩銀值，現銀不足');
+ const firm=econEnsureFirms(st,v82Hub(st))[0];if(!firm)return v81No('本地沒有可交割漁具的商販');
+ if(!money(st,-cost,'購買漁網'))return v81No('購買漁網付款失敗');firm.cash+=cost;
+ l.gear82=l.gear82||{net:0,netDurability:0};l.gear82.net+=1;l.gear82.netDurability+=100;
+ return v81Drain(st,45,'漁具採購','向本地商販購入漁網一張，支付8兩銀值，總耐久'+l.gear82.netDurability+'。');
+}
+
 function v81Processing(st,a){
  const life=v81State(st),hub=v81Hub(st),kind=Object.keys(V81_PROCESS).find(x=>a.includes(x));
- if(!kind)return v81No('可加工：麵粉、食油、鐵錠、布匹、熟食、生絲');
+ if(!kind)return v81No('可加工：麵粉、食油、鐵錠、布匹、熟食、生絲');const gate=v82Guard(st,'workshop');if(gate)return gate;
  const r=V81_PROCESS[kind],q=v81Int(a);
  if(!life||!v8State(st).economy.workshops.some(x=>x.hub===hub&&x.active!==false))return v81No('本地尚無運作中的工坊，請先開設工坊');
  if((st.skills.crafting||0)<r.skill)return v81No('工藝熟練度不足，需要 '+r.skill);
@@ -1542,14 +1596,7 @@ function v81Commissions(st,a){
  const l=v81State(st),w=v8State(st),hub=v81Hub(st),tick=st.world.tick;
  if(/^(?:委託榜|查看委託|查看訂單|查看懸賞工作)/.test(a)){
   let tasks=l.community.filter(x=>x.hub===hub&&x.status==='待交貨');
-  if(tasks.length===0){
-   const firm=econEnsureFirms(st,hub).find(x=>x.cash>=6);if(firm){
-    const options=['grain','vegetable','fish','cloth','egg','flour','ore','medicine'];
-    let code=options[Math.floor(rand(st)*options.length)],qty=2+Math.floor(rand(st)*3);
-    const pay=Math.max(2,Math.round(econPrice(st,code,hub)*qty*1.15*100)/100);
-    if(firm.cash>=pay){firm.cash-=pay;l.community.push({id:'委'+(l.community.length+1),hub,from:firm.name,code,qty,pay,firmName:firm.name,status:'待交貨',created:tick,expires:tick+14});}
-   }
-  }
+  // 閱讀委託榜只查詢既有 NPC 委託，不生成需求或預留金錢。
   tasks=l.community.filter(x=>x.hub===hub&&x.status==='待交貨');
   return {ok:true,verified:true,kind:'市集委託',minutes:0,text:'【本地委託榜】'+(tasks.map(x=>`${x.id} ${ECON_GOODS[x.code]?.name}×${x.qty}，酬勞${x.pay}兩，剩餘${Math.max(0,x.expires-tick)}個遊戲日`).join('；')||'暫無可付款的新委託')+'。輸入「交付委託 委1」。'};
  }
@@ -1557,7 +1604,7 @@ function v81Commissions(st,a){
  const task=l.community.find(x=>x.id===id&&x.hub===hub&&x.status==='待交貨');
  if(!task)return v81No('找不到本地待履行的委託');
  if(tick>task.expires){task.status='逾期';const firm=econEnsureFirms(st,hub).find(x=>x.name===task.firmName);if(firm)firm.cash+=task.pay;return v81No('委託已逾期，預留款退回商社');}
- if(v81Stock(st,task.code)<task.qty)return v81No('交貨不足，需 '+ECON_GOODS[task.code].name+'×'+task.qty);
+ const gate=v82Guard(st,'market');if(gate)return gate;if(v81Stock(st,task.code)<task.qty)return v81No('交貨不足，需 '+ECON_GOODS[task.code].name+'×'+task.qty);
  econTake(st,hub,task.code,task.qty);money(st,task.pay,'委託完成');task.status='完成';task.paidAt=tick;
  const firm=econEnsureFirms(st,hub).find(x=>x.name===task.firmName);if(firm){firm.stock=firm.stock||{};firm.stock[task.code]=(firm.stock[task.code]||0)+task.qty;}
  return v81Drain(st,60,'委託交付',`交付${task.id}，扣除${ECON_GOODS[task.code].name}×${task.qty}，收到已預留的${task.pay}兩，貨物進入買方商社帳。`);
@@ -1593,7 +1640,7 @@ function v81Career(st,a){
 }
 function v81Guild(st,a){
  const life=v81State(st),hub=v81Hub(st),m=life.guild;
- const kinds=V81_GUILD_KINDS;
+ const kinds=V81_GUILD_KINDS;const organizations=v82GuildWorld(st);
  if(/^(?:門派總覽|查看門派制度|宗門總覽|門派勢力圖|查看宗門|門派資訊|查看門派階級)/.test(a)){
   const names=kinds.map(x=>x.name+'（'+x.type+'、'+x.alignment+'、入門費'+x.fee+'兩）').join('；');
   return {ok:true,verified:true,minutes:0,kind:'宗門制度',text:'門派八級：'+V81_RANKS.join('→')+'。在外尋訪：'+names+'。目前身分：'+(m?m.name+'／'+V81_RANKS[m.rank]+'，貢獻'+m.contribution:'未入門')+'；門派公庫與個人現銀互不混用。'};
@@ -1608,29 +1655,32 @@ function v81Guild(st,a){
    f={name,type:'自創門派',alignment:'中',fee:120,threshold:3,lessons:[],treasury:0};
   }else if(!f)return v81No('請指定可尋訪的門派，如：加入宗門 青岳武門');
   if(st.age<11)return v81No('年紀太小，需由家長或師長代為安排啟蒙');
-  if(!create&&!/(?:宗門|武館|鏢局|門派山門|教場)/.test(st.location||''))return v81No('請先從世界地圖前往本地宗門、武館或鏢局，不能隔空拜入門派');
+  if(!create&&st.location!==v82GuildOrg(st,f).base)return v81No('要加入'+f.name+'，請先親赴它的招收處「'+v82GuildOrg(st,f).base+'」；其他武館無權代為收徒');
+  if(create&&!v82Site(st,'guild'))return v81No('創派需前往可實際辦理事務的山門或武館，不可站在皇宮或路上直接創派');
   if(st.money<f.fee)return v81No('個人現銀不足以支付入門束脩 '+f.fee+' 兩');
   if(f.type==='修仙宗門'&&!st.worldDiscovery?.cultivationUnlocked)return v81No('角色尚未知悉或開啟修行途徑，不能直接加入修仙宗門');
   const acceptance=create||chance(st,Math.min(.85,.52+st.knowledge/500+(st.skills.combat||0)/500));
   if(!acceptance)return v81Drain(st,60,'門派招收','門派依照資質、名額與立場婉拒入門，沒有收款也未獲任何功法。');
   if(!money(st,-f.fee,'門派入門束脩'))return v81No('付款失敗');
-  const funds=f.treasury+f.fee,entry={name:f.name,kind:f.type,alignment:f.alignment,rank:create?7:0,contribution:0,reputation:0,joined:st.world.tick,lastMission:-999,discipline:0,founder:create};
-  life.guild=entry;life.guildStates[f.name]={treasury:funds,members:create?1:5,lessons:f.lessons.slice(),stores:{grain:10,ore:5},rankSlots:[999,20,10,5,2,2,1,1],leader:create?st.id:'NPC掌門',missions:0,facilities:{演武場:1,藏經閣:1,藥圃:0,工坊:0}};
+  const org=create?{name:f.name,kind:f.type,alignment:f.alignment,base:st.location,owner:'org:'+f.name,treasury:0,members:0,lessons:[],stores:{grain:0,ore:0},rankSlots:[999,20,10,5,2,2,1,1],leader:st.id,missions:0,facilities:{演武場:0,藏經閣:0,藥圃:0,工坊:0}}:v82GuildOrg(st,f);
+  org.treasury+=f.fee;org.members+=1;if(create)organizations[f.name]=org;const entry={name:f.name,kind:f.type,alignment:f.alignment,rank:create?7:0,contribution:0,reputation:0,joined:st.world.tick,lastMission:-999,discipline:0,founder:create};
+  life.guild=entry;life.guildStates[f.name]=org;
   return v81Drain(st,180,'門派入門',`已加入${f.name}，身分${V81_RANKS[entry.rank]}。束脩${f.fee}兩進入門派公庫；可做門派任務累積貢獻、請求晉升或學習本門可授武學。`);
  }
  if(!m)return v81No('尚未加入門派；可以查看門派制度，再選擇加入宗門 青岳武門');
- const g=life.guildStates[m.name],f=kinds.find(x=>x.name===m.name);
+ const g=organizations[m.name]||life.guildStates[m.name],f=kinds.find(x=>x.name===m.name);
+ if(!g)return v81No('該門派資料不完整，禁止使用未核實的門派公款');
  if(/^(?:門派帳本|宗門帳本|查看門派財庫|查看門派規劃|門派狀態)/.test(a)){
   return {ok:true,verified:true,kind:'門派帳本',minutes:0,text:`【${m.name}】身分${V81_RANKS[m.rank]}，貢獻${m.contribution}，聲望${m.reputation}；門派公庫${g.treasury.toFixed(2)}兩，弟子${g.members}人，資材${Object.entries(g.stores).map(([k,v])=>k+'×'+v).join('、')}；設施${Object.entries(g.facilities).map(([k,v])=>k+'Lv.'+v).join('、')}；藏書${g.lessons.join('、')||'無可直接授與功法'}。門派公款非私人財產。`};
  }
- if(/^(?:門派任務|執行門派任務|宗門差事|貢獻任務)/.test(a)){
+ if(/^(?:門派任務|執行門派任務|宗門差事|貢獻任務)/.test(a)){if(st.location!==g.base)return v81No('必須到'+g.base+'才能執行本門任務');
   if(m.lastMission===st.world.tick)return v81No('今日已完成門派任務，不能重複刷取貢獻');
   if(st.stamina<14)return v81No('體力不足');
   const needed=2,stock=g.stores.grain||0;if(stock<needed)return v81No('本門糧食供應不足，任務暫停');
   g.stores.grain-=needed;st.stamina-=14;m.lastMission=st.world.tick;m.contribution+=5+Math.floor(v8MartialRank(st)/2);m.reputation+=1;
   g.missions++;return v81Drain(st,180,'門派事務',`完成${m.name}日常任務：耗用門派糧食${needed}份，獲得貢獻${5+Math.floor(v8MartialRank(st)/2)}，無私取門派公款。`);
  }
- if(/^(?:請求晉升|門派晉升|宗門升階|晉升弟子)/.test(a)){
+ if(/^(?:請求晉升|門派晉升|宗門升階|晉升弟子)/.test(a)){if(st.location!==g.base)return v81No('請親赴本門山門接受考核，不可遠距晉升');
   if(m.rank>=7)return v81No('已到掌門級；不能繼續提升階級');
   const target=m.rank+1,required=10+target*13;
   if(m.contribution<required)return v81No('晉升至'+V81_RANKS[target]+'需要門派貢獻 '+required+'，目前只有 '+m.contribution);
@@ -1639,14 +1689,14 @@ function v81Guild(st,a){
   m.contribution-=required;m.rank=target;if(!m.founder)g.rankSlots[target]=Math.max(0,(g.rankSlots[target]||1)-1);
   return v81Drain(st,60,'門派晉升','經考核升任'+V81_RANKS[target]+'，扣除貢獻'+required+'；權限依階級開放。');
  }
- if(/^(?:請教門派武功|學習門派武功|宗門授藝)/.test(a)){
+ if(/^(?:請教門派武功|學習門派武功|宗門授藝)/.test(a)){if(st.location!==g.base)return v81No('師父不在此處，需到本門山門請教');
   const name=g.lessons.find(x=>a.includes(x))||g.lessons[0];if(!name)return v81No('藏經閣目前沒有可確認的授武功法，不能憑空編造');
   if(m.contribution<4)return v81No('需要貢獻 4 才能請教');
   const art=V75_MARTIAL_CATALOG.find(x=>x.name===name);if(!art)return v81No('功法名稱未在已核對的武學資料庫中');
   const book=martialStateV75(st);book.learned[name]=Math.min(100,(book.learned[name]||0)+2);m.contribution-=4;
   return v81Drain(st,90,'門派傳功',`向${m.name}請教${name}，熟練度提升，扣門派貢獻4；未憑空學會不存在的招式。`);
  }
- if(/^(?:門派擴建|升級門派設施|興建門派)/.test(a)){
+ if(/^(?:門派擴建|升級門派設施|興建門派)/.test(a)){if(st.location!==g.base)return v81No('需到門派所在地安排工程');
   if(m.rank<5)return v81No('只有執事以上可支用公庫安排門派工程');
   const facility=['演武場','藏經閣','藥圃','工坊'].find(x=>a.includes(x));if(!facility)return v81No('請指定演武場、藏經閣、藥圃或工坊');
   const level=g.facilities[facility]||0,cost=20+level*20;
@@ -1664,7 +1714,7 @@ function v81Guild(st,a){
 }
 function v81WorkStatus(st){
  const life=v81State(st),hub=v81Hub(st),season=v81Season(st);
- return `【V8.1 百業】${V81_SEASONS[season]}季；農田${life.fields.filter(x=>x.hub===hub&&x.status==='生長中').length}批在種、牲畜${life.animals.filter(x=>x.hub===hub&&x.alive).length}隻；工具：鋤Lv.${life.tools.hoe}／斧Lv.${life.tools.axe}／鎬Lv.${life.tools.pick}／釣竿Lv.${life.tools.rod}；宗門：${life.guild?life.guild.name+' '+V81_RANKS[life.guild.rank]:'未入門'}。`;
+ return `【V8.2 百業】${V81_SEASONS[season]}季；農田${life.fields.filter(x=>x.hub===hub&&x.status==='生長中').length}批在種、牲畜${life.animals.filter(x=>x.hub===hub&&x.alive).length}隻；工具：鋤Lv.${life.tools.hoe}／斧Lv.${life.tools.axe}／鎬Lv.${life.tools.pick}／釣竿Lv.${life.tools.rod}；宗門：${life.guild?life.guild.name+' '+V81_RANKS[life.guild.rank]:'未入門'}；本地本人土地${(v82FieldArea(st)/V82_AREA.fen).toFixed(2)}分。`;
 }
 function v81Tool(st,a){
  const life=v81State(st),types={鋤頭:'hoe',斧頭:'axe',礦鎬:'pick',釣竿:'rod'};
@@ -1679,7 +1729,9 @@ function v81Intent(st,raw){
  const a=String(raw||'').trim();
  if(/^(?:農田總覽|查看農田|農場總覽|農牧總覽|澆水|灌溉|灑水|澆灌|收割|採收|收成|種植\s*(?:稻米|小麥|粟米|白菜|蘿蔔|黃豆|棉花|桑葉|藥草)|栽種\s*(?:稻米|小麥|粟米|白菜|蘿蔔|黃豆|棉花|桑葉|藥草)|播種\s*(?:稻米|小麥|粟米|白菜|蘿蔔|黃豆|棉花|桑葉|藥草))/.test(a))return {code:'v81Farm'};
  if(/^(?:查看牲畜|畜舍總覽|查看畜舍|查看牧場|餵食|餵養|餵牲畜|飼養照顧|收蛋|擠奶|剪羊毛|收取畜產|收畜產|(?:購買|飼養|養殖|買)\s*(?:雞|鴨|山羊|綿羊|牛))/.test(a))return {code:'v81Animal'};
- if(/^(?:釣魚|垂釣|捕魚|採礦|挖礦|下礦|採集|採藥|伐木|撿拾野菜)/.test(a))return {code:'v81Wild'};
+ if(/^(?:釣魚|垂釣|捕魚|撒網|下網|網捕|張網|採礦|挖礦|下礦|採集|採藥|伐木|撿拾野菜)/.test(a))return {code:'v81Wild'};
+ if(/^(?:購買漁網|買漁網|採購漁網)/.test(a))return {code:'v82NetBuy'};
+ if(/^(?:地籍總覽|查看地籍|土地面積)/.test(a))return {code:'v82Land'};
  if(/^(?:研磨|加工製作|製作|加工|烹調|紡織)\s*(?:麵粉|食油|鐵錠|布匹|熟食|生絲)/.test(a))return {code:'v81Process'};
  if(/^(?:委託榜|查看委託|查看訂單|查看懸賞工作|交付委託)/.test(a))return {code:'v81Commission'};
  if(/^(?:查看仕途|仕途總覽|官職總覽|功名總覽|讀書備考|準備科舉|研讀經書|準備考試|參加科舉|參加考試|赴考|應試|履行官職|地方治事|處理政務|當差)/.test(a))return {code:'v81Career'};
@@ -1692,6 +1744,8 @@ function v81Action(st,code){
  if(v8State(st).law.detained)return v81No('目前被羈押，無法外出工作或加入宗門');
  if(v8State(st).law.pursuit)return v81No('官兵正追捕，請先處理現場追捕');
  if(st.journey)return v81No('仍在長途旅程中，無法隔空操作家鄉的農場或商號');
+ if(code==='v82NetBuy')return v82FishGear(st,a);
+ if(code==='v82Land')return {ok:true,verified:true,minutes:0,kind:'地籍總覽',text:'【'+v82Hub(st)+'】本地本人農地：'+v82AreaText(v82FieldArea(st))+'；'+(v82PlotRecords(st).map(x=>x.assetId+' '+v82AreaText(x.sqm)+'／'+x.source).join('；')||'無已登記私人土地')+'。甲分厘採臺灣制，市畝另行換算。'};
  if(code==='v81Farm')return v81Farm(st,a);
  if(code==='v81Animal')return v81Animal(st,a);
  if(code==='v81Wild')return v81Wild(st,a);
@@ -1726,8 +1780,9 @@ function v81Daily(st){
  for(const task of life.community){
   if(task.status==='待交貨'&&tick>task.expires){task.status='逾期';const firm=econEnsureFirms(st,task.hub).find(x=>x.name===task.firmName);if(firm)firm.cash+=task.pay;}
  }
+ v82DailyTrade(st);
  // 門派只依真實資產運轉，不在每日更新時憑空增加公庫。
- for(const [name,g] of Object.entries(life.guildStates)){
+ for(const [name,g] of Object.entries(v82GuildWorld(st))){
   if(tick%7===0){const expense=Math.min(g.treasury,Math.ceil((g.members||0)*.3));g.treasury=Math.max(0,g.treasury-expense);g.lastWeeklyWage=expense;}
  }
  life.seasonSeen=season;
@@ -1751,7 +1806,12 @@ function rule(st,code,targetId,minutes=30){
  if(code==='farm')return v81Farm(st,'農田總覽');
  if(code==='harvest')return v81Farm(st,'收割');
  if(code==='mineOre')return v81Wild(st,'採礦');
- if(code.startsWith('v81'))return v81Action(st,code);
+ if(code.startsWith('v81')||code.startsWith('v82'))return v81Action(st,code);
+ if(code==='gatherWood'&&!v82Site(st,'forage'))return v81No('請先前往林間、田間或郊野，不能在室內採木材');
+ if(['sellWood','sellOre'].includes(code)&&!v82Site(st,'market'))return v81No('售貨必須到市集、商鋪街或貨棧交割');
+ if(code==='v8Economy'&&/^(?:播種|耕種|種植|收割|收穫|農田)/.test(st.pendingAction||'')&&!v82Site(st,'farm'))return v81No('請前往實際農田操作，舊版農業指令不再允許異地耕種');
+ if(code==='v8Economy'&&/^(?:製作|生產|加工|鍛造|燒製)/.test(st.pendingAction||'')&&!v82Site(st,'workshop'))return v81No('製造作業必須在本地工坊進行');
+ if(code==='econV7'&&/^(?:買|購買|採購|進貨|出售|賣出|賣掉)/.test(st.pendingAction||'')&&!v82Site(st,'market'))return v81No('商品交割須於市場、商鋪街或貨棧，遠距交易須另立訂單');
  const law=v8State(st).law;
  if(law.detained&&!['v8Law','crimeStatusV74'].includes(code))return v8Fail('仍在官府羈押中；請「申辯」「請求審理」，或等待刑期，不可從牢中直接瞬移或經商');
  if(law.pursuit&&!['v8Law','crimeStatusV74'].includes(code))return v8Fail('有官兵正追捕你；先選擇逃跑、藏匿、交涉、抵抗或投降。本回不扣時間');
@@ -1791,7 +1851,7 @@ function v8UiStatus(st){
  const w=v8State(st),m=w.combat,law=v8LawStatus(st);
  const texts=[
  v81WorkStatus(st),
- '【V8.1 共用世界系統】',v8CombatStatus(st),'【武館／師承】'+(w.schools.memberships.map(x=>x.name).join('、')||'尚無')+'；【江湖勢力】'+(w.schools.faction||'尚無')+'，江湖名聲 '+w.schools.renown,
+ '【V8.2 共用世界系統】',v8CombatStatus(st),'【武館／師承】'+(w.schools.memberships.map(x=>x.name).join('、')||'尚無')+'；【江湖勢力】'+(w.schools.faction||'尚無')+'，江湖名聲 '+w.schools.renown,
  '【法律／通緝】'+law,'【旅程】'+v8JourneyText(st),v8EconStatus(st),
  '【玩法指令範例】練習內功／練習輕功／查看武館／拜師 城南武館／向師父請教 少林長拳／切磋 NPC 姓名／出招／格擋／閃避／運功／留手／撤退。',
  '【交易與生活】購買 棉麻 3 件／開設工坊／生產 布匹 1 件／播種糧食／收割作物／僱用鏢師／查看契約／財務總覽。',
@@ -2664,7 +2724,7 @@ if(['investigateMystery','seekMaster','enterHidden','senseAptitude','studyLaw','
  case 'train':spent=120;if(st.stamina<14)return fail('體力不足，無法完成訓練');st.stamina-=14;st.training+=2;st.strength=cap(st.strength+1,0,st.strengthMax);if(st.training>=20){st.training-=20;st.strengthMax++;}giveSkill(st,'combat',1);text=`完成體能訓練，力量 ${st.strength}/${st.strengthMax}，體力已消耗。`;break;
  case 'craft':spent=180;if(st.age<10||st.stamina<15)return fail('體力或年齡條件不符');if(st.inventory.wood<2)return fail('製作一件簡易工具需要 2 份木材');st.inventory.wood-=2;st.stamina-=15;if(chance(st,cap(.48+st.skills.crafting/140,.2,.91))){st.inventory.tools++;text='完成一件簡易工具，已寫入庫存。'}else{text='製作失敗，材料已耗用。'}giveSkill(st,'crafting',3);break;
  case 'buyHouse':spent=120;if(!adult)return fail('現階段不能獨立辦理住屋買賣');if(!spend(25,'購買住屋'))return fail('購買住屋需要 25 銀');st.assets.push({id:'asset-'+st.world.tick+'-'+dice(st,10,9999),kind:'住屋',owner:st.id,cost:25,location:st.location});text='完成簡易住屋交易，所有權已記錄。';break;
- case 'buyField':spent=120;if(!adult)return fail('現階段不能獨立購買田地');if(!spend(18,'購買田地'))return fail('購買田地需要 18 銀');st.assets.push({id:'asset-'+st.world.tick+'-'+dice(st,10,9999),kind:'田地',owner:st.id,cost:18,location:st.location});text='取得一塊小田的所有權。';break;
+ case 'buyField':spent=120;if(!v82Site(st,'farm'))return fail('購買地籍必須在農田現場丈量及辦理，不能在非農田場所直接置產');if(!adult)return fail('現階段不能獨立購買田地');if(!spend(18,'購買田地'))return fail('購買田地需要 18 銀');st.assets.push({id:'asset-'+st.world.tick+'-'+dice(st,10,9999),kind:'田地',owner:st.id,cost:18,location:st.location,areaSqm:V82_AREA.fen});text='已取得一分（969.917㎡）田地，地籍記錄保留地點、面積及本人所有權。';break;
  case 'farm':spent=240;if(assetsCount(st,'田地')===0)return fail('尚未擁有可使用的田地');if(st.stamina<13)return fail('體力不足以耕作');st.stamina-=13;st.farm.progress+=20+Math.floor(st.skills.farming/5);giveSkill(st,'farming',2);if(st.farm.progress>=100){st.farm.progress-=100;st.farm.harvestable++;}text=`耕作完成，作物成熟批次 ${st.farm.harvestable}。`;break;
  case 'harvest':spent=240;if(st.farm.harvestable<1)return fail('目前沒有成熟的作物可收成');if(st.stamina<10)return fail('體力不足');st.farm.harvestable--;st.stamina-=10;{let amount=dice(st,6,12)+Math.floor(st.skills.farming/10);st.food+=amount;text=`收成得到 ${amount} 份糧食。`;}break;
  case 'familyFundingTalk':{
