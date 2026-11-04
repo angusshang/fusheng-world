@@ -10,7 +10,7 @@ NPC 保有目標、年齡、關係、記憶與拒絕權；玩家對話必須顯�
 持續擴充：直接修改這份完整版，不要以短篇 Demo 取代它；後續需保持測試案例。
 詳情見同套件的 V5_SPEC.md 及 QA_REPORT.md。
 -->
-<title>浮生無界・萬世因果｜V9.8 IndexedDB 存檔與回合修正版</title>
+<title>浮生無界・萬世因果｜V9.10 IndexedDB 存檔與回合修正版</title>
 <style>
 :root{color-scheme:dark;--bg:#101b22;--card:#1b2d35;--border:#3d5662;--gold:#f0c77e;--ink:#eee9d9;--muted:#b7c8cb;--green:#87cba5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Noto Sans TC",sans-serif}main{max-width:860px;margin:auto;padding:18px 15px 70px}h1{font-size:1.6rem;margin:0;color:var(--gold)}h2{font-size:1.14rem;margin:0 0 10px;color:#ffe1a3}h3{font-size:1rem;margin:12px 0 6px}.sub{color:var(--muted);font-size:.85rem}.panel{padding:17px;border:1px solid var(--border);background:var(--card);border-radius:15px;margin:12px 0}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,input,textarea,select{font:inherit;border-radius:9px}button{padding:10px 12px;cursor:pointer;border:1px solid #e3b56f;background:var(--gold);color:#172129;font-weight:730}button.alt{background:#334c59;color:white;border-color:#557180}button.ghost{background:transparent;color:var(--ink);border-color:#58717c}button.choice{display:block;width:100%;text-align:left;background:#314954;color:white;border-color:#59717a;margin:8px 0}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:3px solid white}textarea,input,select{background:#0e2028;color:white;border:1px solid #77909b;padding:10px;width:100%}textarea{min-height:116px}label{display:block;font-size:.94rem;margin:10px 0 5px}details>summary{cursor:pointer;font-weight:750;color:#e9c98e}details.panel[open]>summary{margin-bottom:12px}.status{border-left:4px solid #bdcdd4;border-radius:6px;background:#283f4c;padding:10px 12px;margin:10px 0}.ok{border-left-color:var(--green)}.bad{border-left-color:#f0908e}.story{white-space:pre-wrap;line-height:2.04;min-height:80px}.clock{font-weight:700;color:var(--gold);font-size:1.13rem}.entry{padding:7px 0;border-bottom:1px solid #435764;font-size:.9rem;white-space:pre-wrap}.hidden{display:none!important}#chapterArea{scroll-margin-top:12px}#topInfo{font-weight:650}#menuStatus{white-space:pre-wrap}.tag{display:inline-block;border:1px solid #5a7680;background:#283f47;padding:2px 8px;border-radius:999px;font-size:.8rem;margin:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.mutedline{font-size:.85rem;color:var(--muted)}.compact button{padding:9px 8px;font-size:.92rem}@media(max-width:540px){main{padding:12px 11px 80px}.panel{padding:14px}.row>*{flex-basis:140px}}
 
@@ -160,7 +160,7 @@ main{max-width:750px!important;padding:12px 12px 46px!important;margin-inline:au
 <label for="chosenWealth">家庭財力（決定私房錢、家產）</label><select id="chosenWealth"><option value="貧困">貧困</option><option value="平民">平實</option><option value="小康">小康</option><option value="富足">富裕</option><option value="權貴" selected>豪富</option></select>
 <label for="chosenSocial">社會地位（決定身份與影響力，與錢分開）</label><select id="chosenSocial"><option value="平民">庶民</option><option value="鄉紳">鄉紳</option><option value="士族">士族</option><option value="官宦">官宦</option><option value="王侯" selected>權貴／王侯</option></select>
 <label for="chosenSex">性別</label><select id="chosenSex"><option value="random">隨機</option><option value="男">男</option><option value="女">女</option></select></div><div class="row"><button type="button" id="rebirthCancel" class="alt">返回</button><button type="button" id="rebirthConfirm">確認開始這一世</button></div><p style="font-size:.78rem">如果已有正在進行的人生，確認時才會封存原人生並建立新人生；取消不影響存檔。</p></div></section><main><div id="libraryBackdrop"></div><aside aria-label="遊戲資料與設定" aria-modal="true" hidden="" id="libraryDrawer" role="dialog"><div class="libraryHeading"><strong>遊戲資料</strong><button aria-label="關閉選單" id="libraryClose" type="button">✕ 關閉</button></div><div class="libraryBody"><details class="panel" id="profilePanel"><summary>人物狀態、家庭與人物關係</summary><h3>角色能力與庫存</h3><div id="stats"></div><h3>修行與世界基準</h3><div id="cultivationStatus"></div><h3>家庭與子女</h3><div id="family"></div><h3>財產與商業</h3><div id="assets"></div><h3>家族／商號／NPC 資產負債表（持續更新）</h3><div id="balanceSheets" class="financeLedger"></div><h3>債務、裝備與家產</h3><div id="v5Detail"></div><h3>NPC 自主生活與記憶</h3><div class="npcCards" id="npcCards"></div><div id="npcs"></div><h3>世界事件</h3><div id="news"></div><h3>收支帳本</h3><div id="ledger"></div></details><details class="panel" id="chroniclePanel"><summary>事件經過與歷史摘要</summary><h3>最近 100 回完整劇情</h3><div id="history"></div><h3>事件帳本（最多 800 筆）</h3><div id="events"></div></details><details class="panel" id="mapPanel"><summary>當前世界地圖</summary><p class="sub">地圖是當前地域的道路示意。點目的地只填入行動文字，不會自動瞬移；按「推進下一回」才會檢查體力、道路與行程時間。</p><div aria-label="五處區域的示意地圖" class="atlas"><svg aria-hidden="true" preserveaspectratio="none" viewbox="0 0 600 330" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="mapGround" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#e8d8ae"></stop><stop offset="1" stop-color="#a9bd99"></stop></lineargradient><lineargradient id="mapSea"><stop stop-color="#8ec6bd"></stop><stop offset="1" stop-color="#507c96"></stop></lineargradient></defs><rect fill="url(#mapGround)" height="330" width="600"></rect><path d="M382 250 Q469 190 600 190 L600 330 L386 330 Z" fill="url(#mapSea)" opacity=".9"></path><path d="M0 202 Q105 185 160 210 T300 193 T446 221 L470 330 L0 330 Z" fill="#c4c797" opacity=".6"></path><path d="M64 0 L106 62 L138 17 L177 94 L222 7 L265 88 L292 18 L330 91 L355 0" fill="none" opacity=".43" stroke="#8a9880" stroke-linejoin="round" stroke-width="17"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".9" stroke="#d8e0b8" stroke-width="25"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".96" stroke="#75b0b5" stroke-width="15"></path><path d="M108 95 Q166 127 145 198 T310 183 T483 240" fill="none" opacity=".75" stroke="#90735a" stroke-dasharray="8 10" stroke-width="5"></path><g opacity=".45" stroke="#587a67" stroke-width="4"><path d="M30 180 l14 -31 l14 31z M68 178 l12 -24 l12 24z M387 130 l14 -31 l14 31z M412 143 l11 -25 l11 25z" fill="#5f9666"></path></g></svg><div class="mapPins" id="mapPins"></div><div class="atlasStamp">浮生州域圖 · 示意路程</div></div><div aria-live="polite" class="sub" id="travelHint"></div><div class="row" style="margin-top:12px"><button class="alt" id="mapBack" type="button">返回目前場景</button></div></details><details class="panel" id="settingsPanel"><summary>設定、備份與輪迴</summary><h3>舊版人生與復原</h3><p class="sub">列出此瀏覽器仍保存的舊版人生。切換前會保存目前人生快照；不會合併不同版本的劇情或覆寫舊版存檔。</p><div id="saveSourceList"></div><div class="row"><button type="button" class="alt" id="refreshSources">重新掃描舊人生</button><button type="button" class="alt" id="exportAllSaves">備份全部版本存檔</button></div><label>Cloudflare Worker 網址</label><input id="endpoint" placeholder="https://example.workers.dev"/><label>通行密語（只儲存在你的瀏覽器）</label><input autocomplete="off" id="password" type="password"/><div class="row" style="margin-top:10px"><button class="alt" id="config">儲存 AI 設定</button><button class="alt" id="check">測試 Worker 綁定</button><button class="alt" id="export">匯出 JSON 備份</button><button class="alt" id="import">匯入 JSON 備份</button></div><div class="row" style="margin-top:10px"><button class="alt" id="archive">結束並封存本世</button><button class="ghost" id="discard">結束且不保留本世</button><button class="alt" id="reincarnate">下一世（先封存）</button><button class="alt" id="continueHeir">由成年子女承續人生</button></div><input accept=".json,application/json" class="hidden" id="file" type="file"/><p class="sub">刪除本世只移除 V5 正在遊玩的人生，不動 V3 舊版與已下載的 JSON。已封存人生會保留在 V5 輪迴史；死亡並不保證所有資產可自動繼承。</p></details></div></aside>
-<div class="gameHead"><div><h1>浮生無界 <small>· 萬世因果</small></h1><div class="sub">隨機人生 · 故事主導 · 每回一個行動 <strong style="color:#ffe09d;border:1px solid #b48c50;border-radius:5px;padding:2px 5px;white-space:nowrap">修正版本 V9.8 · 儲存與回合修正</strong></div></div><span class="versionToken">直式 · 三種重生模式</span><button aria-controls="libraryDrawer" aria-expanded="false" aria-haspopup="dialog" id="libraryToggle" type="button">☰ 遊戲資料</button></div>
+<div class="gameHead"><div><h1>浮生無界 <small>· 萬世因果</small></h1><div class="sub">隨機人生 · 故事主導 · 每回一個行動 <strong style="color:#ffe09d;border:1px solid #b48c50;border-radius:5px;padding:2px 5px;white-space:nowrap">修正版本 V9.10 · 儲存與回合修正</strong></div></div><span class="versionToken">直式 · 三種重生模式</span><button aria-controls="libraryDrawer" aria-expanded="false" aria-haspopup="dialog" id="libraryToggle" type="button">☰ 遊戲資料</button></div>
 <details class="panel obsoleteRules"><summary>長期推演：年齡、健康、家庭與世界自主運作</summary><p class="sub">每年採 360 天，短期逐日模擬；跨年長期推進採分年近似結算，並不等同逐日精確模擬。推演可能提早中斷，不保證一定存活或完成事業。</p><div class="row"><div><label>經過幾年</label><input id="years" max="100" min="0" type="number" value="0"/></div><div><label>再經過幾天</label><input id="days" max="359" min="0" type="number" value="0"/></div></div><button class="alt" id="jump" style="margin-top:10px">確定推演時間</button></details>
 <nav aria-label="遊戲快捷導覽" class="obsoleteRules" id="bottomNav"><button class="active" data-nav="artScene" type="button"><span>🏞️</span>場景</button><button data-nav="mapPanel" type="button"><span>🧭</span>地圖</button><button data-nav="chapterArea" type="button"><span>📜</span>劇情</button><button data-nav="worldPanel" type="button"><span>⚒️</span>行動</button><button data-nav="profilePanel" type="button"><span>👥</span>人物</button><button data-nav="settingsPanel" type="button"><span>⚙️</span>設定</button></nav><section class="panel" id="menu"><h2>人生主選單</h2><div class="offlineControls"><label for="offlineMode">敘事模式</label><select id="offlineMode"><option value="auto">自動（有網路優先 AI，斷網用本機敘事）</option><option value="offline">永遠離線（只用本機規則）</option><option value="online">只使用線上 AI（失敗則不執行）</option></select><div class="mutedline" id="offlineStatus">首次須連線開啟一次才能安裝離線網頁；存檔保存在本裝置瀏覽器。</div><button class="alt" type="button" id="cacheOffline">安裝／更新離線資源</button></div><div class="sub" id="menuStatus"></div><div class="row" style="margin-top:10px"><button id="continue">繼續人生</button><button class="alt" id="new">選擇重生方式</button><button class="alt" id="backup">匯出完整備份</button></div><p class="sub">三種重生模式共用同一宇宙；本版首次進入只複製先前直式存檔，保留原檔。新人生會重新抽選年代、文化、國度、地區、家庭、天賦及開場事件。</p></section><section class="panel" id="heroPanel"><div id="topInfo">尚未開始人生</div><div class="clock" id="clock">—</div><div class="sub" id="location"></div><div class="mutedline" id="quickStats"></div><div class="status" id="turnDelta95">本回狀態變化：尚未執行</div>
 <div aria-live="polite" class="resourceStrip">
@@ -1905,7 +1905,7 @@ function v8Intent(st,raw){
  if(/^(?:財務總覽|家族身家|總資產|產業鏈|生計紀錄|生產紀錄|經濟系統)$|^(?:查看|查詢|檢視)(?:全家資產|家族身家|財務總覽|總資產|產業鏈|生計|生產紀錄|經濟系統)|^(?:開設工坊|創辦工坊|設立工坊|製作|生產|加工|燒製|鍛造|播種|耕種糧食|種植糧食|栽種棉麻|種植棉麻|收割作物|農田收成|收穫農作物|收成棉麻|僱用鏢師|雇鏢師|護鏢委託|商號雇員薪資|發放工錢|支付工資|查詢契約|契約總覽|我的契約|查看契約|學館教書|教授學生|教學授課|代人送貨|運輸接案|承運商貨)/.test(a))return {code:'v8Economy',type:'economy'};
  return null;
 }
-function rule(st,code,targetId,minutes=30){if(code==='v97Continue'){advance(st,30);return {ok:true,verified:true,kind:'劇情推進',text:'時間推進半小時；在'+st.location+'繼續生活。既有交易不會重複扣款。'}}if(code==='v97Stay'){
+function rule(st,code,targetId,minutes=30){if(code==='v910EndLife')return v910EndLife(st);if(code==='v99Enter')return v99Enter(st,st.pendingAction||'');if(code==='v99Inquiry')return v99Inquiry(st,st.pendingAction||'');if(code==='v97Continue'){advance(st,30);return {ok:true,verified:true,kind:'劇情推進',text:'時間推進半小時；在'+st.location+'繼續生活。既有交易不會重複扣款。'}}if(code==='v97Stay'){
   const d=st.conversationDeals92?.active;
   if(d?.kind==='lodging'&&d.status==='in_progress'&&!d.stayedNight){
    d.stayedNight=true;d.status='completed';const span=advance(st,1410);
@@ -2036,7 +2036,7 @@ function v92Venue(st,kind){
  return null;
 }
 function v92Count(t){const q=String(t||'');let m=q.match(/([1-9１-９])\s*(?:個|位|名|人|間|桌)/);if(m)return Number(m[1].replace(/[１-９]/g,x=>String(x.charCodeAt(0)-65296)));for(const [mark,n] of [['一',1],['二',2],['兩',2],['三',3],['四',4],['五',5],['六',6],['七',7],['八',8],['九',9]])if(new RegExp(mark+'\\s*(?:個|位|名|人|間|桌)').test(q))return n;return null;}
-function v92Kind(t){const x=String(t||'');if(/姑娘|女孩|女子|藝伎|歌舞|陪席|陪聊|表演|接待|妓院|青樓|藝館/.test(x))return 'entertainment';if(/訂房|客房|住宿|住店|房間/.test(x))return 'lodging';if(/訂製|委託打造|定製|打製兵器|打造武器/.test(x))return 'commission';return null;}
+function v92Kind(t){const x=String(t||'');if(/姑娘|女孩|女子|妓女|女人|藝伎|歌舞|陪席|陪聊|表演|接待|妓院|青樓|藝館/.test(x))return 'entertainment';if(/訂房|客房|住宿|住店|房間/.test(x))return 'lodging';if(/訂製|委託打造|定製|打製兵器|打造武器/.test(x))return 'commission';return null;}
 function v92Confirm(t){return /^(?:我)?(?:確認(?:安排|預約|訂單|委託)?|確定(?:安排|預約|訂單)?|同意|可以|好|好的|就這樣|成交|安排吧|照辦|就這三位|就這三個|不用再問了|直接安排|付錢安排)[！!。\s]*$/.test(String(t||'').trim());}
 function v92Cancel(t){return /^(?:取消(?:安排|預約|訂單|委託)?|算了|不訂了|不要了|停止安排)[！!。\s]*$/.test(String(t||'').trim());}
 function v92Intent(st,action){const a=String(action||'').trim(),r=st?.conversationDeals92?.active;
@@ -2044,7 +2044,7 @@ function v92Intent(st,action){const a=String(action||'').trim(),r=st?.conversati
  if(r&&r.status==='quoted'&&((/^(?:繼續安排|繼續劇情|繼續)$/.test(a))||v92Confirm(a)||v92Cancel(a)||/^(?:改成|改為|改要|換成|換為|我要|就要|三位|三個|兩位|兩個|四位|四個)/.test(a)))return 'v92Deal';
  if(r&&['completed','in_progress'].includes(r.status)&&/^(?:繼續安排|接著|接下來|進行接待|帶她們入座|開始宴席|開始表演|繼續劇情|繼續|好|好的|就這樣|不用再問了|直接安排)$/.test(a))return 'v92Deal';
  const kind=v92Kind(a);
- if(kind==='entertainment'&&/(?:要|找|請|安排|預約|訂|叫|挑選|選|提供|帶來|來)(?:.{0,18})(?:姑娘|女孩|女子|藝伎|歌舞|陪席|表演|接待)|(?:姑娘|女孩|女子)(?:.{0,12})(?:三位|三個|安排|接待)/.test(a))return 'v92Deal';
+ if(kind==='entertainment'&&/(?:要|找|請|安排|預約|訂|叫|挑選|選|提供|帶來|來)(?:.{0,18})(?:姑娘|女孩|女子|妓女|女人|藝伎|歌舞|陪席|表演|接待)|(?:姑娘|女孩|女子|妓女|女人)(?:.{0,12})(?:三位|三個|安排|接待)/.test(a))return 'v92Deal';
  if(kind==='lodging'&&/(?:訂|要|安排|預約|租)(?:.{0,12})(?:房|住宿)|(?:房間|客房).{0,8}(?:預訂|安排)/.test(a))return 'v92Deal';
  if(kind==='commission'&&/(?:訂製|委託打造|定製)/.test(a))return 'v92Deal';
  return null;
@@ -2091,7 +2091,7 @@ function v92Deal(st,action){
  if(!kind)return v92No('請直接說你想辦的事，已確定的條件不會重新詢問。');
  const required=kind==='entertainment'?['青樓','藝館']:kind==='lodging'?['客棧']:['鐵匠鋪','木作坊'];
  const b=v92Venue(st,required);
- if(!b)return v92No('目前還沒進入一家可識別的'+(kind==='lodging'?'客棧':kind==='entertainment'?'青樓／藝館':'工坊')+'。請先「查看商店」，再「拜訪店鋪 完整店名」，到場後直接提出要求即可辦理。');
+ if(!b)return v92No('目前還沒進入一家可識別的'+(kind==='lodging'?'客棧':kind==='entertainment'?'青樓／藝館':'工坊')+'。請先直接說「去青樓」「去客棧」或「去餐館」進入營業中的具名店家；也可指定拜訪完整店名。');
  // 同一件事重複說一次視為延續，而非再次購買；只有明確「再訂／再安排一批」才新建。
  const repeat=/^(?:再|另外|再來|再訂|再安排|追加)/.test(a);
  if(d&&['in_progress','completed'].includes(d.status)&&d.shopId===b.id&&d.kind===kind&&!repeat)return v92No('【'+b.name+'】先前的 '+d.count+(kind==='lodging'?' 間客房':' 位接待人員')+(d.status==='completed'?'已完成':'已在進行')+'，沒有再次扣款。'+(d.people?.length?'人員：'+d.people.map(p=>p.name).join('、')+'。':'')+'可直接自由行動；若確實要新增另一筆，請明說「再安排一批」。');
@@ -2106,9 +2106,11 @@ function v92Deal(st,action){
  }
  if(kind==='entertainment'){
   if(!Array.isArray(b.hostRoster92)){
-   const cap=Math.max(3,Number(b.staff)||0);b.hostRoster92=[];
-   for(let i=0;i<cap;i++){const id='host92-'+b.id+'-'+i;let n=(st.npcs||[]).find(x=>x.id===id);if(!n){n=makeNPC(st,st.npcs.length);n.id=id;n.name=makePersonName(st,'女',null,new Set(st.npcs.map(p=>p.name)));n.sex='女';n.age=Math.max(19,Math.min(45,Number(n.age)||24));n.home=b.site;n.job='藝館接待／歌舞表演';n.bond=b.name+'成年受僱人員';n.encountered=false;st.npcs.push(n);}b.hostRoster92.push({id,name:n.name,available:n.alive!==false,adult:n.age>=18,consent:true});}
+   const cast=v98EnsureShopCast(st,b).filter(n=>n.alive!==false&&n.age>=18&&/成年歌舞接待/.test(n.job||''));
+   b.hostRoster92=cast.map(n=>({id:n.id,name:n.name,available:true,adult:true,consent:true}));
   }
+  // Older saves had a separate host roster. These are staff of THIS venue, not invisible generic NPCs.
+  for(const item of b.hostRoster92){const n=(st.npcs||[]).find(x=>x.id===item.id);if(n){n.home=b.site;n.workplaceId=b.id;}}
   const available=b.hostRoster92.filter(p=>p.adult&&p.consent&&p.available&&(st.npcs||[]).some(n=>n.id===p.id&&n.age>=18&&n.alive!==false));
   if(available.length<count)return v92No(b.name+'目前只有 '+available.length+' 名符合條件且願意接待的成年工作人員，無法安排 '+count+' 位。可以直接改說較少的人數或去另一家店，不會反覆重問。');
   const selected=available.slice(0,count),price=v91Price(st,0.08)*count;
@@ -3098,7 +3100,7 @@ function ensureBackup(raw,key){if(!localStorage.getItem(key))localStorage.setIte
 
 function chapter(st,action,text,notes,options=null,source='系統建議'){st.chapter++;st.story='【你的行動／發言】'+action+'\n\n'+text+(notes?'\n\n【規則確認】'+notes:'')+'\n\n【本回實際資源／能力變化】'+(st.lastTurnDelta95?.detail||'未記錄');st.choices=options||sceneChoices(st);st.choiceSource=source;st.chapterHistory.push({chapter:st.chapter,at:now(st),action,story:st.story});if(st.chapterHistory.length>100)st.chapterHistory.shift();emit(st,'回合',`第 ${st.chapter} 回：${action.slice(0,130)}`,{result:notes});return st}
 function sceneChoices(st){const dealChoices=v92Choices(st);if(dealChoices)return dealChoices;if(st.career?.employed||((st.jobLeads||[]).some(j=>j.status==='尚未應徵'&&j.hub===v81Hub(st))))return employmentChoices(st);const v8=v8SceneChoices(st);if(v8)return v8;if(st.journey)return ['繼續趕路前往'+st.journey.destination,'在途中的安全地點休息'];const speaker=activeSpeaker(st);if(speaker)return [`繼續向${speaker.name}追問剛才的話題`,`聽聽${speaker.name}接下來怎麼說`];let here=st.npcs.filter(n=>n.alive&&n.encountered&&n.home===st.location);let b=st.birth||{};if(st.chapter===0&&st.age>=8){if(b.standing==='貧困')return ['查看家中的口糧和可用工錢','向附近可信的人打聽可做的生計'];if(b.standing==='權貴'||b.standing==='富足')return ['先核對家族公產和自己能動用的資源','詢問親族近期的家務或外界變化'];}if(st.age<7)return ['觀察照顧我的人正做什麼','試著發出聲音，表達眼前的需要'];if(st.hp<35)return ['查看自己的傷勢，想辦法向附近的人求助','檢查身邊可用的物品和遮蔽處'];if(st.food<3)return ['詢問目前所在地的食物來源與價格','查看自己的口糧，想想今天該如何維持生活'];if(b.hook&&st.chapter<3)return [`追查：${b.hook}`,'先看看周圍的人對這件事有何反應'];if(here.length)return [`我問${here[0].name}：「你現在在忙什麼？」`,'留在原地觀察街巷與行人動靜'];return ['仔細觀察眼前的環境與動靜','想想今天最需要處理的一件事']}
-// V9.8 人物語氣檔：由人物 ID / 性格 / 職業穩定導出；寫入存檔，避免每回合改人設。
+// V9.10 人物語氣檔：由人物 ID / 性格 / 職業穩定導出；寫入存檔，避免每回合改人設。
 const V96_VOICES={
  '謹慎':{pace:'短句，先說可核實的事',habit:'此事須有憑據',values:'安全與承諾',taboo:'無憑無據的保證',greeting:'先把話說清楚'},
  '倔強':{pace:'直截了當，句尾斬釘截鐵',habit:'我有我的主意',values:'自主與尊嚴',taboo:'被人使喚',greeting:'有話直說'},
@@ -3527,7 +3529,7 @@ const V84_SHOPS=[
  ['振威鏢局','鏢局','護衛',1,0.18,'守衛及護運']
 ];
 // V8.5: 城鎮、居民、商店、供應方共用同一個世界資料；金錢轉帳不可自行創生。
-// V9.8: V85_ROOT_HUBS is initialized at the beginning of this script.
+// V9.10: V85_ROOT_HUBS is initialized at the beginning of this script.
 const V85_PRODUCTS=['糧食','住宿服務','藥材','茶葉','布匹','木器','農產','運輸服務','護鏢服務'];
 const V85_SUPPLIERS=['農莊','客房維護','藥圃','茶園','織坊','木場','農莊','車馬場','鏢師團'];
 const V85_COSTS=[0.042,0.060,0.045,0.037,0.060,0.075,0.033,0.055,0.090];
@@ -3992,7 +3994,7 @@ function v91Run(st,action){
   if(v81Hub(st)!==s.city)return v81No('該店位於 '+s.city+'，必須先完成前往該城鎮的旅程。');
   if(s.closed)return v81No('該店目前已歇業。');
   const from=st.location;st.location=s.site;st.activeVenueShop91=s.id;
-  v971EnsureVenueResidents(st);
+  const welcome=v99Welcome(st,s);v971EnsureVenueResidents(st);
   const adv=advance(st,35);
   return {ok:true,verified:true,kind:'拜訪實體店鋪',minutes:adv.minutes,text:'從 '+from+' 前往 '+s.name+'，抵達 '+s.site+'，此刻正在拜訪的是「'+s.name+'」，並非自動進入同類的其他商家。店主與服務內容仍需由實際互動確認。'};
  }
@@ -4085,9 +4087,105 @@ function employmentChoices(st){
  return ['查看本地職缺','前往鄰近商鋪街'];
 }
 function stubs97HasActiveDeal(){return ['quoted','in_progress'].includes(state?.conversationDeals92?.active?.status)}
+
+// V9.10: One-step shop entrance and reception shared by every business type.
+// Select a stable existing business in the current city; no shop or NPC is conjured by AI narration.
+const V99_KIND_ALIASES=[
+ [/青樓|妓院|花樓|花館|妓館/,'青樓'],[/藝館|歌舞坊|歌坊/,'藝館'],
+ [/餐館|餐廳|飯館|飯店|酒樓|酒家/,'酒樓'],[/客棧|旅館|旅店/,'客棧'],
+ [/茶館|茶樓/,'茶館'],[/醫館|診所|醫院/,'醫館'],[/藥鋪|藥房/,'醫館'],
+ [/鐵匠鋪|打鐵鋪/,'鐵匠鋪'],[/書坊|書店/,'書坊'],[/雜貨舖|雜貨店/,'雜貨舖'],
+ [/布莊|布行/,'布莊'],[/米行|糧店/,'米行'],[/錢莊/,'錢莊'],[/鏢局/,'鏢局'],
+ [/車行/,'車行'],[/丹藥坊/,'丹藥坊'],[/靈器坊/,'靈器坊'],[/符籙鋪/,'符籙鋪']
+];
+
+// V9.10: Explicit fictional-life ending, not a free-form chat or AI assertion.
+// Abstract transition only: no method or graphic narration. Player retains the ability to begin next incarnation.
+function v910EndLife(st){
+ if(!st.alive)return {ok:false,text:'這一世已結束。可從輪迴選單開始下一世。'};
+ st.alive=false;st.hp=0;
+ st.activeConversation=null;
+ st.journey=null;
+ st.gameEnding910={cause:'角色主動結束本世',at:now(st),chapter:(st.chapter||0)+1};
+ emit(st,'本世終結','此世由角色自行選擇結束，人物紀錄與資產資料保留待封存。',{verified:true});
+ return {ok:true,verified:true,kind:'本世終結',minutes:0,text:'這一世至此結束，生命歸零。世界中的其他人物仍照常生活；可以透過「下一世（先封存）」進入輪迴。'};
+}
+
+function v99KindFromText(a){const text=String(a||'');return V99_KIND_ALIASES.find(([re])=>re.test(text))?.[1]||null;}
+function v99EntryIntent(a){
+ const t=String(a||'').trim();
+ return /^(?:我(?:想|要)?|現在|直接|先|請)?(?:去|到|前往|走進|進入|進|來到|拜訪|逛|走到|走去)(?:一間|一家|附近的|當地的|城裡的|城內的|這家|那家|個)?(?:青樓|妓院|花樓|藝館|歌舞坊|餐館|餐廳|飯館|飯店|酒樓|酒家|客棧|旅館|旅店|茶館|茶樓|醫館|診所|藥鋪|藥房|鐵匠鋪|打鐵鋪|書坊|書店|雜貨舖|雜貨店|布莊|布行|米行|糧店|錢莊|鏢局|車行|丹藥坊|靈器坊|符籙鋪)(?:裡|內|去|看看|坐坐|吃飯|消費|用餐|找掌櫃|找老闆)?[！!。\s]*$/.test(t);
+}
+function v99InquiryIntent(a){
+ const t=String(a||'').trim();
+ return /(?:多少錢|什麼價格|怎麼算錢|怎麼收費|價目|價錢|菜單|菜色|有哪些服務|有什麼服務|住宿價格|一晚多少|幾位.*多少)/.test(t)
+  &&!/(?:付|支付|買下|成交|交錢|給錢|打賞|砸錢|拿出|贈送)/.test(t);
+}
+function v99CurrentShop(st){return v98SceneBusiness(st);}
+function v99FindShop(st,kind){
+ const hub=v81Hub(st),town=v91Town(st,hub),active=v99CurrentShop(st);
+ if(active&&(active.kind===kind||(kind==='青樓'&&active.kind==='藝館')))return active;
+ const eligible=(town.businesses91||[]).filter(b=>!b.closed&&b.city===hub&&(b.kind===kind||(kind==='青樓'&&b.kind==='藝館')));
+ if(!eligible.length)return null;
+ // A consistent shop choice per city and type; repeated visits don't shuffle identity.
+ return eligible[v91Hash(hub+'::'+kind+'::v99')%eligible.length];
+}
+function v99Welcome(st,shop){
+ const people=v98EnsureShopCast(st,shop).filter(n=>n.alive!==false);
+ const host=people.find(n=>/掌櫃|店主|主人|醫師|鏢頭/.test(n.job||''))||people[0]||null;
+ if(host){host.encountered=true;host.workplaceId=shop.id;keepConversation(st,host,'進入'+shop.name,'店內接待');npcMemory(host,st,'在店內迎接'+st.name);}
+ const greeting={
+  '青樓':'迎客的夥計領你到櫃檯，掌櫃介紹可供預約的成年歌舞及席間接待人員；人數、意願與費用須依實際名冊。',
+  '藝館':'接待員領你入座，介紹本日的歌舞、琴藝及雅座。',
+  '酒樓':'跑堂夥計迎上前，安排座位，遞上菜單並介紹今日可供應的餐食。',
+  '茶館':'茶館夥計迎客入座，送來茶單。',
+  '客棧':'店小二在櫃檯招呼你，詢問住宿或用餐，客房依空位收費。',
+  '醫館':'藥童先請你到診桌前，醫師詢問是否需要看診。',
+  '鐵匠鋪':'學徒接應，師傅介紹現貨兵器與打造委託。',
+  '丹藥坊':'藥師在櫃檯介紹現有丹藥，價格按本界貨幣計算。'
+ };
+ const defaultText='店員迎接你進入櫃檯區，介紹本店可提供的商品與服務。';
+ return (host?host.name+'（'+host.job+'）向你招呼。':'店家接待你。')+(greeting[shop.kind]||defaultText);
+}
+function v99Enter(st,action){
+ if(st.journey)return {ok:false,text:'仍在旅途中，尚未抵達此城。'};
+ const kind=v99KindFromText(action);if(!kind)return {ok:false,text:'無法判斷要拜訪的店鋪類型。'};
+ const shop=v99FindShop(st,kind);
+ if(!shop)return {ok:false,text:'本城目前沒有營業中的'+kind+'，可查看商戶名冊尋找其他店家。'};
+ const old=st.location;
+ st.location=shop.site;st.activeVenueShop91=shop.id;
+ const response=v99Welcome(st,shop);v971EnsureVenueResidents(st);
+ const moved=old!==shop.site;
+ const adv=advance(st,moved?Math.max(10,Math.min(35,localTravelMinutes(st,old,shop.site)||15)):5);
+ return {ok:true,verified:true,kind:'入店接待',minutes:adv.minutes,text:'你進入「'+shop.name+'」的店內，來到接待區。'+response+'【所在地】'+st.location+'；【目前店家】'+shop.name+'。可直接詢價、點餐、訂房或找在場人員交談，不必再輸入一次「拜訪店鋪」。'};
+}
+function v99Inquiry(st,action){
+ // In a class-specific venue but without an active shop (legacy save), choose and enter a real shop first.
+ let shop=v99CurrentShop(st);
+ if(!shop){const scene=String(st.location||'').split('·').at(-1);
+  const kind=v99KindFromText(action)||({'青樓':'青樓','酒樓':'酒樓','茶館':'茶館','客棧':'客棧','醫館':'醫館'}[scene]);
+  if(kind){shop=v99FindShop(st,kind);if(shop){st.activeVenueShop91=shop.id;st.location=shop.site;}}
+ }
+ if(!shop)return {ok:true,verified:true,kind:'場內詢價',minutes:0,text:'你目前尚未進入具體店家。直接說「去青樓」、「去餐館」或「去客棧」即可入店，由店員當面接待。'};
+ const cast=v98EnsureShopCast(st,shop),host=cast.find(n=>/掌櫃|店主|主人|醫師/.test(n.job||''))||cast[0];
+ if(host){host.encountered=true;keepConversation(st,host,action,'詢價／菜單');}
+ const amount=v92Count(action)||1;
+ let detail='本店經營'+(shop.product||shop.kind)+'；目前有 '+Math.max(0,Number(shop.stock)||0)+' 件可售存貨，標示單價 '+(shop.retail??'待核價')+'。';
+ if(/青樓|藝館/.test(shop.kind)){
+  const staff=v98EnsureShopCast(st,shop).filter(n=>n.alive!==false&&n.age>=18&&/成年歌舞接待/.test(n.job||'')).length;const base=v91Price(st,.08);const n=amount;
+  detail='歌舞／席間接待參考費用每位 '+base+'，'+n+' 位合計 '+(Math.round(base*n*100)/100)+'（'+(v91Realm(st)==='mortal'?'銀兩值':'下品靈石')+'）。目前登記工作人數 '+staff+'；能否安排仍須由現場成年工作人員自願且有空檔，不因詢價自動扣款。';
+ }else if(/酒樓|茶館/.test(shop.kind))detail='今日提供'+(shop.product||'茶點餐食')+'；基本單價約 '+(shop.retail??v91Price(st,.12))+'（本界錢袋單位）。點餐後才會驗資並從店內存貨結算。';
+ else if(shop.kind==='客棧')detail='客房參考單價 '+v91Price(st,.13)+'（本界錢袋單位），先查空房、入住才會收費。';
+ else if(shop.kind==='醫館')detail='看診費及藥價會依診療與藥品實際項目另行結算，未看診不收費。';
+ return {ok:true,verified:true,kind:'場內詢價',minutes:0,text:'【'+shop.name+'】'+(host?host.name+'（'+host.job+'）':'店員')+'答覆：'+detail};
+}
+
 function v97DirectRoute(action){const a=String(action||'').trim();
+ if(/^(?:我(?:想|要|決定)?|現在|立刻)?(?:自殺|自盡|了結此生|結束生命|結束這一世|結束本世|不想活了)[。！!\s]*$/.test(a))return 'v910EndLife';
+ if(v99EntryIntent(a))return 'v99Enter';
+ if(v99InquiryIntent(a))return 'v99Inquiry';
  if(/^(?:繼續劇情|繼續人生|推進劇情|下一回|接著發生什麼)$/.test(a))return stubs97HasActiveDeal()?'v92Deal':'v97Continue';
- if(v971InhabitedScene(state)&&/(?:老闆|掌櫃|有人嗎|招呼|姑娘|女人|女孩|服務我|接待我|找人聊天|找人談談)/.test(a)&&!v95MoneyClaim(a,state)&&!v92Intent(state,a)&&!v91Intent(a))return 'v971SceneConversation';
+ if(v971InhabitedScene(state)&&/(?:老闆|掌櫃|有人嗎|招呼|姑娘|女人|女孩|服務我|接待我|找人聊天|找人談談|菜單|有什麼吃的|有什麼喝的|我餓了|我要吃飯|我想吃飯|要吃飯|我要看診|想看病|我生病了|要住宿|幫我訂房)/.test(a)&&!v95MoneyClaim(a,state)&&!v92Intent(state,a)&&!v91Intent(a))return 'v971SceneConversation';
  if(/^(?:住店一晚|住客棧一晚|入住一晚|住宿一晚)$/.test(a))return 'v97Stay';
  if(/^(?:我要飛升|飛升|嘗試飛升|升上)(?:中界|上界)$/.test(a))return 'v97Ascend';
  return null;
@@ -4189,9 +4287,9 @@ function renderWorldMap(s){
  $('travelHint').textContent=s?('三界大地圖 V8.9｜當前界域：'+V89_REALM_TITLES[v89RealmOf(s)]+'｜出生年代：'+(s.birth?.era||'未知')+'｜主要州府／聚落 '+hubs.length+' 處，當前聚落街區 '+places.filter(p=>p.region===home&&p.kind!=='hub').length+' 處。'+' 當前：'+s.location+'。可自由走向鎮上、市集、青樓、酒樓、家門，或輸入「隨便逛逛」；長途不會瞬間抵達。座標僅為歷史地理近似，非真實道路。'+(s.journey?' 尚在前往 '+s.journey.destination+' 的途中。':'')):'開始人生後顯示當代地圖。';
 }
 
-// V9.8: A resident exists independently of whether the player has already met them.
+// V9.10: A resident exists independently of whether the player has already met them.
 // Only create a small persistent local cast at inhabited venues; do not instantiate the entire city population.
-// V9.8 統一實體人物層：店家、玩家商號、街巷、民居、官署與山門共用同一個人物名冊。
+// V9.10 統一實體人物層：店家、玩家商號、街巷、民居、官署與山門共用同一個人物名冊。
 // 每間商戶僅在玩家接觸時延遲建立人物，避免一座大城數百店一次消耗手機存檔容量。
 function v98SceneBusiness(st){
  if(!st||!st.location||!st.activeVenueShop91)return null;
@@ -4235,7 +4333,8 @@ function v98EnsureShopCast(st,shop){
   // 原有具名僱主保持原 ID 與姓名，帳本仍使用同一商戶 ID。
   out.push(owner);
  }
- const count=Math.min(3,Math.max(0,Number(shop.staff)||0));
+ if(shop.recordType==='background'&&/青樓|藝館/.test(shop.kind))shop.staff=Math.max(3,Number(shop.staff)||0);
+ const count=Math.min(3,Math.max(/青樓|藝館|酒樓|茶館|客棧|醫館/.test(shop.kind)?1:0,Number(shop.staff)||0));
  for(let i=0;i<count;i++){
   const id='v98-employee-'+shop.id+'-'+i;
   const worker=v98Person(st,id,shop.site,roles[1],{shopId:shop.id,activity:'在'+shop.name+'值勤'});
@@ -4283,19 +4382,37 @@ function v971EnsureVenueResidents(st){
  return v971LocalCast(st);
 }
 function v971SceneConversation(st,action){
- const locals=v971EnsureVenueResidents(st);
- const a=String(action||'');
- const requested=locals.find(n=>a.includes(n.name));
- const shop=v98SceneBusiness(st);
- const target=requested||(shop?locals.find(n=>n.workplaceId===shop.id&&/掌櫃|店主|醫師|主人|鏢頭/.test(n.job||'')):null)||locals[0];
- if(!target)return {ok:false,text:'此處尚未找到可交談的人物；請先查詢在場人物。',minutes:0};
+ const locals=v971EnsureVenueResidents(st),a=String(action||'').trim();
+ let shop=v98SceneBusiness(st);
+ // A legacy save may be standing in a named category scene but not yet bound to one shop.
+ if(!shop&&/·(?:青樓|藝館|酒樓|茶館|客棧|醫館|鐵匠鋪|雜貨舖)$/.test(st.location||'')){
+   const type=(st.location||'').split('·').at(-1);shop=v99FindShop(st,type);
+   if(shop){st.location=shop.site;st.activeVenueShop91=shop.id;v98EnsureShopCast(st,shop);}
+ }
+ const current=v971EnsureVenueResidents(st);
+ const requested=current.find(n=>a.includes(n.name));
+ const target=requested||(shop?current.find(n=>n.workplaceId===shop.id&&/掌櫃|店主|醫師|主人|鏢頭/.test(n.job||'')):null)||current[0];
+ if(!target)return {ok:false,text:'目前沒有可交談的在場人物；請先走入營業中的店舖或查看附近人物。',minutes:0};
  target.encountered=true;target.bond=target.bond==='尚未相識'?'初識':target.bond;
- const reply=v96PersonLine(st,target,a);
- const advice=/女人|姑娘|女孩|接待|服務/.test(a)?(shop?'。所在店家為「'+shop.name+'」；實際接待須符合人員意願、可用名冊及付款規則。':'。你尚未進入特定店家，可以先從商戶名冊挑選店鋪。'):'';
- const text=target.name+'（'+target.job+'）回應：「'+reply.line+'」'+advice;
- npcMemory(target,st,'玩家：'+a.slice(0,110)+'；回覆：'+reply.line);
+ let reply=v96PersonLine(st,target,a).line;
+ if(shop){
+   if(/青樓|藝館/.test(shop.kind)&&/姑娘|女人|女孩|接待|服務|歌舞|幾位|幾個/.test(a)){
+     const adult=v98EnsureShopCast(st,shop).filter(n=>n.age>=18&&n.alive!==false&&/成年歌舞接待/.test(n.job||''));
+     reply='歡迎到「'+shop.name+'」。本店安排的是成年工作人員自願提供的歌舞與席間接待。現場可詢問的接待人員有 '+adult.length+' 位；要詢價直接說「3位接待多少錢」，要安排可直接說「安排3位歌舞接待」。';
+   }else if(/酒樓|茶館/.test(shop.kind)&&/吃|喝|茶|點餐|菜單|推薦|多少錢/.test(a)){
+     reply='歡迎到「'+shop.name+'」。請入座，今日供應'+(shop.product||'餐食茶點')+'，參考單價 '+(shop.retail??v91Price(st,.12))+'；你可以直接指定餐點。';
+   }else if(shop.kind==='客棧'&&/住宿|住店|房|一晚|休息/.test(a)){
+     reply='這裡是「'+shop.name+'」，有空房便可入住。想住一晚直接說「住店一晚」，會按實際錢袋結算。';
+   }else if(/醫館|藥鋪/.test(shop.kind)&&/診|病|醫|看|傷|藥/.test(a)){
+     reply='這裡是「'+shop.name+'」，你先說症狀，醫師會依診療規則處理；不會憑敘事直接替你治癒。';
+   }else if(/書坊|布莊|鐵匠鋪|雜貨舖|米行|錢莊|工坊/.test(shop.kind)){
+     reply='這裡是「'+shop.name+'」，目前營業的是'+shop.kind+'；你可以直接詢問本店商品、價格與可辦理的委託。';
+   }
+ }
+ const text=target.name+'（'+target.job+'）回應：「'+reply+'」';
+ npcMemory(target,st,'玩家：'+a.slice(0,110)+'；回覆：'+reply);
  keepConversation(st,target,a,'現場交談');
- const adv=advance(st,15);emit(st,'現場交談',text,{personId:target.id,verified:true});
+ const adv=advance(st,12);emit(st,'現場交談',text,{personId:target.id,verified:true});
  return {ok:true,verified:true,kind:'現場交談',minutes:adv.minutes,text};
 }
 
@@ -4310,7 +4427,7 @@ function renderNPCGallery(s){const box=$('npcCards');box.replaceChildren();if(!s
 }
 
 function render(animate=false){$('endpoint').value=conf.endpoint||'';$('password').value=conf.password||'';$('continue').disabled=!state;$('backup').disabled=!state;$('new').disabled=busy;$('send').disabled=!state||!state.alive||busy;$('save').disabled=!state||busy;$('jump').disabled=!state||!state.alive||busy;$('export').disabled=!state;$('reincarnate').disabled=busy;$('continueHeir').disabled=!state||state.alive||busy;$('archive').disabled=!state||busy;$('discard').disabled=!state||busy;
- $('menuStatus').textContent='【V9.8】'+(loadProblem?loadProblem+'（可備份後另建新人生）':(state?`讀到本世：${state.name}，${state.age} 歲，第 ${state.chapter} 回；按「繼續人生」即可。`:'目前沒有進行中的直式人生。首次進入會複製最新可讀取的舊版人生；也可以匯入 JSON。'));
+ $('menuStatus').textContent='【V9.10】'+(loadProblem?loadProblem+'（可備份後另建新人生）':(state?`讀到本世：${state.name}，${state.age} 歲，第 ${state.chapter} 回；按「繼續人生」即可。`:'目前沒有進行中的直式人生。首次進入會複製最新可讀取的舊版人生；也可以匯入 JSON。'));
  document.querySelectorAll('button[data-act]').forEach(b=>b.disabled=!state||!state.alive||busy);
  if(!state){$('birthInfo').textContent='隨機新人生：每一世重新產生出生條件，不保證與上一世有任何關係。';$('topInfo').textContent='尚無進行中的人生';$('clock').textContent='—';$('location').textContent='';$('quickStats').textContent='';$('turnDelta95').textContent='本回狀態變化：尚未執行';$('chapter').textContent='序章';typing('選擇開始新人生，或匯入備份。');$('choices').replaceChildren();$('choiceLabel').textContent='';for(let id of ['balanceSheets','stats','cultivationStatus','family','assets','npcs','news','ledger','history','events','v5Detail'])$(id).replaceChildren();$('npcSelect').replaceChildren();renderArt(null);renderWorldMap(null);renderNPCGallery(null);return}
  let s=state;$('birthInfo').textContent=(s.birth?`${s.birth.era} · ${s.birth.country} · ${s.birth.culture}｜${s.birth.family} · 財力${s.birth.wealthTier||s.birth.standing} · 地位${s.birth.socialRank||'未登記'}`:`${s.setting} · ${s.location}｜延續舊版人生`);$('topInfo').textContent=`${s.name}・${s.sex}・${s.age} 歲・${s.setting}${s.alive?'':'【已死亡】'}`;$('clock').textContent=now(s);$('location').textContent='📍 '+s.location;$('quickStats').textContent=`生命 ${s.hp}/${s.hpMax}｜體力 ${s.stamina}/${s.staminaMax}｜${econRealm(s)==='mortal'?'個人現銀 '+econFormatSilver(s.money):'個人靈石 '+econFormatStones(econInit(s).spiritBalance||0)}｜靈氣 ${s.cultivation.qi}｜口糧 ${s.food} 份${crimeDisplayV74(s)}｜武者 ${martialRankV75(s)} 階｜壽元 ${lifeLimit(s)===Infinity?'不受自然壽元限制':lifeLimit(s)+'歲'}｜糧價 ${s.world.grainPrice} 銀／份`;$('turnDelta95').textContent='【第 '+(s.lastTurnDelta95?.chapter||0)+' 回實際變動】'+(s.lastTurnDelta95?.detail||'尚未有已核驗的回合變動');$('chapter').textContent=s.chapter?`第 ${s.chapter} 回`:'序章';typing(s.story,animate);
@@ -4339,7 +4456,7 @@ function localDialogueV73(st,action,speaker){
  const reply=v96PersonLine(st,speaker,action);
  return speaker.name+'（'+(speaker.familyRole||speaker.bond||speaker.job||'居民')+'，'+(speaker.nature||'謹慎')+'）說：「'+reply.line+'」';
 }
-function offlineNarration(st,action,result){if(result?.kind?.startsWith('NPC協議'))return '【'+now(st)+'｜'+st.location+'】\n\n'+result.text+'\n\n'+'已成立的安排已保存，無須再次確認。下一回直接接續現場事件。';
+function offlineNarration(st,action,result){if(['入店接待','場內詢價','本世終結','現場交談'].includes(result?.kind))return '【'+now(st)+'｜'+st.location+'】\n\n'+result.text;if(result?.kind?.startsWith('NPC協議'))return '【'+now(st)+'｜'+st.location+'】\n\n'+result.text+'\n\n'+'已成立的安排已保存，無須再次確認。下一回直接接續現場事件。';
  if(['違法行為','非常規行為','官府','治安紀錄'].includes(result?.kind))return '【'+now(st)+'｜'+st.location+'】\n\n'+result.text+'\n\n'+(result.kind==='違法行為'?'目擊者、地方官府與當事人可能記住此事；後續追捕及人物關係依保存的案件資料延續。':'接下來可以自由決定行動，但先前已成立的事件不會自動抹消。');
  const b=st.birth||{},speaker=activeSpeaker(st),n=st.npcs.find(q=>q.alive&&q.home===st.location&&action.includes(q.name));
  if(speaker && result?.kind==='交談' && !explicitConversationExit(action))return `【${b.era||st.setting}・${st.location}｜${now(st)}】\n\n${result.text}`;
@@ -4393,6 +4510,9 @@ async function execute(action){if(!state||busy||!state.alive)return;if(!String(a
  const minutes=30;
  if(oneActionOnly(action))return message('每回合只能執行一個主要行動。請先完成目前這一步，再安排下一步；沒有一鍵連續趕路、工作和修煉。','bad');
  if(movementIntent(action))return message('你尚未學會有效的傳送能力，不能直接瞬移到別處。此回未扣時間。','bad');
+ // Confirmed venue and life-cycle actions must use the same deterministic rule both online and offline.
+ const venueRoute=v97DirectRoute(action);
+ if(['v99Enter','v99Inquiry','v971SceneConversation','v910EndLife'].includes(venueRoute)){await v72OfflinePlay(action,minutes);return}
  if(v72MustUseOffline()||(!conf.endpoint||!conf.password)&&v72NarrationMode()!=='online'){await v72OfflinePlay(action,minutes);return}if(!conf.endpoint||!conf.password)return message('線上模式需要先設定 Worker 網址與密語；未執行本回。','bad');if(!v97DirectRoute(action)&&contextualSpeechReply(state,action))ensureSceneSpeaker(state);let target=encounterTarget(state,action,$('npcSelect').value),code=v97DirectRoute(action)||dialogueRoute(state,action);const expectedRevision=v97Revision;busy=true;render();message(`正在生成第 ${state.chapter+1} 回；回應成功前不修改存檔。`);$('chapterArea').scrollIntoView({behavior:'smooth',block:'start'});
  try{let preview=clone(state);const before95=clone(state);preview.pendingAction=action;v971EnsureVenueResidents(preview);let ruling=rule(preview,code,target?.id,minutes);delete preview.pendingAction;if(ruling.ok){updateConversationAfterRule(preview,action,code,ruling,target?.id);v95RecordDelta(before95,preview,ruling);}if(!ruling.ok){busy=false;render();message('行動不成立：'+ruling.text+'（時間與存檔都沒有改動）','bad');return}
  let contract=narrativeContract(state,preview,action,ruling,code);
@@ -4515,7 +4635,7 @@ document.querySelectorAll('[data-nav]').forEach(btn=>btn.addEventListener('click
  el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
 }));
 
-// IndexedDB is authoritative. Migrate pre-V9.8 localStorage only on first startup.
+// IndexedDB is authoritative. Migrate pre-V9.10 localStorage only on first startup.
 (async function v97Boot(){
  try{
   conf=JSON.parse(localStorage.getItem(CONF)||'{}')||{};
