@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "浮生無界 V9.6 NPC 性格與規則校正",
-  "short_name": "浮生無界 V9.5",
+  "name": "浮生無界 V9.7 IndexedDB 存檔與回合修正版",
+  "short_name": "浮生無界 V9.7",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

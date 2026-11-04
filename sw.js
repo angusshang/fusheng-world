@@ -1,4 +1,5 @@
-const VERSION='fusheng-v96-npc-personality-1',FILES=['./','./index.html','./manifest.webmanifest','./icon.png'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(VERSION).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(x=>x.startsWith('fusheng-')&&x!==VERSION).map(x=>caches.delete(x)));await self.clients.claim();})()));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==self.location.origin)return;if(e.request.mode==='navigate')e.respondWith(fetch(e.request).catch(()=>caches.match('./index.html')));else e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});
+const VERSION='fusheng-v97-indexeddb-turnfix-20261104';
+const FILES=['./','./index.html','./manifest.webmanifest','./icon.png'];
+self.addEventListener('install',event=>event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(FILES)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('fusheng-')&&k!==VERSION).map(k=>caches.delete(k)));await self.clients.claim()})()));
+self.addEventListener('fetch',event=>{if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;if(event.request.mode==='navigate')event.respondWith(fetch(event.request).catch(()=>caches.match('./index.html')));else event.respondWith(fetch(event.request).catch(()=>caches.match(event.request)))});
