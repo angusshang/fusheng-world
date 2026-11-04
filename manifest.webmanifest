@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "浮生無界 V9.15 旅途與店家路由修正版",
-  "short_name": "浮生無界 V9.10",
+  "name": "浮生無界 V9.16 AI 與場景整合修正版",
+  "short_name": "浮生無界 V9.16",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
