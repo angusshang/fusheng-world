@@ -10,7 +10,7 @@ NPC 保有目標、年齡、關係、記憶與拒絕權；玩家對話必須顯�
 持續擴充：直接修改這份完整版，不要以短篇 Demo 取代它；後續需保持測試案例。
 詳情見同套件的 V5_SPEC.md 及 QA_REPORT.md。
 -->
-<title>浮生無界・萬世因果｜V9.16 現有 AI 整合修正版</title>
+<title>浮生無界・萬世因果｜V9.19 全場景消費與 NPC 自主服務版</title>
 <style>
 :root{color-scheme:dark;--bg:#101b22;--card:#1b2d35;--border:#3d5662;--gold:#f0c77e;--ink:#eee9d9;--muted:#b7c8cb;--green:#87cba5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Noto Sans TC",sans-serif}main{max-width:860px;margin:auto;padding:18px 15px 70px}h1{font-size:1.6rem;margin:0;color:var(--gold)}h2{font-size:1.14rem;margin:0 0 10px;color:#ffe1a3}h3{font-size:1rem;margin:12px 0 6px}.sub{color:var(--muted);font-size:.85rem}.panel{padding:17px;border:1px solid var(--border);background:var(--card);border-radius:15px;margin:12px 0}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,input,textarea,select{font:inherit;border-radius:9px}button{padding:10px 12px;cursor:pointer;border:1px solid #e3b56f;background:var(--gold);color:#172129;font-weight:730}button.alt{background:#334c59;color:white;border-color:#557180}button.ghost{background:transparent;color:var(--ink);border-color:#58717c}button.choice{display:block;width:100%;text-align:left;background:#314954;color:white;border-color:#59717a;margin:8px 0}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:3px solid white}textarea,input,select{background:#0e2028;color:white;border:1px solid #77909b;padding:10px;width:100%}textarea{min-height:116px}label{display:block;font-size:.94rem;margin:10px 0 5px}details>summary{cursor:pointer;font-weight:750;color:#e9c98e}details.panel[open]>summary{margin-bottom:12px}.status{border-left:4px solid #bdcdd4;border-radius:6px;background:#283f4c;padding:10px 12px;margin:10px 0}.ok{border-left-color:var(--green)}.bad{border-left-color:#f0908e}.story{white-space:pre-wrap;line-height:2.04;min-height:80px}.clock{font-weight:700;color:var(--gold);font-size:1.13rem}.entry{padding:7px 0;border-bottom:1px solid #435764;font-size:.9rem;white-space:pre-wrap}.hidden{display:none!important}#chapterArea{scroll-margin-top:12px}#topInfo{font-weight:650}#menuStatus{white-space:pre-wrap}.tag{display:inline-block;border:1px solid #5a7680;background:#283f47;padding:2px 8px;border-radius:999px;font-size:.8rem;margin:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.mutedline{font-size:.85rem;color:var(--muted)}.compact button{padding:9px 8px;font-size:.92rem}@media(max-width:540px){main{padding:12px 11px 80px}.panel{padding:14px}.row>*{flex-basis:140px}}
 
@@ -159,8 +159,8 @@ main{max-width:750px!important;padding:12px 12px 46px!important;margin-inline:au
 <label for="chosenClass">出生身分</label><select id="chosenClass"><option value="random">隨機身分</option></select>
 <label for="chosenWealth">家庭財力（決定私房錢、家產）</label><select id="chosenWealth"><option value="貧困">貧困</option><option value="平民">平實</option><option value="小康">小康</option><option value="富足">富裕</option><option value="權貴" selected>豪富</option></select>
 <label for="chosenSocial">社會地位（決定身份與影響力，與錢分開）</label><select id="chosenSocial"><option value="平民">庶民</option><option value="鄉紳">鄉紳</option><option value="士族">士族</option><option value="官宦">官宦</option><option value="王侯" selected>權貴／王侯</option></select>
-<label for="chosenSex">性別</label><select id="chosenSex"><option value="random">隨機</option><option value="男">男</option><option value="女">女</option></select></div><div class="row"><button type="button" id="rebirthCancel" class="alt">返回</button><button type="button" id="rebirthConfirm">確認開始這一世</button></div><p style="font-size:.78rem">如果已有正在進行的人生，確認時才會封存原人生並建立新人生；取消不影響存檔。</p></div></section><main><div id="libraryBackdrop"></div><aside aria-label="遊戲資料與設定" aria-modal="true" hidden="" id="libraryDrawer" role="dialog"><div class="libraryHeading"><strong>遊戲資料</strong><button aria-label="關閉選單" id="libraryClose" type="button">✕ 關閉</button></div><div class="libraryBody"><details class="panel" id="profilePanel"><summary>人物狀態、家庭與人物關係</summary><h3>角色能力與庫存</h3><div id="stats"></div><h3>修行與世界基準</h3><div id="cultivationStatus"></div><h3>家庭與子女</h3><div id="family"></div><h3>財產與商業</h3><div id="assets"></div><h3>家族／商號／NPC 資產負債表（持續更新）</h3><div id="balanceSheets" class="financeLedger"></div><h3>債務、裝備與家產</h3><div id="v5Detail"></div><h3>NPC 自主生活與記憶</h3><div class="npcCards" id="npcCards"></div><div id="npcs"></div><h3>世界事件</h3><div id="news"></div><h3>收支帳本</h3><div id="ledger"></div></details><details class="panel" id="chroniclePanel"><summary>事件經過與歷史摘要</summary><h3>最近 100 回完整劇情</h3><div id="history"></div><h3>事件帳本（最多 800 筆）</h3><div id="events"></div></details><details class="panel" id="mapPanel"><summary>當前世界地圖</summary><p class="sub">地圖是當前地域的道路示意。點目的地只填入行動文字，不會自動瞬移；按「推進下一回」才會檢查體力、道路與行程時間。</p><div aria-label="五處區域的示意地圖" class="atlas"><svg aria-hidden="true" preserveaspectratio="none" viewbox="0 0 600 330" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="mapGround" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#e8d8ae"></stop><stop offset="1" stop-color="#a9bd99"></stop></lineargradient><lineargradient id="mapSea"><stop stop-color="#8ec6bd"></stop><stop offset="1" stop-color="#507c96"></stop></lineargradient></defs><rect fill="url(#mapGround)" height="330" width="600"></rect><path d="M382 250 Q469 190 600 190 L600 330 L386 330 Z" fill="url(#mapSea)" opacity=".9"></path><path d="M0 202 Q105 185 160 210 T300 193 T446 221 L470 330 L0 330 Z" fill="#c4c797" opacity=".6"></path><path d="M64 0 L106 62 L138 17 L177 94 L222 7 L265 88 L292 18 L330 91 L355 0" fill="none" opacity=".43" stroke="#8a9880" stroke-linejoin="round" stroke-width="17"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".9" stroke="#d8e0b8" stroke-width="25"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".96" stroke="#75b0b5" stroke-width="15"></path><path d="M108 95 Q166 127 145 198 T310 183 T483 240" fill="none" opacity=".75" stroke="#90735a" stroke-dasharray="8 10" stroke-width="5"></path><g opacity=".45" stroke="#587a67" stroke-width="4"><path d="M30 180 l14 -31 l14 31z M68 178 l12 -24 l12 24z M387 130 l14 -31 l14 31z M412 143 l11 -25 l11 25z" fill="#5f9666"></path></g></svg><div class="mapPins" id="mapPins"></div><div class="atlasStamp">浮生州域圖 · 示意路程</div></div><div aria-live="polite" class="sub" id="travelHint"></div><div class="row" style="margin-top:12px"><button class="alt" id="mapBack" type="button">返回目前場景</button></div></details><details class="panel" id="settingsPanel"><summary>設定、備份與輪迴</summary><h3>舊版人生與復原</h3><p class="sub">列出此瀏覽器仍保存的舊版人生。切換前會保存目前人生快照；不會合併不同版本的劇情或覆寫舊版存檔。</p><div id="saveSourceList"></div><div class="row"><button type="button" class="alt" id="refreshSources">重新掃描舊人生</button><button type="button" class="alt" id="exportAllSaves">備份全部版本存檔</button></div><label>Cloudflare Worker 網址</label><input id="endpoint" placeholder="https://example.workers.dev"/><label>通行密語（只儲存在你的瀏覽器）</label><input autocomplete="off" id="password" type="password"/><div class="row" style="margin-top:10px"><button class="alt" id="config">儲存 AI 設定</button><button class="alt" id="check">測試 Worker 綁定</button><button class="alt" id="export">匯出 JSON 備份</button><button class="alt" id="import">匯入 JSON 備份</button></div><div class="row" style="margin-top:10px"><button class="alt" id="archive">結束並封存本世</button><button class="ghost" id="discard">結束且不保留本世</button><button class="alt" id="reincarnate">下一世（先封存）</button><button class="alt" id="continueHeir">由成年子女承續人生</button></div><input accept=".json,application/json" class="hidden" id="file" type="file"/><p class="sub">刪除本世只移除 V5 正在遊玩的人生，不動 V3 舊版與已下載的 JSON。已封存人生會保留在 V5 輪迴史；死亡並不保證所有資產可自動繼承。</p></details></div></aside>
-<div class="gameHead"><div><h1>浮生無界 <small>· 萬世因果</small></h1><div class="sub">隨機人生 · 故事主導 · 每回一個行動 <strong style="color:#ffe09d;border:1px solid #b48c50;border-radius:5px;padding:2px 5px;white-space:nowrap">修正版本 V9.16 · AI 與場景整合</strong></div></div><span class="versionToken">直式 · 三種重生模式</span><button aria-controls="libraryDrawer" aria-expanded="false" aria-haspopup="dialog" id="libraryToggle" type="button">☰ 遊戲資料</button></div>
+<label for="chosenSex">性別</label><select id="chosenSex"><option value="random">隨機</option><option value="男">男</option><option value="女">女</option></select></div><div class="row"><button type="button" id="rebirthCancel" class="alt">返回</button><button type="button" id="rebirthConfirm">確認開始這一世</button></div><p style="font-size:.78rem">如果已有正在進行的人生，確認時才會封存原人生並建立新人生；取消不影響存檔。</p></div></section><main><div id="libraryBackdrop"></div><aside aria-label="遊戲資料與設定" aria-modal="true" hidden="" id="libraryDrawer" role="dialog"><div class="libraryHeading"><strong>遊戲資料</strong><button aria-label="關閉選單" id="libraryClose" type="button">✕ 關閉</button></div><div class="libraryBody"><details class="panel" id="profilePanel"><summary>人物狀態、家庭與人物關係</summary><h3>角色能力與庫存</h3><div id="stats"></div><h3>修行與世界基準</h3><div id="cultivationStatus"></div><h3>家庭與子女</h3><div id="family"></div><h3>財產與商業</h3><div id="assets"></div><h3>家族／商號／NPC 資產負債表（持續更新）</h3><div id="balanceSheets" class="financeLedger"></div><h3>債務、裝備與家產</h3><div id="v5Detail"></div><h3>NPC 自主生活與記憶</h3><div class="npcCards" id="npcCards"></div><div id="npcs"></div><h3>世界事件</h3><div id="news"></div><h3>收支帳本</h3><div id="ledger"></div></details><details class="panel" id="chroniclePanel"><summary>事件經過與歷史摘要</summary><h3>本機保存最近 800 回完整劇情（畫面僅顯示最近 100 回）</h3><div id="history"></div><h3>事件帳本（本機最近 1600 筆，畫面僅顯示最近 90 筆）</h3><div id="events"></div></details><details class="panel" id="mapPanel"><summary>當前世界地圖</summary><p class="sub">地圖是當前地域的道路示意。點目的地只填入行動文字，不會自動瞬移；按「推進下一回」才會檢查體力、道路與行程時間。</p><div aria-label="五處區域的示意地圖" class="atlas"><svg aria-hidden="true" preserveaspectratio="none" viewbox="0 0 600 330" xmlns="http://www.w3.org/2000/svg"><defs><lineargradient id="mapGround" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#e8d8ae"></stop><stop offset="1" stop-color="#a9bd99"></stop></lineargradient><lineargradient id="mapSea"><stop stop-color="#8ec6bd"></stop><stop offset="1" stop-color="#507c96"></stop></lineargradient></defs><rect fill="url(#mapGround)" height="330" width="600"></rect><path d="M382 250 Q469 190 600 190 L600 330 L386 330 Z" fill="url(#mapSea)" opacity=".9"></path><path d="M0 202 Q105 185 160 210 T300 193 T446 221 L470 330 L0 330 Z" fill="#c4c797" opacity=".6"></path><path d="M64 0 L106 62 L138 17 L177 94 L222 7 L265 88 L292 18 L330 91 L355 0" fill="none" opacity=".43" stroke="#8a9880" stroke-linejoin="round" stroke-width="17"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".9" stroke="#d8e0b8" stroke-width="25"></path><path d="M0 292 Q92 218 146 253 T270 231 T378 238 T543 320" fill="none" opacity=".96" stroke="#75b0b5" stroke-width="15"></path><path d="M108 95 Q166 127 145 198 T310 183 T483 240" fill="none" opacity=".75" stroke="#90735a" stroke-dasharray="8 10" stroke-width="5"></path><g opacity=".45" stroke="#587a67" stroke-width="4"><path d="M30 180 l14 -31 l14 31z M68 178 l12 -24 l12 24z M387 130 l14 -31 l14 31z M412 143 l11 -25 l11 25z" fill="#5f9666"></path></g></svg><div class="mapPins" id="mapPins"></div><div class="atlasStamp">浮生州域圖 · 示意路程</div></div><div aria-live="polite" class="sub" id="travelHint"></div><div class="row" style="margin-top:12px"><button class="alt" id="mapBack" type="button">返回目前場景</button></div></details><details class="panel" id="settingsPanel"><summary>設定、備份與輪迴</summary><h3>舊版人生與復原</h3><p class="sub">列出此瀏覽器仍保存的舊版人生。切換前會保存目前人生快照；不會合併不同版本的劇情或覆寫舊版存檔。</p><div id="saveSourceList"></div><div class="row"><button type="button" class="alt" id="refreshSources">重新掃描舊人生</button><button type="button" class="alt" id="exportAllSaves">備份全部版本存檔</button></div><label>Cloudflare Worker 網址</label><input id="endpoint" placeholder="https://example.workers.dev"/><label>通行密語（只儲存在你的瀏覽器）</label><input autocomplete="off" id="password" type="password"/><div class="row" style="margin-top:10px"><button class="alt" id="config">儲存 AI 設定</button><button class="alt" id="check">測試 Worker 綁定</button><button class="alt" id="export">匯出 JSON 備份</button><button class="alt" id="import">匯入 JSON 備份</button></div><div class="row" style="margin-top:10px"><button class="alt" id="archive">結束並封存本世</button><button class="ghost" id="discard">結束且不保留本世</button><button class="alt" id="reincarnate">下一世（先封存）</button><button class="alt" id="continueHeir">由成年子女承續人生</button></div><input accept=".json,application/json" class="hidden" id="file" type="file"/><p class="sub">刪除本世只移除 V5 正在遊玩的人生，不動 V3 舊版與已下載的 JSON。已封存人生會保留在 V5 輪迴史；死亡並不保證所有資產可自動繼承。</p></details></div></aside>
+<div class="gameHead"><div><h1>浮生無界 <small>· 萬世因果</small></h1><div class="sub">隨機人生 · 故事主導 · 每回一個行動 <strong style="color:#ffe09d;border:1px solid #b48c50;border-radius:5px;padding:2px 5px;white-space:nowrap">修正版本 V9.19 · 商店與 NPC 自主行動</strong></div></div><span class="versionToken">直式 · 三種重生模式</span><button aria-controls="libraryDrawer" aria-expanded="false" aria-haspopup="dialog" id="libraryToggle" type="button">☰ 遊戲資料</button></div>
 <details class="panel obsoleteRules"><summary>長期推演：年齡、健康、家庭與世界自主運作</summary><p class="sub">每年採 360 天，短期逐日模擬；跨年長期推進採分年近似結算，並不等同逐日精確模擬。推演可能提早中斷，不保證一定存活或完成事業。</p><div class="row"><div><label>經過幾年</label><input id="years" max="100" min="0" type="number" value="0"/></div><div><label>再經過幾天</label><input id="days" max="359" min="0" type="number" value="0"/></div></div><button class="alt" id="jump" style="margin-top:10px">確定推演時間</button></details>
 <nav aria-label="遊戲快捷導覽" class="obsoleteRules" id="bottomNav"><button class="active" data-nav="artScene" type="button"><span>🏞️</span>場景</button><button data-nav="mapPanel" type="button"><span>🧭</span>地圖</button><button data-nav="chapterArea" type="button"><span>📜</span>劇情</button><button data-nav="worldPanel" type="button"><span>⚒️</span>行動</button><button data-nav="profilePanel" type="button"><span>👥</span>人物</button><button data-nav="settingsPanel" type="button"><span>⚙️</span>設定</button></nav><section class="panel" id="menu"><h2>人生主選單</h2><div class="offlineControls"><label for="offlineMode">敘事模式</label><select id="offlineMode"><option value="auto">自動（有網路優先 AI，斷網用本機敘事）</option><option value="offline">永遠離線（只用本機規則）</option><option value="online">只使用線上 AI（失敗則不執行）</option></select><div class="mutedline" id="offlineStatus">首次須連線開啟一次才能安裝離線網頁；存檔保存在本裝置瀏覽器。</div><button class="alt" type="button" id="cacheOffline">安裝／更新離線資源</button></div><div class="sub" id="menuStatus"></div><div class="row" style="margin-top:10px"><button id="continue">繼續人生</button><button class="alt" id="new">選擇重生方式</button><button class="alt" id="backup">匯出完整備份</button></div><p class="sub">三種重生模式共用同一宇宙；本版首次進入只複製先前直式存檔，保留原檔。新人生會重新抽選年代、文化、國度、地區、家庭、天賦及開場事件。</p></section><section class="panel" id="heroPanel"><div id="topInfo">尚未開始人生</div><div class="clock" id="clock">—</div><div class="sub" id="location"></div><div class="mutedline" id="quickStats"></div><div class="status" id="turnDelta95">本回狀態變化：尚未執行</div>
 <div aria-live="polite" class="resourceStrip">
@@ -1905,7 +1905,7 @@ function v8Intent(st,raw){
  if(/^(?:財務總覽|家族身家|總資產|產業鏈|生計紀錄|生產紀錄|經濟系統)$|^(?:查看|查詢|檢視)(?:全家資產|家族身家|財務總覽|總資產|產業鏈|生計|生產紀錄|經濟系統)|^(?:開設工坊|創辦工坊|設立工坊|製作|生產|加工|燒製|鍛造|播種|耕種糧食|種植糧食|栽種棉麻|種植棉麻|收割作物|農田收成|收穫農作物|收成棉麻|僱用鏢師|雇鏢師|護鏢委託|商號雇員薪資|發放工錢|支付工資|查詢契約|契約總覽|我的契約|查看契約|學館教書|教授學生|教學授課|代人送貨|運輸接案|承運商貨)/.test(a))return {code:'v8Economy',type:'economy'};
  return null;
 }
-function rule(st,code,targetId,minutes=30){if(code==='v915TravelVenue')return v915TravelVenue(st);if(code==='v914Shop')return v914Shop(st,st.pendingAction||'');if(code==='v912Venue')return v912Venue(st,st.pendingAction||'');if(code==='v911Venue')return v911Venue(st,st.pendingAction||'');if(code==='v910EndLife')return v910EndLife(st);if(code==='v99Enter')return v99Enter(st,st.pendingAction||'');if(code==='v99Inquiry')return v99Inquiry(st,st.pendingAction||'');if(code==='v97Continue'){advance(st,30);return {ok:true,verified:true,kind:'劇情推進',text:'時間推進半小時；在'+st.location+'繼續生活。既有交易不會重複扣款。'}}if(code==='v97Stay'){
+function rule(st,code,targetId,minutes=30){if(code==='v919Shop')return v919Shop(st,st.pendingAction||'');if(code==='v915TravelVenue')return v915TravelVenue(st);if(code==='v914Shop')return v914Shop(st,st.pendingAction||'');if(code==='v912Venue')return v912Venue(st,st.pendingAction||'');if(code==='v911Venue')return v911Venue(st,st.pendingAction||'');if(code==='v910EndLife')return v910EndLife(st);if(code==='v99Enter')return v99Enter(st,st.pendingAction||'');if(code==='v99Inquiry')return v99Inquiry(st,st.pendingAction||'');if(code==='v97Continue'){advance(st,30);return {ok:true,verified:true,kind:'劇情推進',text:'時間推進半小時；在'+st.location+'繼續生活。既有交易不會重複扣款。'}}if(code==='v97Stay'){
   const d=st.conversationDeals92?.active;
   if(d?.kind==='lodging'&&d.status==='in_progress'&&!d.stayedNight){
    d.stayedNight=true;const span=advance(st,1410);const b=v91Town(st).businesses91.find(x=>x.id===d.shopId);const bill=v911Checkout(st,d,b);if(!bill.ok)return bill;return {ok:true,verified:true,kind:'客棧留宿',minutes:span.minutes,text:'你在'+d.shopName+'留宿一晚後結帳。'+bill.text};
@@ -2269,7 +2269,7 @@ function discoverPerson(st,action,selectedId){
 function cleanUnmetNPCs(st){
  st.npcs=Array.isArray(st.npcs)?st.npcs:[];
  // 已有對話記憶、配偶、血親或重要關聯的人物保留；未遇見的預設路人從清單移除。
- st.npcs=st.npcs.filter(n=>String(n.id||'').startsWith('v84-')||n.familyRole||n.id===st.household?.partnerId||n.encountered||(!/^n[0-7]$/.test(String(n.id))&&(n.memory||[]).length>0));
+ st.npcs=st.npcs.filter(n=>String(n.id||'').startsWith('v84-')||String(n.id||'').startsWith('v918-entertainer-')||n.workplaceId||n.familyRole||n.id===st.household?.partnerId||n.encountered||(!/^n[0-7]$/.test(String(n.id))&&(n.memory||[]).length>0));
  for(const n of st.npcs){if(n.familyRole||String(n.id||'').startsWith('v84-'))n.encountered=!!n.encountered;else n.encountered=true;}
  st.npcSequence=Math.max(st.npcSequence||0,st.npcs.length);
 }
@@ -2582,7 +2582,7 @@ function worldAction(st,code){const d=discovery(st),h=setupHiddenWorld(st),layer
  const adv=advance(st,spent);emit(st,'世界探索',text,{action:code,elapsed:adv.minutes,verified:true});return {ok:true,text:text+(adv.dead?'；過程中角色死亡。':''),minutes:adv.minutes,verified:true,kind:'世界探索'};
 }
 
-function publicStoryState(st){let v=clone(st),d=discovery(st);if(v.hiddenWorld&&!d.knownEntrances.some(x=>x.name===v.hiddenWorld.entryName)){delete v.hiddenWorld;}if(d.realm==='upper'&&!d.knownMortalWorld){delete v.birth.originCountry;}delete v.seed;return v}
+function publicStoryState(st){let v=clone(st),d=discovery(st);if(v.hiddenWorld&&!d.knownEntrances.some(x=>x.name===v.hiddenWorld.entryName)){delete v.hiddenWorld;}if(d.realm==='upper'&&!d.knownMortalWorld){delete v.birth.originCountry;}delete v.seed;v.chapterHistory=(v.chapterHistory||[]).slice(-6).map(h=>({chapter:h.chapter,at:h.at,action:String(h.action||'').slice(0,300),story:String(h.story||'').slice(0,1300)}));v.events=(v.events||[]).slice(-12);v.news=(v.news||[]).slice(-12);for(const n of v.npcs||[])if(Array.isArray(n.memory))n.memory=n.memory.slice(-4);return v}
 function birthScenario(st){return rebirthSetup(st,{mode:'basic'})}
 function birthName(st){return makePersonName(st,st.sex||'女',null,st._nameUsed)}
 function establishFamilyAndBackground(st){
@@ -2956,6 +2956,27 @@ function relevantMemories(st,action){
  const known=st.npcs.filter(n=>n.encountered&&n.alive&&n.home===st.location).slice(0,5);
  return {target,known,history:(st.society?.history||[]).filter(x=>x.location===st.location).slice(-3)};
 }
+// V9.18: Search the complete on-device 800-turn log. Only relevant excerpts go over the network.
+function v917Recall(st,action){
+ const all=Array.isArray(st.chapterHistory)?st.chapterHistory:[];
+ const query=String(action||'').trim();
+ const speaker=activeSpeaker(st);
+ const stop=new Set(['我','你','他','她','的','了','是','在','有','要','想','讓','把','說','現在','就是','還有','然後','可以','之前','這個','那個']);
+ const words=new Set((query.match(/[\u3400-\u9fff]{2,6}|[A-Za-z0-9]{2,}/g)||[]).filter(w=>!stop.has(w)));
+ for(const n of (st.npcs||[]))if(query.includes(n.name)||(speaker&&speaker.id===n.id))words.add(n.name);
+ const pairs=[];for(let i=0;i<query.length-1;i++){const w=query.slice(i,i+2);if(/[\u3400-\u9fff]{2}/.test(w)&&!stop.has(w))pairs.push(w)}
+ const items=all.slice(0,-1).map((h,i)=>{
+   const a=String(h.action||''), story=String(h.story||''), text=a+' '+story.slice(0,1100);
+   let score=0;for(const w of words)if(text.includes(w))score+=w.length>=3?4:2;
+   for(const w of pairs)if(text.includes(w))score+=1;
+   if(speaker&&text.includes(speaker.name))score+=5;
+   if(/約定|承諾|答應|同意|期限|契約|銀兩|金元寶|懷孕|婚約|賒帳|借款|十個月|一年後/.test(text)&&/之前|上次|記得|約定|承諾|答應|同意|多久|幾個月|懷孕|金元寶|銀兩/.test(query))score+=3;
+   return {h,i,score};
+ }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||b.i-a.i).slice(0,9).sort((a,b)=>a.i-b.i);
+ const selected=items.map(({h})=>({chapter:h.chapter,at:h.at,playerSaid:String(h.action||'').slice(0,230),narrative:String(h.story||'').slice(0,650)}));
+ const recent=all.slice(-4).map(h=>({chapter:h.chapter,at:h.at,playerSaid:String(h.action||'').slice(0,230),narrative:String(h.story||'').slice(0,500)}));
+ return {totalStored:all.length,relevant:selected,recent,rule:'玩家說過的要求不是NPC已同意的承諾。區分玩家提出、NPC確認、規則執行與尚未發生。舊劇情不能覆蓋帳本或已核驗狀態。時間跳躍後依事件原始時間判讀，不要把舊話說成剛剛說過。'};
+}
 function contextualOpening(st){
  const b=st.birth||{},f=st.familyEstate||{},s=st.society||{},near=st.npcs.filter(n=>n.encountered&&n.alive&&n.home===st.location);
  const relative=st.npcs.find(n=>n.alive&&n.familyRole&&(n.familyRole==='配偶'||n.familyRole==='父親'||n.familyRole==='母親'||n.familyRole==='兄弟'||n.familyRole==='姊妹'));
@@ -3009,7 +3030,7 @@ function newLife(archives=[],options={}){let st={schema:4,id:'life-'+Date.now()+
 function arr(v){return Array.isArray(v)?v:[]}
 function migrate(x){if(!x||typeof x!=='object'||typeof x.id!=='string'||!Array.isArray(x.events)||!Array.isArray(x.npcs))throw Error('缺少有效人生 ID、NPC 或事件帳本');let z=clone(x),legacy=nu(z.schema,0)<4;
  z.schema=5;z.seed=nu(z.seed,z.rng||1234567)>>>0;z.chapter=Math.max(0,Math.floor(nu(z.chapter)));z.hp=cap(nu(z.hp,100),0,10000);z.hpMax=Math.max(1,nu(z.hpMax,100));z.staminaMax=Math.max(1,nu(z.staminaMax,100));z.stamina=cap(nu(z.stamina,70),0,z.staminaMax);z.hunger=nu(z.hunger,0);z.food=Math.max(0,nu(z.food,12));z.money=Math.max(0,nu(z.money,0));z.ageDays=Math.max(0,nu(z.ageDays,nu(z.age)*YEAR));z.age=Math.floor(z.ageDays/YEAR);z.year=Math.floor(nu(z.year,1));z.day=cap(Math.floor(nu(z.day,1)),1,YEAR);z.minute=cap(Math.floor(nu(z.minute,480)),0,1439);z.health=nu(z.health,100);z.strength=nu(z.strength,35);z.strengthMax=Math.max(z.strength,nu(z.strengthMax,100));z.knowledge=nu(z.knowledge,20);z.knowledgeMax=Math.max(z.knowledge,nu(z.knowledgeMax,100));z.illness=nu(z.illness);z.injury=nu(z.injury);z.alive=z.alive!==false;z.setting=z.setting||'古代民間';z.location=z.location||'青溪村';z.trait=z.trait||'凡體';z.sex=z.sex||'未知';z.name=z.name||'無名';
- z.inventory={wood:0,ore:0,tools:0,herbs:0,...(z.inventory||{})};z.skills={learning:0,farming:0,crafting:0,combat:0,trade:0,...(z.skills||{})};z.cultivation={aptitude:0,qi:0,level:0,progress:0,...(z.cultivation||{})};z.assets=arr(z.assets).map(a=>{let t=a.kind||a.type||'財產';t=t==='簡易住屋'||t==='house'?'住屋':t==='小田'||t==='field'?'田地':t;return {...a,id:a.id||'asset-'+Math.random().toString(36).slice(2,9),kind:t,owner:a.owner||z.id}});z.farm={progress:cap(nu(z.farmProgress,0)*33,0,99),harvestable:0,...(z.farm||{})};z.business=z.business||null;z.household={partnerId:null,married:false,engaged:false,dependents:[],pregnancy:null,...(z.household||{})};z.familyEstate=z.familyEstate||null;z.household.dependents=arr(z.household.dependents).map(k=>({...k,ageDays:nu(k.ageDays,nu(k.age)*YEAR),health:nu(k.health,90),learning:nu(k.learning,0),bond:nu(k.bond,50)}));z.world={scarcity:nu(z.market?.scarcity,0),grainPrice:nu(z.market?.foodPrice,2),season:1,tick:0,...(z.world||{})};if(z.world.priceModel!=='v85-silver'){z.world.grainPrice=0.07;z.world.priceModel='v85-silver';z.news=arr(z.news);z.news.push({at:now(z),text:'舊版銀兩糧價已校正為每份約70文；原有私人現銀數量保留，未擅自扣除。'});}z.world.grainPrice=cap(nu(z.world.grainPrice,0.07),0.035,0.18);z.ledger=arr(z.ledger).length?z.ledger:arr(z.walletLedger).map(e=>({at:e.at||'',amount:nu(e.amount),reason:e.reason||e.why||'舊版紀錄',balance:nu(e.balance)}));z.events=arr(z.events).slice(-800).map(e=>({...e,type:e.type||e.kind||'舊版事件',description:e.description||((e.action||'')+'：'+(e.result||''))}));z.chapterHistory=arr(z.chapterHistory).slice(-100);z.news=arr(z.news).length?z.news:arr(z.worldNews);z.choices=arr(z.choices);z.choiceSource=z.choiceSource||'舊版選項';z.archives=arr(z.archives);
+ z.inventory={wood:0,ore:0,tools:0,herbs:0,...(z.inventory||{})};z.skills={learning:0,farming:0,crafting:0,combat:0,trade:0,...(z.skills||{})};z.cultivation={aptitude:0,qi:0,level:0,progress:0,...(z.cultivation||{})};z.assets=arr(z.assets).map(a=>{let t=a.kind||a.type||'財產';t=t==='簡易住屋'||t==='house'?'住屋':t==='小田'||t==='field'?'田地':t;return {...a,id:a.id||'asset-'+Math.random().toString(36).slice(2,9),kind:t,owner:a.owner||z.id}});z.farm={progress:cap(nu(z.farmProgress,0)*33,0,99),harvestable:0,...(z.farm||{})};z.business=z.business||null;z.household={partnerId:null,married:false,engaged:false,dependents:[],pregnancy:null,...(z.household||{})};z.familyEstate=z.familyEstate||null;z.household.dependents=arr(z.household.dependents).map(k=>({...k,ageDays:nu(k.ageDays,nu(k.age)*YEAR),health:nu(k.health,90),learning:nu(k.learning,0),bond:nu(k.bond,50)}));z.world={scarcity:nu(z.market?.scarcity,0),grainPrice:nu(z.market?.foodPrice,2),season:1,tick:0,...(z.world||{})};if(z.world.priceModel!=='v85-silver'){z.world.grainPrice=0.07;z.world.priceModel='v85-silver';z.news=arr(z.news);z.news.push({at:now(z),text:'舊版銀兩糧價已校正為每份約70文；原有私人現銀數量保留，未擅自扣除。'});}z.world.grainPrice=cap(nu(z.world.grainPrice,0.07),0.035,0.18);z.ledger=arr(z.ledger).length?z.ledger:arr(z.walletLedger).map(e=>({at:e.at||'',amount:nu(e.amount),reason:e.reason||e.why||'舊版紀錄',balance:nu(e.balance)}));z.events=arr(z.events).slice(-1600).map(e=>({...e,type:e.type||e.kind||'舊版事件',description:e.description||((e.action||'')+'：'+(e.result||''))}));z.chapterHistory=arr(z.chapterHistory).slice(-800);z.news=arr(z.news).length?z.news:arr(z.worldNews);z.choices=arr(z.choices);z.choiceSource=z.choiceSource||'舊版選項';z.archives=arr(z.archives);
  z.npcs=arr(z.npcs).map((n,i)=>({...n,id:n.id||'n'+i,age:nu(n.age,25),alive:n.alive!==false,health:nu(n.health,90),money:nu(n.money,10),trust:nu(n.trust),fond:nu(n.fond),obsession:nu(n.obsession),goal:n.goal||'維持生活',nature:n.nature||'謹慎',bond:n.bond||(n.relation==='交往中'?'交往':n.relation==='配偶'?'配偶':n.relation==='分開'?'分開':'相識'),activity:n.activity||'日常生活',memory:arr(n.memory).slice(-30),tick:nu(n.tick,0)}));cleanUnmetNPCs(z);if(z.household.married&&z.household.partnerId){let p=z.npcs.find(n=>n.id===z.household.partnerId);if(p)p.bond='配偶'}
  if(!z.worldDiscovery)z.worldDiscovery={realm:z.birth?.realm||'mortal',knowledge:0,knownEntrances:[],hasTeacher:false,knowsCultivation:!!z.cultivation?.arts?.length,knownMortalWorld:true,cultivationUnlocked:!!z.cultivation?.arts?.length||z.cultivation?.level>0||z.cultivation?.qi>0};v5Ensure(z);if(legacy){z.news.push({at:now(z),text:'已從 V3 系列複製人生到 V4；舊版本原存檔未被覆蓋。'});if(z.household.partnerId&&!z.npcs.some(n=>n.id===z.household.partnerId))z.household.partnerId=null}familyCultivationSchool(z);ensureRealmResourcePolicy(z);establishRealmFormation(z,true);v85WarmWorld(z);v971EnsureVenueResidents(z);for(const n of z.npcs)if(n.alive)npcWorldFormation(z,n,true);return z}
 // All V5 data is additional; V4 snapshots remain readable and intact.
@@ -3069,11 +3090,11 @@ async function v97Read(key='main'){
 }
 function v97Compact(st){
  // Keep game-critical state, cap high-volume narrative logs; NEVER discard ownership, people, stock or accounts.
- st.events=Array.isArray(st.events)?st.events.slice(-250):[];
+ st.events=Array.isArray(st.events)?st.events.slice(-1600):[];
  st.news=Array.isArray(st.news)?st.news.slice(-80):[];
- st.chapterHistory=Array.isArray(st.chapterHistory)?st.chapterHistory.slice(-35):[];
+ st.chapterHistory=Array.isArray(st.chapterHistory)?st.chapterHistory.slice(-800):[];
  if(st.society){st.society.history=Array.isArray(st.society.history)?st.society.history.slice(-80):[];st.society.rumors=Array.isArray(st.society.rumors)?st.society.rumors.slice(-60):[]}
- for(const n of st.npcs||[]){if(Array.isArray(n.memory))n.memory=n.memory.slice(-18)}
+ for(const n of st.npcs||[]){if(Array.isArray(n.memory))n.memory=n.memory.slice(-800)}
  if(st.world?.towns)for(const t of Object.values(st.world.towns)){if(t&&Array.isArray(t.ledger))t.ledger=t.ledger.slice(-120)}
  return st;
 }
@@ -3128,8 +3149,8 @@ async function transaction(fn){
 function ensureBackup(raw,key){if(!localStorage.getItem(key))localStorage.setItem(key,raw)}
 // V9.1.1: Delayed save hydration. World constants must exist before migrate()/v85WarmWorld().
 
-function chapter(st,action,text,notes,options=null,source='系統建議'){st.chapter++;st.story='【你的行動／發言】'+action+'\n\n'+text;st.choices=options||sceneChoices(st);st.choiceSource=source;st.chapterHistory.push({chapter:st.chapter,at:now(st),action,story:st.story});if(st.chapterHistory.length>100)st.chapterHistory.shift();emit(st,'回合',`第 ${st.chapter} 回：${action.slice(0,130)}`,{result:notes});return st}
-function sceneChoices(st){if(st.journey)return ['繼續趕路','折返'];const dealChoices=v92Choices(st);if(dealChoices)return dealChoices;if(st.career?.employed||((st.jobLeads||[]).some(j=>j.status==='尚未應徵'&&j.hub===v81Hub(st))))return employmentChoices(st);const v8=v8SceneChoices(st);if(v8)return v8;if(st.journey)return ['繼續趕路前往'+st.journey.destination,'在途中的安全地點休息'];const speaker=activeSpeaker(st);if(speaker)return [`繼續向${speaker.name}追問剛才的話題`,`聽聽${speaker.name}接下來怎麼說`];let here=st.npcs.filter(n=>n.alive&&n.encountered&&n.home===st.location);let b=st.birth||{};if(st.chapter===0&&st.age>=8){if(b.standing==='貧困')return ['查看家中的口糧和可用工錢','向附近可信的人打聽可做的生計'];if(b.standing==='權貴'||b.standing==='富足')return ['先核對家族公產和自己能動用的資源','詢問親族近期的家務或外界變化'];}if(st.age<7)return ['觀察照顧我的人正做什麼','試著發出聲音，表達眼前的需要'];if(st.hp<35)return ['查看自己的傷勢，想辦法向附近的人求助','檢查身邊可用的物品和遮蔽處'];if(st.food<3)return ['詢問目前所在地的食物來源與價格','查看自己的口糧，想想今天該如何維持生活'];if(b.hook&&st.chapter<3)return [`追查：${b.hook}`,'先看看周圍的人對這件事有何反應'];if(here.length)return [`我問${here[0].name}：「你現在在忙什麼？」`,'留在原地觀察街巷與行人動靜'];return ['仔細觀察眼前的環境與動靜','想想今天最需要處理的一件事']}
+function chapter(st,action,text,notes,options=null,source='系統建議'){st.chapter++;st.story='【你的行動／發言】'+action+'\n\n'+text;st.choices=options||sceneChoices(st);st.choiceSource=source;st.chapterHistory.push({chapter:st.chapter,at:now(st),action,story:st.story});if(st.chapterHistory.length>800)st.chapterHistory.shift();emit(st,'回合',`第 ${st.chapter} 回：${action.slice(0,130)}`,{result:notes});return st}
+function sceneChoices(st){const shop=v912Shop(st);if(shop){const record=v919Current(st,shop);if(record?.status==='in_progress')return ['繼續服務','查看本店帳單'];const cat=v919Category(shop);return cat==='performance'?['有哪些姑娘，叫什麼名字？','介紹你們的歌舞與接待安排']:['掌櫃，推薦本店的商品或服務','介紹商品目錄與價格'];}if(st.journey)return ['繼續趕路','折返'];const dealChoices=v92Choices(st);if(dealChoices)return dealChoices;if(st.career?.employed||((st.jobLeads||[]).some(j=>j.status==='尚未應徵'&&j.hub===v81Hub(st))))return employmentChoices(st);const v8=v8SceneChoices(st);if(v8)return v8;if(st.journey)return ['繼續趕路前往'+st.journey.destination,'在途中的安全地點休息'];const speaker=activeSpeaker(st);if(speaker)return [`繼續向${speaker.name}追問剛才的話題`,`聽聽${speaker.name}接下來怎麼說`];let here=st.npcs.filter(n=>n.alive&&n.encountered&&n.home===st.location);let b=st.birth||{};if(st.chapter===0&&st.age>=8){if(b.standing==='貧困')return ['查看家中的口糧和可用工錢','向附近可信的人打聽可做的生計'];if(b.standing==='權貴'||b.standing==='富足')return ['先核對家族公產和自己能動用的資源','詢問親族近期的家務或外界變化'];}if(st.age<7)return ['觀察照顧我的人正做什麼','試著發出聲音，表達眼前的需要'];if(st.hp<35)return ['查看自己的傷勢，想辦法向附近的人求助','檢查身邊可用的物品和遮蔽處'];if(st.food<3)return ['詢問目前所在地的食物來源與價格','查看自己的口糧，想想今天該如何維持生活'];if(b.hook&&st.chapter<3)return [`追查：${b.hook}`,'先看看周圍的人對這件事有何反應'];if(here.length)return [`我問${here[0].name}：「你現在在忙什麼？」`,'留在原地觀察街巷與行人動靜'];return ['仔細觀察眼前的環境與動靜','想想今天最需要處理的一件事']}
 // V9.11 人物語氣檔：由人物 ID / 性格 / 職業穩定導出；寫入存檔，避免每回合改人設。
 const V96_VOICES={
  '謹慎':{pace:'短句，先說可核實的事',habit:'此事須有憑據',values:'安全與承諾',taboo:'無憑無據的保證',greeting:'先把話說清楚'},
@@ -4234,7 +4255,8 @@ function v99Welcome(st,shop){
   '丹藥坊':'藥師在櫃檯介紹現有丹藥，價格按本界貨幣計算。'
  };
  const defaultText='店員迎接你進入櫃檯區，介紹本店可提供的商品與服務。';
- return (host?host.name+'（'+host.job+'）向你招呼。':'店家接待你。')+(greeting[shop.kind]||defaultText);
+ const offer=v919Recommendation(st,shop,host);
+ return (host?host.name+'（'+host.job+'）向你招呼。':'店家接待你。')+(greeting[shop.kind]||defaultText)+offer;
 }
 function v99Enter(st,action){
  if(st.journey)return v915TravelVenue(st);
@@ -4260,11 +4282,11 @@ function v99Inquiry(st,action){
  const cast=v98EnsureShopCast(st,shop),host=cast.find(n=>/掌櫃|店主|主人|醫師/.test(n.job||''))||cast[0];
  if(host){host.encountered=true;keepConversation(st,host,action,'詢價／菜單');}
  const amount=v92Count(action)||1;
- let detail='本店經營'+(shop.product||shop.kind)+'；目前有 '+Math.max(0,Number(shop.stock)||0)+' 件可售存貨，標示單價 '+(shop.retail??'待核價')+'。';
+ let detail='本店可供介紹的品項：'+v918CatalogLine(st,shop)+'。';
  if(/青樓|藝館/.test(shop.kind)){
   const staff=v98EnsureShopCast(st,shop).filter(n=>n.alive!==false&&n.age>=18&&/成年歌舞接待/.test(n.job||'')).length;const base=v91Price(st,.08);const n=amount;
   detail='歌舞／席間接待參考費用每位 '+base+'，'+n+' 位合計 '+(Math.round(base*n*100)/100)+'（'+(v91Realm(st)==='mortal'?'銀兩值':'下品靈石')+'）。目前登記工作人數 '+staff+'；能否安排仍須由現場成年工作人員自願且有空檔，不因詢價自動扣款。';
- }else if(/酒樓|茶館/.test(shop.kind))detail='今日提供'+(shop.product||'茶點餐食')+'；基本單價約 '+(shop.retail??v91Price(st,.12))+'（本界錢袋單位）。點餐後才會驗資並從店內存貨結算。';
+ }else if(/酒樓|茶館/.test(shop.kind))detail='今日菜單：'+v918CatalogLine(st,shop)+'。點餐後會按實際結算。';
  else if(shop.kind==='客棧')detail='客房參考單價 '+v91Price(st,.13)+'（本界錢袋單位），先查空房、入住才會收費。';
  else if(shop.kind==='醫館')detail='看診費及藥價會依診療與藥品實際項目另行結算，未看診不收費。';
  return {ok:true,verified:true,kind:'場內詢價',minutes:0,text:'【'+shop.name+'】'+(host?host.name+'（'+host.job+'）':'店員')+'答覆：'+detail};
@@ -4284,12 +4306,12 @@ function v912Intent(st,raw){
  // Leaving / moving / explicit unrelated game actions still follow their own rules.
  if(/^(?:離開|走出|出去|回家|前往|去碼頭|去市集|去街上|前往宗門|返回)/.test(a))return null;
  if(v99EntryIntent(a))return 'v912Venue';
+ if(/(?:介紹|推薦|推銷|賣什麼|有什麼商品|有什麼貨|菜單|茶單|有哪些商品|商品清單|貨品清單|商品目錄|幾位姑娘|幾個姑娘|多少姑娘|幾個女孩|多少小姐|幾位小姐|姑娘名字|姑娘名單|都有誰|人員名冊)/.test(a))return 'v912Venue';
  if(/(?:叫什麼名字|什麼名字|如何稱呼|自我介紹|介紹.*(?:姑娘|人員|你們|她們)|名單|有哪些人|有幾個|有幾位|誰在這|誰來了)/.test(a))return 'v912Venue';
  if(/(?:快點|快些|趕快|催促|開始吧|繼續|接著|下一步|隨便|照辦|好了|不用問|讓她們來|叫她們來|帶她們來|進包廂|入座|接著聊|跟她聊天)/.test(a))return 'v912Venue';
  if(/(?:妓女|姑娘|女孩|女人|陪我|接待|歌舞|宴飲|服務|點餐|上菜|飯菜|住宿|房間|醫師|看診|價格|價錢|多少錢|收費)/.test(a))return 'v912Venue';
  if(v914RetailIntent(a)){
-   const apparel=/布莊|成衣|裁縫|衣|服|布/.test(shop.kind+' '+String(shop.product||''));
-   if(apparel||/(?:驗貨|看貨|商品|試穿|成色|品質|交貨|購買|我要買|買下)/.test(a))return 'v914Shop';
+   if(/(?:買下|我要買|買一|買兩|買三|購買|付錢買|交貨|拿貨|取貨|驗貨|看貨|試穿|檢查)/.test(a)||/^(?:買|買些|買個|買件|買份)/.test(a))return 'v914Shop';
    return 'v912Venue';
  }
  const ongoing=st.conversationDeals92?.active;
@@ -4313,12 +4335,15 @@ function v912Venue(st,raw){
  };
  if(v99EntryIntent(a))return say(manager,'您已經在「'+b.name+'」店內了。'+(active?.status==='in_progress'?'先前安排正在進行，不必重新進門。':'有什麼需要，直接跟我說就好。'));
  if(/^(?:查看服務進度|查看消費進度|查看本店帳單|結帳|買單|付帳|付賬|結清費用|完成接待|結束接待|結束宴席|吃完|吃飽|離店|退房|離開店家)$/.test(a))return v911Venue(st,a);
+ if(/青樓|藝館/.test(b.kind)&&/(?:姑娘|小姐|女孩|女人|接待|人員|歌舞|名單|有哪些人|幾個人|多少人|名字|介紹她們)/.test(a)&&/(?:幾個|幾位|多少|名字|叫什麼|名單|有哪些|介紹|都有誰|列出|認識)/.test(a))return say(manager,v918RosterLine(st,b));
  if(/(?:叫什麼名字|什麼名字|如何稱呼|自我介紹|介紹.*(?:姑娘|人員|你們|她們)|名單|有哪些人|有幾個|有幾位|誰在這|誰來了)/.test(a)){
    const names=cast.slice(0,16).map(n=>n.name+'（'+n.job+'）').join('、');
    if(active?.people?.length)return say(person,'我叫'+person.name+'。這次已安排的是 '+active.people.map(p=>p.name).join('、')+'；目前'+(active.status==='in_progress'?'正在接待':'已完成')+'。店內在場還有：'+names+'。');
    if(/你們|她們|三個|三位|名單|有哪些人|有幾個|有幾位/.test(a))return say(manager,'本店在場的人有：'+names+'。想跟哪一位交談，可以直接叫她的名字。');
    return say(person,'我叫'+person.name+'。在這裡擔任'+person.job+'。');
  }
+ // A merchant can describe their actual persistent catalog, without making an unauthorized sale.
+ if(!entertainment&&/(?:推薦|介紹|推銷|有什麼|賣什麼|有哪些商品|商品清單|商品目錄|貨品|菜單|茶單|賣些什麼|有什麼好)/.test(a))return say(manager,'歡迎光臨，這是本店今日可提供的品項：'+v918CatalogLine(st,b)+'。想驗哪一件可以直接說品名；購買前會核實庫存與價錢。');
  // Price inquiries are factual and never buy or complete the service.
  if(/(?:多少錢|什麼價格|價錢|價格|怎麼收費|價目|報價|三個.*錢|三位.*錢)/.test(a))return v99Inquiry(st,a);
  // Once service has begun, natural continuations advance the SAME order; no re-quoting or re-opening.
@@ -4363,13 +4388,13 @@ function v912Venue(st,raw){
 
 // V9.14: Physical merchandise inspection and fulfillment, shared across all shop types.
 // Services and goods remain separate: a dialogue is never treated as payment or possession.
-function v914RetailIntent(action){return /(?:驗貨|看看貨|拿來看看|看商品|看實物|查看商品|試穿|看看成色|檢查品質|檢查貨|貨有什麼|有什麼貨|商品目錄|買下|我要買|買一|買兩|買三|購買|付錢買|交貨|拿貨|取貨|脫衣服|換衣服)/.test(String(action||''));}
+function v914RetailIntent(action){return /(?:驗貨|看看貨|拿來看看|看商品|看實物|查看商品|試穿|看看成色|檢查品質|檢查貨|貨有什麼|有什麼貨|商品目錄|買下|我要買|買一|買兩|買三|買些|買件|購買|付錢買|交貨|拿貨|取貨|脫衣服|換衣服)/.test(String(action||''));}
 function v914Shop(st,raw){
  const a=String(raw||'').trim(),b=v912Shop(st);
  if(!b)return {ok:false,verified:false,kind:'店內操作',minutes:0,text:'目前沒有可識別的店鋪，未扣款也沒有虛構交付。'};
  const cast=v98EnsureShopCast(st,b).filter(n=>n.alive!==false&&n.workplaceId===b.id&&n.home===st.location);
  const clerk=cast.find(n=>/掌櫃|店主|夥計|店員|掌事|醫師/.test(n.job||''))||cast[0]||null;
- const product=String(b.product||b.kind||'貨品'),stock=Math.max(0,Math.floor(Number(b.stock)||0)),unit=Number(b.retail)||v91Price(st,.12);
+ const catalog=v918EnsureCatalog(st,b),selected=catalog.find(x=>a.includes(x.name))||catalog[0],product=String(selected?.name||b.product||b.kind||'貨品'),stock=Math.max(0,Math.floor(Number(selected?.stock)||0)),unit=Number(selected?.price)||Number(b.retail)||v91Price(st,.12);
  const common={ok:true,verified:true,kind:'店內實際互動'};
  const scene=/青樓|藝館/.test(b.kind),clothing=/布莊|成衣|裁縫|衣|服|布/.test(b.kind+' '+product);
  if(/(?:脫衣服|把衣服脫|換衣服)/.test(a)){
@@ -4392,18 +4417,20 @@ function v914Shop(st,raw){
  }
  if(/(?:買下|我要買|買一|買兩|買三|購買|付錢買|買\s*\d+|交貨|拿貨|取貨)/.test(a)){
    // An unsolicited pickup is not proof of a prior purchase.
-   const purchase=/(?:買下|我要買|買一|買兩|買三|購買|付錢買|買\s*\d+)/.test(a);
+   const purchase=/(?:買下|我要買|買一|買兩|買三|買些|買件|購買|付錢買|買\s*\d+|^買)/.test(a);
    if(!purchase)return {...common,kind:'取貨',minutes:0,text:'尚無可交付的已付款商品；店員不會因為一句「交貨」憑空交出存貨。'};
    const n=Math.max(1,Math.min(99,Number(a.match(/\d+/)?.[0]||(/(?:三|參)\s*(?:件|份|個)/.test(a)?3:/(?:兩|二)\s*(?:件|份|個)/.test(a)?2:1))));
    if(n>stock)return {ok:false,verified:false,kind:'購物',minutes:0,text:''+b.name+'目前只有'+stock+'份'+product+'，無法交付'+n+'份，沒有扣款。'};
    const otherGoods=['茶葉','糧食','布匹','木材','礦石','藥材','陶器','食鹽','農具','衣服','丹藥','靈草'];
    const mismatch=otherGoods.find(x=>a.includes(x)&&!product.includes(x)&&!(x==='衣服'&&/布|衣|服/.test(product)));
-   if(mismatch)return {ok:false,verified:false,kind:'購物',minutes:0,text:'這家店目前登記出售的是「'+product+'」，不是「'+mismatch+'」。未扣款、未交貨。'};
+   if(mismatch&&!catalog.some(x=>a.includes(x.name)))return {ok:false,verified:false,kind:'購物',minutes:0,text:'這家店目前登記出售的是「'+product+'」，不是「'+mismatch+'」。未扣款、未交貨。'};
    const price=v85Round(unit*n);
    if(v911Cash(st)+1e-8<price)return {ok:false,verified:false,kind:'購物',minutes:0,text:''+n+'份'+product+'共需'+price+'，你的個人錢袋不足；未扣款、未交貨。'};
    // Atomic in the staged turn: the complete state only commits if save succeeds.
    if(!v911Ledger(st,b,price,'購買'+product+' × '+n))return {ok:false,verified:false,kind:'購物',minutes:0,text:'付款未成功，未交貨。'};
-   b.stock=stock-n;
+   if(selected)selected.stock=stock-n;
+   b.stock=Math.max(0,Math.floor(Number(b.stock)||0)-n);
+   b.catalog918Stock=b.stock;
    st.inventory=st.inventory||{};st.inventory[product]=(Number(st.inventory[product])||0)+n;
    st.shopPurchases914=st.shopPurchases914||[];
    st.shopPurchases914.push({shopId:b.id,product,qty:n,price,at:now(st)});
@@ -4413,7 +4440,215 @@ function v914Shop(st,raw){
  }
  return {...common,minutes:0,text:'店員在場，你可以直接驗貨、詢價或購買實物；不會擅自扣款。'};
 }
-function v97DirectRoute(action){const a=String(action||'').trim();if(v915EntryRequest(a))return 'v99Enter';if(state?.journey&&v915VenueRelated(a))return 'v915TravelVenue';const v912=v912Intent(state,a);if(v912)return v912;if(v911Direct(a))return 'v911Venue';
+
+// V9.19: shared, stateful merchant/NPC service engine. AI narrates VERIFIED actions;
+// catalog, funds, NPC identity, staged fulfillment and receipts remain authoritative locally.
+function v919Category(shop){
+ const k=String(shop?.kind||'');
+ if(/青樓|藝館/.test(k))return 'performance';
+ if(/酒樓|茶館|餐館|餐廳|飯館|酒家/.test(k))return 'dining';
+ if(/客棧|旅館|旅店/.test(k))return 'lodging';
+ if(/醫館|診所|藥鋪/.test(k))return 'medical';
+ if(/車行|鏢局/.test(k))return 'transport';
+ if(/錢莊/.test(k))return 'financial';
+ return 'goods';
+}
+function v919Catalog(st,shop){
+ const entries=v918EnsureCatalog(st,shop);
+ const kind=v919Category(shop);
+ if(kind==='medical'&&!entries.some(x=>x.name==='醫師問診'))entries.push({id:'v919-exam-'+shop.id,name:'醫師問診',stock:0,price:v91Price(st,.06),kind:'service'});
+ for(const item of entries){
+  item.kind=kind==='goods'?'goods':kind==='dining'?'consumable':kind==='medical'&&/藥|紗布|草/.test(item.name)?'goods':'service';
+ }
+ return entries;
+}
+function v919Current(st,shop){const x=st.merchant919?.active;return x&&x.shopId===shop.id?x:null;}
+function v919History(st,shop,kind,text,extra={}){
+ st.merchant919=st.merchant919||{active:null,history:[],receipts:[]};
+ const e={shopId:shop.id,shopName:shop.name,kind,text,chapter:(st.chapter||0)+1,at:now(st),...extra};
+ st.merchant919.history.push(e);
+ if(st.merchant919.history.length>800)st.merchant919.history.splice(0,st.merchant919.history.length-800);
+ return e;
+}
+function v919Staff(st,shop,action){
+ const cast=v98EnsureShopCast(st,shop).filter(n=>n.alive!==false&&n.workplaceId===shop.id);
+ return cast.find(n=>action.includes(n.name))||cast.find(n=>/掌櫃|店主|主人|醫師|鏢頭/.test(n.job||''))||cast[0]||null;
+}
+function v919Result(st,shop,person,action,reply,kind='店內自主互動',duration=4){
+ if(person){person.encountered=true;keepConversation(st,person,action,kind);npcMemory(person,st,'玩家：'+action.slice(0,100)+'；店內行動：'+reply.slice(0,180));}
+ v919History(st,shop,kind,reply,{personId:person?.id||null});
+ const time=duration>0?advance(st,duration).minutes:0;
+ return {ok:true,verified:true,kind,minutes:time,text:(person?person.name+'（'+(person.job||'店員')+'）':'店內人員')+'：'+reply};
+}
+function v919Recommendation(st,shop,person){
+ const cat=v919Category(shop),items=v919Catalog(st,shop).filter(x=>x.stock>0);
+ if(cat==='performance'){
+  const roster=v918EnsureRoster(st,shop).filter(n=>n.alive!==false);
+  const names=roster.slice(0,4).map(n=>n.name+'（'+n.specialty918+'）').join('、');
+  return '本店有 '+roster.length+' 位具名成年歌舞接待人員，例如 '+names+'。可以聽曲、看舞、席間交談；每人是否接待都須由本人決定。您想聽哪一種曲目，還是先認識幾位？';
+ }
+ if(!items.length)return '今日暫無可供應的現貨或服務時段，尚未向您收費。';
+ shop.pitchTurn919=(Number(shop.pitchTurn919)||0)+1;
+ const index=(v91Hash(shop.id+'|'+(person?.id||'owner'))+shop.pitchTurn919-1)%items.length;
+ const featured=items[index];
+ const names=items.slice(0,5).map(x=>x.name+'（'+x.price+'）').join('、');
+ const verb=cat==='dining'?'今天可以現點現做':cat==='lodging'?'今晚可先核對房況':cat==='transport'?'可先談路線和行程':cat==='medical'?'可以先安排問診':cat==='financial'?'可以先查詢費率與服務條件':'您可以先驗貨再決定買不買';
+ return '我先推薦「'+featured.name+'」，標價 '+featured.price+'。其他品項有 '+names+'。'+verb+'；您只需說出品名和需求，我就接手後續安排。';
+}
+function v919Number(a){
+ const normalized=String(a).replace(/[０-９]/g,c=>String(c.charCodeAt(0)-65296));
+ const m=normalized.match(/(?:買|要|來|點|訂|安排|購買|預約|再來|給我)?\s*(\d{1,2})\s*(?:份|件|個|碗|壺|晚|間|張|包|把|套|次)/);
+ if(m)return Math.max(1,Math.min(30,Number(m[1])));
+ const words={'一':1,'二':2,'兩':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};const w=normalized.match(/([一二兩三四五六七八九十])\s*(?:份|件|碗|壺|晚|張|包|把|套|次)/);return w?words[w[1]]:(v92Count(normalized)||1);
+}
+function v919Pick(st,shop,a){
+ const items=v919Catalog(st,shop);
+ let found=items.find(x=>a.includes(x.name));
+ if(found)return found;
+ if(/(?:這個|這件|剛剛那個|剛才推薦|推薦的|就它|那一款|照剛才)/.test(a))return items.find(x=>x.id===shop.selected919)||null;
+ if(v919Category(shop)==='lodging'&&/(?:住一晚|住宿|入住|訂房|住店)/.test(a))return items.find(x=>x.name==='客房住宿')||null;
+ if(v919Category(shop)==='medical'&&/(?:問診|看診|診察|看病|檢查病情)/.test(a))return items.find(x=>x.name==='醫師問診')||null;
+ return null;
+}
+function v919CanDirect(st,action){
+ const shop=v912Shop(st);if(!shop||st.journey)return false;
+ const a=String(action||'').trim();
+ if(/^(?:離開|離店|走出|出去|回家|前往|去碼頭|去市集|去街上|返回|結束生命|自殺|查詢存檔)/.test(a))return false;
+ if(/^(?:查看本店帳單|查看消費進度|查看服務進度|結帳|買單|結清費用|退房)$/.test(a))return false;
+ if(/(?:掌櫃|老闆|店員|夥計|推銷|推薦|介紹|商品|菜單|茶單|貨品|有什麼|多少錢|價格|價錢|預算|消費|花錢|花銀|打賞|出價|願意付|願意花|報價|開價|條件|議價|殺價|便宜|折扣|購買|買下|試穿|驗貨|拿來看看|我想買|我要買|點餐|點菜|上菜|來一份|來一碗|我要吃|我要喝|訂房|住宿|住一晚|入住|看診|問診|診察|搭車|包車|運送|護送|寄養|存款|匯兌|換零|介紹姑娘|名冊|幾位姑娘|姑娘名字|安排接待|歌舞接待)/.test(a))return true;
+ if(v919Pick(st,shop,a))return true;
+ if(st.merchant919?.active?.shopId===shop.id&&/^(?:開始|繼續|下一步|照辦|好|好的|同意|確認|完成服務|服務完成|繼續服務|請繼續|取消訂單|取消服務|結束服務)$/.test(a))return true;
+ return false;
+}
+function v919Receipt(st,shop,record,amount,description){
+ st.merchant919=st.merchant919||{active:null,history:[],receipts:[]};
+ const receipt={id:'v919-'+st.id+'-'+(st.chapter+1)+'-'+(st.merchant919.receipts.length+1),shopId:shop.id,description,price:amount,at:now(st),chapter:(st.chapter||0)+1};
+ st.merchant919.receipts.push(receipt);
+ if(st.merchant919.receipts.length>800)st.merchant919.receipts.splice(0,st.merchant919.receipts.length-800);
+ if(record)record.receiptId=receipt.id;
+ return receipt;
+}
+function v919Goods(st,shop,person,item,qty,a){
+ if(item.kind!=='goods'&&item.kind!=='consumable')return null;
+ if(item.stock<qty)return {ok:false,verified:false,minutes:0,text:'「'+item.name+'」現貨只有 '+item.stock+' 份，無法交付 '+qty+' 份；沒有收費。'};
+ const amount=v85Round(item.price*qty);
+ if(v911Cash(st)+1e-8<amount)return {ok:false,verified:false,minutes:0,text:'購買 '+qty+' 份「'+item.name+'」需要 '+amount+'，錢袋不足；未扣款、未交貨。'};
+ if(!v911Ledger(st,shop,amount,'實際購買／餐飲：'+item.name+' × '+qty))return {ok:false,verified:false,minutes:0,text:'結帳未成功，商品未交付。'};
+ item.stock-=qty;shop.stock=Math.max(0,(Number(shop.stock)||0)-qty);shop.catalog918Stock=shop.stock;
+ let info='';
+ if(item.kind==='consumable'){
+  if(Number.isFinite(Number(st.hunger)))st.hunger=Math.max(0,Number(st.hunger)-Math.min(45,12*qty));
+  info='店員端上 '+qty+' 份「'+item.name+'」，你在席間實際用餐／飲用，餐點已提供並結帳。';
+ }else{
+  st.inventory=st.inventory||{};st.inventory[item.name]=(Number(st.inventory[item.name])||0)+qty;
+  info='店員拿出 '+qty+' 份「'+item.name+'」供核對，完成交貨，已放入你的背包。';
+ }
+ const receipt=v919Receipt(st,shop,null,amount,item.name+' × '+qty);
+ shop.selected919=item.id;
+ const text=info+'本次實付 '+amount+'；店內此品項剩 '+item.stock+'；收據 '+receipt.id+'。';
+ return v919Result(st,shop,person,a,text,item.kind==='consumable'?'餐飲履行及結帳':'實物購買及交貨',item.kind==='consumable'?35:12);
+}
+function v919FulfillService(st,shop,person,item,qty,a){
+ const existing=v919Current(st,shop);
+ if(existing?.status==='in_progress')return v919AdvanceService(st,shop,person,'繼續服務');
+ const amount=v85Round(item.price*qty);
+ if(v911Cash(st)+1e-8<amount)return {ok:false,verified:false,minutes:0,text:'這項服務需 '+amount+'，個人錢袋不足；沒有開工、未扣款。'};
+ const category=v919Category(shop);
+ if(category==='medical'&&item.name==='醫師問診'){
+  // Only a verified consultation; medical outcomes are controlled by other game systems.
+  if(!v911Ledger(st,shop,amount,'醫師問診'))return {ok:false,verified:false,minutes:0,text:'問診結帳失敗，未扣款。'};
+  const rec=v919Receipt(st,shop,null,amount,'醫師問診');
+  return v919Result(st,shop,person,a,'醫師已當面詢問症狀、檢查基本情況並提出後續診療建議；問診已履行，沒有宣稱病情已痊癒。實付 '+amount+'，收據 '+rec.id+'。','問診完成及結帳',30);
+ }
+ if(category==='lodging'&&item.name==='客房住宿'){
+  if(!v911Ledger(st,shop,amount,'客棧住宿 × '+qty))return {ok:false,verified:false,minutes:0,text:'住宿結帳失敗，未扣款。'};
+  const rec=v919Receipt(st,shop,null,amount,'住宿 × '+qty);
+  return v919Result(st,shop,person,a,'夥計主動準備並交付 '+qty+' 間客房，帶你安置行李；你確實留宿了一晚，翌日才退房結帳。實付 '+amount+'，收據 '+rec.id+'。','住宿完成及結帳',1440);
+ }
+ if(category==='lodging'&&/(?:茶|飯)/.test(item.name)){
+  // Small inn meals are consumed rather than placed into inventory.
+  if(!v911Ledger(st,shop,amount,'客棧餐飲：'+item.name+' × '+qty))return {ok:false,verified:false,minutes:0,text:'結帳失敗，未扣款。'};
+  const rec=v919Receipt(st,shop,null,amount,item.name+' × '+qty);
+  if(Number.isFinite(Number(st.hunger)))st.hunger=Math.max(0,Number(st.hunger)-Math.min(40,10*qty));
+  return v919Result(st,shop,person,a,'夥計已送上並提供「'+item.name+'」'+qty+'份，實付 '+amount+'，收據 '+rec.id+'。','客棧餐飲完成',25);
+ }
+ if(category==='medical'&&/藥|紗布|草/.test(item.name))return v919Goods(st,shop,person,item,qty,a);
+ // Other non-route, non-financial services need an actual staged work record.
+ return v919StartService(st,shop,person,item,qty,a);
+}
+function v919StartService(st,shop,person,item,qty,a){
+ const active=v919Current(st,shop);
+ if(active?.status==='in_progress')return v919Result(st,shop,person,a,'先前「'+active.label+'」已在進行，'+active.stageDescription+'。我會接著完成這一單，不會另立新帳。','服務進度',0);
+ if(!item)return v919Result(st,shop,person,a,v919Recommendation(st,shop,person),'主動推薦');
+ const category=v919Category(shop);
+ if(category==='transport')return v919Result(st,shop,person,a,'「'+item.name+'」可以洽談。'+(/(?:到|去|往|前往|目的地|送到|送往)/.test(a)?'我已聽到您提出的目的地，但目前尚未核實道路、費率及實際到達結果。':'請先告訴我目的地，以便核實路線、里程和價格。')+' 未下單、未收費，也不會假裝已經載送抵達。','路線洽談');
+ if(category==='financial')return v919Result(st,shop,person,a,'「'+item.name+'」需先核對金額與具體條件。沒有實際帳戶與金融履約規則之前，不能擅自從個人錢袋轉存或宣稱匯兌完成。','金融服務詢問');
+ const price=v85Round(item.price*qty);
+ if(v911Cash(st)+1e-8<price)return {ok:false,verified:false,minutes:0,text:'「'+item.name+'」預計費用 '+price+'，個人錢袋不足，未開始服務、未收費。'};
+ st.merchant919=st.merchant919||{active:null,history:[],receipts:[]};
+ const rec={id:'srv919-'+st.id+'-'+(st.chapter+1),shopId:shop.id,itemId:item.id,label:item.name,qty,price,status:'in_progress',stage:1,stageDescription:'店員已備妥場地／器材並開始履行',startedAt:now(st),personId:person?.id||null};
+ st.merchant919.active=rec;
+ shop.selected919=item.id;
+ let action=category==='transport'?'車夫核對目的地並開始安排車輛與隨車物品':category==='medical'?'醫師開始問診並確認症狀，尚未宣稱已治癒':category==='lodging'?'夥計帶你核對客房、安置行李': '店員立即開始提供「'+item.name+'」';
+ return v919Result(st,shop,person,a,action+'。本單 '+qty+' 份，預估 '+price+'，服務完成後結帳；後續可以說「繼續服務」。','服務開始',15);
+}
+function v919AdvanceService(st,shop,person,a){
+ const rec=v919Current(st,shop);
+ if(!rec||rec.status!=='in_progress')return v919Result(st,shop,person,a,'目前沒有正在進行的本店服務。我先向您介紹：'+v919Recommendation(st,shop,person),'主動接待');
+ if(rec.stage===1){rec.stage=2;rec.stageDescription='服務已提供主要內容，正在完成最後收尾';const cat=v919Category(shop);
+  const detail=cat==='lodging'?'客房已交付使用，完成一晚住宿後才算服務結束':cat==='medical'?'醫師完成基礎診察，正整理建議和費用，無法保證治癒':cat==='transport'?'車夫已核實行程，正在執行已確認的路線，尚未假定抵達': '店員繼續提供約定的「'+rec.label+'」，不是只站著等你再下指令';
+  return v919Result(st,shop,person,a,detail+'。這單仍在進行，不會再次收費。','服務自主推進',cat==='lodging'?180:25);
+ }
+ if(v911Cash(st)+1e-8<rec.price)return {ok:false,verified:false,kind:'結帳失敗',minutes:0,text:'服務已到結帳階段，但個人錢袋不足 '+rec.price+'；本單仍待結，未假裝付款成功。'};
+ if(!v911Ledger(st,shop,rec.price,'已履行服務：'+rec.label+' × '+rec.qty))return {ok:false,verified:false,kind:'結帳失敗',minutes:0,text:'結帳失敗，未扣款。'};
+ rec.status='completed';rec.completedAt=now(st);rec.paid=rec.price;
+ const receipt=v919Receipt(st,shop,rec,rec.price,rec.label+' × '+rec.qty);
+ return v919Result(st,shop,person,a,'已完成「'+rec.label+'」的約定服務並向您交代結果，實付 '+rec.price+'，收據 '+receipt.id+'；同一筆訂單不會再扣款。','服務完成及結帳',15);
+}
+function v919Shop(st,raw){
+ const a=String(raw||'').trim(),shop=v912Shop(st);
+ if(!shop)return {ok:false,verified:false,minutes:0,text:'目前不在具名店家，沒有扣款或虛構服務。'};
+ const cat=v919Category(shop),person=v919Staff(st,shop,a),items=v919Catalog(st,shop),chosen=v919Pick(st,shop,a),active=v919Current(st,shop);
+ const ask=/(?:有哪些|有什麼|能提供|多少|幾位|介紹|推薦|推銷|價錢|價格|費用|價目|菜單|茶單|目錄|名冊|名字|叫什麼|怎麼收費|有誰|幾個|幾人|多少錢)/.test(a);
+ const command=/(?:我要|我想買|來|買|購買|點|訂|安排|給我|請給|直接|成交|上菜|開始|接受|請幫我|支付|付錢|買下)/.test(a);
+ if(cat==='performance'){
+  if(/(?:幾位|幾個|多少|名字|叫什麼|名冊|名單|都有誰)/.test(a))return v919Result(st,shop,person,a,v918RosterLine(st,shop),'人物名冊');
+  if(/(?:出價|願意付|願意花|消費|花錢|花銀|打賞|巨額|金元寶|銀元寶)/.test(a)){
+   const offered=v95MoneyClaim(a,st);
+   const reply=offered&&!offered.bad?'您的出價約折合 '+offered.amount+' 銀值，這是您提出的條件，尚未付款。我可以向成年接待人員轉達歌舞、談話或其他合意的安排，讓她們自行決定是否願意，並主動回覆您。':'可以先說明您想參加哪一種歌舞、聽曲或陪席活動，我會介紹人員、費用和可安排時間。';
+   const staff=v918EnsureRoster(st,shop).filter(n=>n.alive!==false&&n.age>=18);
+   const interested=staff.find(n=>/爽朗|活潑|機敏|務實|健談/.test(n.persona918||n.nature||''))||staff[0];
+   const initiative=interested?' '+interested.name+'聽見條件後主動走近，詢問您想聽曲、觀舞還是席間談話，並表示會先確認自己的安排和界線。':'';
+   return v919Result(st,shop,person,a,reply+initiative+' '+v919Recommendation(st,shop,person),'主動洽談');
+  }
+  if(/(?:安排|叫|請|要|找|挑|選).{0,20}(?:姑娘|小姐|女子|妓女|陪席|歌舞|接待)/.test(a)){const started=v92Deal(st,'安排'+v919Number(a)+'位姑娘歌舞接待');if(started.ok&&st.conversationDeals92?.active?.status==='in_progress'){const next=v92Deal(st,'繼續安排');return {...next,kind:'歌舞接待已開始',text:started.text+' '+next.text,minutes:(started.minutes||0)+(next.minutes||0)};}return started;}
+  if(active?.status==='in_progress'&&/^(?:繼續|開始|下一步|照辦|好|好的|確認)$/.test(a))return v919AdvanceService(st,shop,person,a);
+  return v919Result(st,shop,person,a,v919Recommendation(st,shop,person),'主動介紹');
+ }
+ if(/^(?:取消訂單|取消服務)$/.test(a)&&active?.status==='in_progress')return v919Result(st,shop,person,a,'本單服務已開始；若要提前終止，需另核對已提供的部分與實際費用，不會直接把服務視為免費。','取消洽談');
+ if(active?.status==='in_progress'&&/^(?:開始|繼續|下一步|照辦|好|好的|同意|確認|完成服務|服務完成|繼續服務|請繼續|結束服務)$/.test(a))return v919AdvanceService(st,shop,person,a);
+ if(/(?:驗貨|看看|試穿|試用|檢查|品質|成色|展示)/.test(a)&&chosen){shop.selected919=chosen.id;return v919Result(st,shop,person,a,'我已拿出「'+chosen.name+'」供您現場查看。標價 '+chosen.price+'，現貨 '+chosen.stock+'。您可以試看再決定，現在沒有收費，也沒有交貨。','驗貨試用',6);}
+ // Named catalogue queries select an item without forcing a sale.
+ if(ask&&!/(?:我要買|買下|購買|幫我買|點一|來一份|成交|就買)/.test(a)){
+  if(chosen){shop.selected919=chosen.id;return v919Result(st,shop,person,a,'「'+chosen.name+'」價格 '+chosen.price+'，目前有 '+chosen.stock+' 份。'+v919Recommendation(st,shop,person),'主動介紹及報價');}
+  return v919Result(st,shop,person,a,v919Recommendation(st,shop,person),'主動推薦');
+ }
+ const amount=v95MoneyClaim(a,st);
+ if(amount&&/(?:出價|願意付|願意花|預算|最多)/.test(a))return v919Result(st,shop,person,a,'您的預算約 '+amount.amount+' 銀值，我推薦：'+v919Recommendation(st,shop,person)+' 尚未下單或扣款。','預算洽談');
+ if(!chosen){
+  if(command||amount)return v919Result(st,shop,person,a,'我願意接待，不會叫您反覆重新說明。請從實際品項中選一項：'+v919Recommendation(st,shop,person)+' 選好品項即可由我接手後續。','主動推薦');
+  return v919Result(st,shop,person,a,v919Recommendation(st,shop,person),'主動接待');
+ }
+ shop.selected919=chosen.id;
+ const n=v919Number(a);
+ if(/(?:多少錢|價格|價錢|費用|報價|看一看|看看)/.test(a)&&!/買|點|訂/.test(a))return v919Result(st,shop,person,a,'「'+chosen.name+'」每份 '+chosen.price+'，現有 '+chosen.stock+'；由我介紹與拿貨，確認要買再結帳。','價格介紹');
+ if(!command){return v919Result(st,shop,person,a,'「'+chosen.name+'」現有 '+chosen.stock+' 份，每份 '+chosen.price+'。您若想選這款，我可以立即處理。','主動推介');}
+ if(chosen.kind==='goods'||chosen.kind==='consumable')return v919Goods(st,shop,person,chosen,n,a);
+ if(cat==='transport'||cat==='financial')return v919StartService(st,shop,person,chosen,n,a);
+ return v919FulfillService(st,shop,person,chosen,n,a);
+}
+
+function v97DirectRoute(action){const a=String(action||'').trim();if(v915EntryRequest(a))return 'v99Enter';if(state?.journey&&v915VenueRelated(a))return 'v915TravelVenue';if(v919CanDirect(state,a))return 'v919Shop';const v912=v912Intent(state,a);if(v912)return v912;if(v911Direct(a))return 'v911Venue';
  if(/^(?:我(?:想|要|決定)?|現在|立刻)?(?:自殺|自盡|了結此生|結束生命|結束這一世|結束本世|不想活了)[。！!\s]*$/.test(a))return 'v910EndLife';
  if(v99EntryIntent(a))return 'v99Enter';
  if(v99InquiryIntent(a))return 'v99Inquiry';
@@ -4552,6 +4787,59 @@ function v98Person(st,id,site,job,opts={}){
  n.origin98='persistent-venue';
  st.npcs.push(n);return n;
 }
+// V9.18: per-shop persistent cast, personal profiles and physical catalog.
+const V918_CATALOG={
+ '米行':['白米','糙米','小米','糯米','麥粉'], '布莊':['棉布','麻布','絲綢','成衣','布鞋'],
+ '書坊':['蒙學讀本','詩集','筆墨','宣紙','帳簿'], '雜貨舖':['油燈','陶碗','鹽包','麻繩','木桶'],
+ '茶館':['清茶','花茶','普洱茶','茶點','糕餅'], '酒樓':['清蒸魚','燉肉','時蔬','米飯','熱湯'],
+ '客棧':['客房住宿','熱茶','熱飯','澡堂','馬匹寄養'], '醫館':['草藥包','外敷藥','藥膏','紗布','藥材'],
+ '鐵匠鋪':['菜刀','鐵鍋','鋤頭','剪刀','鐵釘'], '木作坊':['木桌','板凳','木箱','木桶','書架'],
+ '車行':['短途載客','貨物運送','包車','馬車出租','代運行李'], '鏢局':['短途護送','押貨','護院','急件護送','路況諮詢'],
+ '錢莊':['存款服務','匯兌服務','換零服務','帳目查詢','兌票服務'],
+ '丹藥坊':['養氣丹','回元丹','止血丹','安神丹','藥散'], '靈器坊':['護身玉佩','靈劍','護腕','符器','靈燈'],
+ '符籙鋪':['護身符','平安符','照明符','清心符','傳訊符']
+};
+function v918ServiceShop(shop){return /青樓|藝館|客棧|車行|鏢局|錢莊/.test(shop.kind||'');}
+function v918EnsureCatalog(st,shop){
+ if(!shop||shop.closed)return [];
+ if(!Array.isArray(shop.catalog918)||!shop.catalog918.length){
+  const names=V918_CATALOG[shop.kind]||[String(shop.product||'本店商品')+'上品',String(shop.product||'本店商品')+'常品',String(shop.product||'本店商品')+'散裝'];
+  const total=Math.max(0,Math.floor(Number(shop.stock)||0));
+  shop.catalog918=names.map((name,i)=>({id:'item-'+shop.id+'-'+i,name,stock:Math.floor(total/names.length)+(i<total%names.length?1:0),price:v85Round(Math.max(.01,(Number(shop.retail)||v91Price(st,.1))*([1,1.3,1.6,.85,1.1][i%5]))),kind:v918ServiceShop(shop)?'service':'goods'}));
+  shop.catalog918Stock=total;
+ }
+ // External market / player management may change the aggregate stock. Reconcile without creating extra goods.
+ const real=Math.max(0,Math.floor(Number(shop.stock)||0));
+ let listed=shop.catalog918.reduce((a,x)=>a+Math.max(0,Math.floor(Number(x.stock)||0)),0);
+ if(listed!==real&&shop.catalog918.length){
+  let delta=real-listed;
+  if(delta>0)shop.catalog918[0].stock+=delta;
+  while(delta<0){const row=shop.catalog918.find(x=>x.stock>0);if(!row)break;const n=Math.min(row.stock,-delta);row.stock-=n;delta+=n;}
+ }
+ shop.catalog918Stock=real;
+ return shop.catalog918;
+}
+function v918CatalogLine(st,shop){const items=v918EnsureCatalog(st,shop);return items.map((x,i)=>(i+1)+'、'+x.name+'（'+(x.kind==='service'?'服務':'現貨')+' '+x.stock+'，參考價 '+x.price+'）').join('；');}
+function v918EnsureRoster(st,shop){
+ if(!shop||!/青樓|藝館/.test(shop.kind||''))return [];
+ // Maintain separately named, adult, persistent entertainers. Existing identities are never replaced.
+ shop.staff=Math.max(10,Number(shop.staff)||0);
+ const roles=['琴師','舞伶','歌者','說書人','琵琶師','清唱歌者','舞伶','笛師','陪席接待','歌舞接待'];
+ for(let i=0;i<10;i++){
+  const id='v918-entertainer-'+shop.id+'-'+i;
+  let n=v98Person(st,id,shop.site,'成年歌舞接待',{shopId:shop.id,adult:true,sex:'女',activity:'在'+shop.name+'從事歌舞／談話接待'});
+  n.age=Math.max(18,Number(n.age)||18);n.sex='女';n.workplaceId=shop.id;n.home=shop.site;
+  n.job='成年歌舞接待';n.specialty918=n.specialty918||roles[i];
+  n.persona918=n.persona918||(['性情爽朗，擅長說笑','談吐溫婉，喜好詩詞','直率健談，重視約定','沉靜細心，善於聽人說話','幽默機敏，喜歡新鮮事','不善奉承，但精通樂器','態度沉穩，待客有分寸','好學好問，喜歡地方故事','外向活潑，喜歡熱鬧','務實細膩，重視自身選擇'][i]);
+  n.origin98='persistent-venue';n.memory=Array.isArray(n.memory)?n.memory:[];
+ }
+ const staff=(st.npcs||[]).filter(n=>n.alive!==false&&n.workplaceId===shop.id&&n.age>=18&&/成年歌舞接待/.test(n.job||''));
+ // Synchronize the scheduling roster without resetting old reservations or availability.
+ const prior=Array.isArray(shop.hostRoster92)?shop.hostRoster92:[];
+ shop.hostRoster92=staff.map(n=>{const old=prior.find(x=>x.id===n.id);return old?{...old,name:n.name,adult:true}:{id:n.id,name:n.name,available:true,adult:true,consent:true};});
+ return staff;
+}
+function v918RosterLine(st,shop){const staff=v918EnsureRoster(st,shop);return '【'+shop.name+'固定人員名冊】成年歌舞接待共 '+staff.length+' 位：'+staff.map((n,i)=>(i+1)+'、'+n.name+'（'+(n.age||18)+'歲，'+(n.specialty918||'歌舞接待')+'；'+(n.persona918||n.nature||'性情尚待了解')+'）').join('；')+'。這些是已建立 NPC ID、會保存在手機存檔中的人物，可指名交談；是否接受安排須個別確認。';}
 function v98EnsureShopCast(st,shop){
  if(!shop||shop.closed)return [];
  const roles=v98ShopRoles(shop.kind||'商鋪');
@@ -4578,6 +4866,10 @@ function v98EnsureShopCast(st,shop){
   }
   worker.workplaceId=shop.id;out.push(worker);
  }
+ if(/青樓|藝館/.test(shop.kind||'')){
+  const added=v918EnsureRoster(st,shop);
+  for(const n of added)if(!out.some(p=>p.id===n.id))out.push(n);
+ }else v918EnsureCatalog(st,shop);
  return out;
 }
 function v98SceneJobs(st){
@@ -4717,7 +5009,7 @@ async function finishAction(action,code,minutes,targetId,aiStory=null){return aw
  let options=v83ChoiceSafe(draft,v92Choices(draft)||(['尋找工作','正式聘僱','上工'].includes(res.kind)?employmentChoices(draft):(parsed?.options.length===2?parsed.options:sceneChoices(draft))));let source=v92Choices(draft)?'已保存協議後續操作':res.kind==='尋找工作'?'工作線索後續選項':(parsed?.options.length===2?'AI 劇情選項':'系統依目前場景建議');chapter(draft,action,narration,res.verified?res.text:'此類行動尚無完成規則，僅保留意圖與推進的時間。',options,source);return {ok:true,text:res.text,minutes:res.minutes}})}
 function completed(res){if(!res)return;busy=false;render(true);$('action').value='';message(`第 ${state.chapter} 回完成・已儲存・${now(state)}。${res.text}`,'ok');$('chapterArea').scrollIntoView({behavior:'smooth',block:'start'})}
 async function systemAction(code){if(!state||busy||!state.alive)return;let npcId=$('npcSelect').value;let actions={work:'打零工',forage:'尋找食物',rest:'休息',buyFood:'購買食物',sellFood:'出售食物',study:'學習',train:'訓練',craft:'製作工具',buyHouse:'購買住屋',buyField:'購買田地',farm:'耕作',harvest:'收成',startBusiness:'創辦小商號',operateBusiness:'營運商號',invent:'研究改良工具',seekTrade:'應徵商販',seekCraft:'應徵工匠',seekGuard:'應徵護衛',resignJob:'辭職',gatherWood:'採木材',mineOre:'採礦',sellWood:'出售木材',sellOre:'出售礦石',stockShop:'商號進貨',hireWorker:'商號雇員',upgradeShop:'商號擴建',withdrawShop:'提領商號現金',borrow:'借款',repay:'還款',teachChild:'教導子女',careerChild:'協助子女就業',familyWill:'指定繼承安排',spouseTalk:'商議家務',forgeWeapon:'打造短劍',equipWeapon:'裝備短劍',repairWeapon:'修繕武器',learnArt:'學習功法',practiceArt:'演練功法',heal:'求醫',social:'與人物交談',court:'提出交往',propose:'提出婚約',marry:'成婚',separate:'分開',adopt:'收養子女',care:'照顧家庭',planChild:'討論生育',defend:'練習防身',fight:'切磋',cultivate:'嘗試修煉',breakthrough:'嘗試突破境界'};let action=code.startsWith('travelTo:')?('前往'+code.slice(9)):(actions[code]||code);let target=state.npcs.find(n=>n.id===npcId);if(['social','court','propose','marry','separate','fight'].includes(code)&&target)action+='（對象：'+target.name+'）';try{const result=await finishAction(action,code,30,npcId);completed(result)}catch(e){busy=false;message('行動未執行：'+e.message,'bad')}}
-function v97ReadOnlyQuery(action){
+function v97ReadOnlyQuery(action){if(/^(?:查看本店服務紀錄|查詢店內收據)$/.test(String(action).trim())){const shop=v912Shop(state);return shop?'【本店服務與收據】'+JSON.stringify((state.merchant919?.receipts||[]).filter(x=>x.shopId===shop.id).slice(-12)):'目前不在店內';}
  const a=String(action||'').trim();if(!/^(?:查看|查詢|檢視|看看|了解)/.test(a))return null;
  if(/(?:我的)?(?:財產|錢包|錢袋|銀兩|金錢|資產)/.test(a))return '【個人財產】'+(state.money||0).toFixed(2)+' 兩銀值；家族公款 '+(state.familyEstate?.treasury||0)+'；店鋪資金與私人錢袋分開。';
  if(/(?:技能|武學|功法|能力)/.test(a))return '【人物技能】學識 '+(state.knowledge||0)+'、武藝 '+(state.strength||0)+'；修為 '+(state.cultivation?.level||0)+'；已學法門 '+(state.cultivation?.arts||[]).join('、');
@@ -4761,11 +5053,11 @@ async function execute(action){if(!state||busy||!state.alive)return;if(!String(a
  if(['v912Venue','v971SceneConversation'].includes(code)){
    contract.venueDialogueInstruction='本回是面對面情境互動。請直接回應玩家原話，不得複製 ruleResult 中的提示式、概括式台詞。ruleResult 僅確認人物在場及哪些狀態確實變動；人物可拒絕或答應非強制的對話，但不可擅自視為服務已履行、衣著或身體狀態已改變。若涉及親密要求，只能在成年、自願及適當界線下以非露骨方式敘述，不能以遊戲交易推定同意。';
  }
- if(['v914Shop','v911Venue','v92Deal','v99Enter','v99Inquiry'].includes(code)){
+ if(['v919Shop','v914Shop','v911Venue','v92Deal','v99Enter','v99Inquiry'].includes(code)){
    contract.venueActionInstruction='規則結果是已核驗的唯一交易／進店／服務事實。請具體敘述已確認的動作與可觀察結果，不可重複接待前言，亦不可聲稱尚未核驗的付款、交貨、完工或服裝變化。';
  }
  if(['crimeV74','extremeV74','crimeStatusV74'].includes(code)){contract.ruleResult=ruling.text;contract.crimePolicy='不可描寫性侵害過程、犯罪教學或強迫性行為；只描寫企圖、拒絕、目擊、調查與後果；不許 AI 自行撤銷通緝或憑空加減錢。';}let speakerNow=activeSpeaker(preview);let context=[`【必須遵守的對話連續性】${speakerNow?'目前正在與'+speakerNow.name+'（'+(speakerNow.familyRole||'相識')+'，NPC ID '+speakerNow.id+'）於'+preview.location+'當面交談；話題：'+(preview.activeConversation?.topic||'延續前文')+'。即使玩家本回沒有再說「爸爸」或名字，也必須由此人繼續回話，不得改成自言自語、換人或無故離場。':'此回沒有已確認的持續對話對象，不得虛構特定人物已在場。'}只有經規則明確確認的移動、離場、死亡才可改變NPC在場事實。若有犯罪或性暴力企圖，僅以非露骨方式敘述抵抗、制止及司法後果，禁止增添侵害細節。`,`已知人物與生活狀態：${JSON.stringify(relevantMemories(state,action))}；已發生的過往：${JSON.stringify(state.lifePast?.events||[])}；近期地方變動：${JSON.stringify((state.society?.history||[]).slice(-4))}。人物家族公產不得視為個人私產。`, `世界設定：${state.setting}，${state.location}，出生資料：${JSON.stringify(state.birth||{})}；時間：${now(state)}。重生層次：${state.worldDiscovery?.realm||"mortal"}；角色實際知道的修仙常識：${state.worldDiscovery?.knowledge||0}；角色已知入口：${JSON.stringify(state.worldDiscovery?.knownEntrances||[])}；不得洩漏隱藏入口及其他世界真相；未取得師承不可施法。現世凡人可能終生不知道仙門存在，上界出生者也可能不知凡間。人物不能瞬移、不能隔空對話，玩家本回只執行一個主行動。`,`【本回由程式確認的結果】${ruling.text}。不得描寫與此矛盾的成功、財產、死亡或婚姻。`,`【行動與敘事一致性】${code==='searchJob'?'本回已查到具名僱主與空缺，但尚未應徵、上工、領薪；若玩家說「去鎮上」，但規則未變更所在地，不得描寫已到鎮上。':''}${code==='applyGenericJob'?'只有規則確認錄取才能描寫受雇；絕不可直接領薪。':''}請以結算後地點${preview.location}、時間${now(preview)}敘事；不得自創已發生的離開、旅行或改變職位。`,`【時間與對話硬性約束】本回結算後為${now(preview)}，當地時刻${String(Math.floor(preview.minute/60)).padStart(2,'0')}:${String(preview.minute%60).padStart(2,'0')}；19:00至05:00為夜間，不可描寫午後陽光、正午或白日景象。玩家原話：「${action}」；若是對話，必須先讓對象直接回應此話，不得只寫無關環境描寫。親屬不得當陌生人。`,`角色：${state.name}，${state.age} 歲；銀兩 ${preview.money}，生命 ${preview.hp}。`,`家庭：已婚 ${preview.household.married}，子女 ${preview.household.dependents.length}。`,`資產：住屋 ${assetsCount(preview,'住屋')}；田地 ${assetsCount(preview,'田地')}。`,`親屬名冊（姓名不可改）：${preview.npcs.filter(n=>n.familyRole).map(n=>n.familyRole+'='+n.name+'（'+(n.alive?'在世':'已故')+'）').join('；')}；本回相遇對象：${ruling.kind==='人物相遇'?ruling.text:'無新人物'}。不得另創同名或替代父母，若玩家找爸爸只能使用名冊父親。`,`NPC 事實：${preview.npcs.filter(n=>n.encountered).slice(0,4).map(n=>n.name+' '+n.nature+'／'+n.goal+'／'+n.bond+'／信任'+n.trust+'／記憶'+n.memory.slice(-1).map(m=>m.event).join('')).join('；')}`, ...preview.events.slice(-3).map(e=>e.type+':'+e.description)];
- const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),32000);let response;try{response=await fetch(conf.endpoint,{method:'POST',headers:{'content-type':'application/json','x-game-password':conf.password},body:JSON.stringify({action:action+'\n\n'+directorPrompt(contract),minutes,state:publicStoryState(preview),recent:[directorPrompt(contract),...context.slice(-3)]}),signal:controller.signal})}finally{clearTimeout(timeout)}
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),32000);let response;try{response=await fetch(conf.endpoint,{method:'POST',headers:{'content-type':'application/json','x-game-password':conf.password},body:JSON.stringify({action:action+'\n\n'+directorPrompt(contract),minutes,state:publicStoryState(preview),recent:[directorPrompt(contract),`【手機保存的歷史回合檢索】${JSON.stringify(v917Recall(state,action))}`,context[0],`【當前人物摘要】${JSON.stringify({speaker:speakerNow?{id:speakerNow.id,name:speakerNow.name,role:speakerNow.familyRole,relation:speakerNow.bond,trust:speakerNow.trust,memories:(speakerNow.memory||[]).slice(-6)}:null,location:preview.location})}`,context[4],context[5],...context.slice(-3)]}),signal:controller.signal})}finally{clearTimeout(timeout)}
  let data=await response.json();if(!response.ok||typeof data.story!=='string'||!data.story.trim())throw Error(data.error||'AI 沒有回傳故事');
  // 避免 AI 回答期間使用者在另一個分頁改動存檔：檢查目前本頁 ID 與回合數仍一致。
  if(!state||state.id!==preview.id||state.chapter!==preview.chapter||v97Revision!==expectedRevision)throw Error('其他分頁已變更此人生，為保護進度，本回不寫入；請重新整理');
