@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "浮生無界 V9.7 IndexedDB 存檔與回合修正版",
-  "short_name": "浮生無界 V9.7",
+  "name": "浮生無界 V9.7.2 NPC互動與回合緊急修正版",
+  "short_name": "浮生無界 V9.7.2",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
