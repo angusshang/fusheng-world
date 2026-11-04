@@ -10,7 +10,7 @@ NPC 保有目標、年齡、關係、記憶與拒絕權；玩家對話必須顯�
 持續擴充：直接修改這份完整版，不要以短篇 Demo 取代它；後續需保持測試案例。
 詳情見同套件的 V5_SPEC.md 及 QA_REPORT.md。
 -->
-<title>浮生無界・萬世因果｜V9.12 場景服務與後結帳修正版</title>
+<title>浮生無界・萬世因果｜V9.13 小聚落店家與 NPC 修正版</title>
 <style>
 :root{color-scheme:dark;--bg:#101b22;--card:#1b2d35;--border:#3d5662;--gold:#f0c77e;--ink:#eee9d9;--muted:#b7c8cb;--green:#87cba5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Noto Sans TC",sans-serif}main{max-width:860px;margin:auto;padding:18px 15px 70px}h1{font-size:1.6rem;margin:0;color:var(--gold)}h2{font-size:1.14rem;margin:0 0 10px;color:#ffe1a3}h3{font-size:1rem;margin:12px 0 6px}.sub{color:var(--muted);font-size:.85rem}.panel{padding:17px;border:1px solid var(--border);background:var(--card);border-radius:15px;margin:12px 0}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,input,textarea,select{font:inherit;border-radius:9px}button{padding:10px 12px;cursor:pointer;border:1px solid #e3b56f;background:var(--gold);color:#172129;font-weight:730}button.alt{background:#334c59;color:white;border-color:#557180}button.ghost{background:transparent;color:var(--ink);border-color:#58717c}button.choice{display:block;width:100%;text-align:left;background:#314954;color:white;border-color:#59717a;margin:8px 0}button:disabled{opacity:.42;cursor:not-allowed}button:focus-visible{outline:3px solid white}textarea,input,select{background:#0e2028;color:white;border:1px solid #77909b;padding:10px;width:100%}textarea{min-height:116px}label{display:block;font-size:.94rem;margin:10px 0 5px}details>summary{cursor:pointer;font-weight:750;color:#e9c98e}details.panel[open]>summary{margin-bottom:12px}.status{border-left:4px solid #bdcdd4;border-radius:6px;background:#283f4c;padding:10px 12px;margin:10px 0}.ok{border-left-color:var(--green)}.bad{border-left-color:#f0908e}.story{white-space:pre-wrap;line-height:2.04;min-height:80px}.clock{font-weight:700;color:var(--gold);font-size:1.13rem}.entry{padding:7px 0;border-bottom:1px solid #435764;font-size:.9rem;white-space:pre-wrap}.hidden{display:none!important}#chapterArea{scroll-margin-top:12px}#topInfo{font-weight:650}#menuStatus{white-space:pre-wrap}.tag{display:inline-block;border:1px solid #5a7680;background:#283f47;padding:2px 8px;border-radius:999px;font-size:.8rem;margin:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.mutedline{font-size:.85rem;color:var(--muted)}.compact button{padding:9px 8px;font-size:.92rem}@media(max-width:540px){main{padding:12px 11px 80px}.panel{padding:14px}.row>*{flex-basis:140px}}
 
@@ -2028,7 +2028,7 @@ function localIntentV73(st,raw){
 // V9.3 持久化 NPC 協議：只有規則結算可改動交易，敘事不得反覆追問已確定的條件。
 
 // V9.11: Individual venue service state, independent of the NPC prose model.
-function v911Shop(st){return v99CurrentShop(st)||v92Venue(st,null)}
+function v911Shop(st){return v99CurrentShop(st)||v913BindScene(st)||v92Venue(st,null)}
 function v911Cash(st){return econRealm(st)==='mortal'?Number(st.money)||0:Number(econInit(st).spiritBalance)||0}
 function v911Host(st,shop){const cast=v98EnsureShopCast(st,shop).filter(n=>n.alive!==false);return cast.find(n=>/掌櫃|店主|主人|醫師|鏢頭/.test(n.job||''))||cast[0]||null}
 function v911Talk(st,person,action,reply){if(person){person.encountered=true;keepConversation(st,person,action,'現場交談');npcMemory(person,st,'玩家：'+action.slice(0,100)+'；回答：'+reply.slice(0,140));}return {ok:true,verified:true,kind:'現場對話',minutes:advance(st,4).minutes,text:(person?person.name+'（'+(person.job||'在場人物')+'）':'接待人員')+'：「'+reply+'」'};}
@@ -2063,6 +2063,8 @@ function v92Venue(st,kind){
  const hub=v81Hub(st),town=v91Town(st,hub),shops=(town.businesses91||[]).filter(x=>!x.closed&&x.city===hub);
  const exact=shops.find(x=>x.id===st.activeVenueShop91&&(!kind||kind.includes(x.kind))&&x.site===st.location);
  if(exact)return exact;
+ const recovered=v913BindScene(st);
+ if(recovered&&(!kind||kind.includes(recovered.kind)))return recovered;
  // 舊版只有「青樓」場景，必須先綁定一間實際店鋪，不能用模糊場景偷偷指定第一家。
  return null;
 }
@@ -2118,7 +2120,7 @@ function v92Deal(st,action){
  if(!kind)return v92No('請直接說你想辦的事，已確定的條件不會重新詢問。');
  const required=kind==='entertainment'?['青樓','藝館']:kind==='lodging'?['客棧']:['鐵匠鋪','木作坊'];
  const b=v92Venue(st,required);
- if(!b)return v92No('目前還沒進入一家可識別的'+(kind==='lodging'?'客棧':kind==='entertainment'?'青樓／藝館':'工坊')+'。請先直接說「去青樓」「去客棧」或「去餐館」進入營業中的具名店家；也可指定拜訪完整店名。');
+ if(!b)return {ok:false,verified:false,kind:'店家不存在',minutes:0,text:'目前還沒進入一家可識別的'+(kind==='lodging'?'客棧':kind==='entertainment'?'青樓／藝館':'工坊')+'。請先直接說「去青樓」「去客棧」或「去餐館」進入營業中的具名店家；也可指定拜訪完整店名。'};
  // 同一件事重複說一次視為延續，而非再次購買；只有明確「再訂／再安排一批」才新建。
  const repeat=/^(?:再|另外|再來|再訂|再安排|追加)/.test(a);
  if(d&&['in_progress','completed'].includes(d.status)&&d.shopId===b.id&&d.kind===kind&&!repeat)return v92No('【'+b.name+'】先前的 '+d.count+(kind==='lodging'?' 間客房':' 位接待人員')+(d.status==='completed'?'已完成':'已在進行')+'，沒有再次扣款。'+(d.people?.length?'人員：'+d.people.map(p=>p.name).join('、')+'。':'')+'可直接自由行動；若確實要新增另一筆，請明說「再安排一批」。');
@@ -4148,12 +4150,58 @@ function v99InquiryIntent(a){
  return /(?:多少錢|什麼價格|怎麼算錢|怎麼收費|價目|價錢|菜單|菜色|有哪些服務|有什麼服務|住宿價格|一晚多少|幾位.*多少)/.test(t)
   &&!/(?:付|支付|買下|成交|交錢|給錢|打賞|砸錢|拿出|贈送)/.test(t);
 }
-function v99CurrentShop(st){return v98SceneBusiness(st);}
+function v99CurrentShop(st){return v98SceneBusiness(st)||v913BindScene(st);}
+// V9.13: A visible shop district and its actual merchant registry must agree.
+// Legacy saves may contain a venue scene without an active shop ID; bind it to a
+// deterministic, persistent venue instead of silently treating the player as outdoors.
+function v913Provision(st,kind){
+ const hub=v81Hub(st),town=v91Town(st,hub);
+ const canonical=kind==='藝館'?'藝館':kind;
+ const typ=v91Type(canonical);
+ if(!typ)return null;
+ let existing=(town.businesses91||[]).find(b=>!b.closed&&b.city===hub&&b.kind===canonical);
+ if(existing)return existing;
+ // This is a real, persisted town business with its own ID, staff and ledger.
+ const id='v913-venue-'+v91Hash(hub+'|'+canonical);
+ existing=(town.businesses91||[]).find(b=>b.id===id);
+ if(existing)return existing;
+ const name=hub+'·'+V91_FIRST[v91Hash(id)%V91_FIRST.length]+canonical;
+ const shop={id,name,kind:canonical,city:hub,site:hub+'·'+typ[1],product:typ[2],
+  ownerId:'v913-owner-'+id,ownerName:'待實際接觸店主',cash:v91Price(st,65),
+  stock:12,retail:v91Price(st,typ[4]),cost:v91Price(st,typ[5]),
+  staff:/青樓|藝館/.test(canonical)?3:2,closed:false,playerOwned:false,
+  recordType:'background',createdTick:st.world?.tick||0,origin913:'legacy-scene-repair'};
+ town.businesses91.push(shop);
+ return shop;
+}
+function v913BindScene(st){
+ if(!st||st.journey)return null;
+ const hub=v81Hub(st),loc=String(st.location||'');
+ if(!loc.startsWith(hub+'·'))return null;
+ const category=loc.slice((hub+'·').length);
+ // A street, a royal palace or a generic market is NOT an entered shop.
+ const alias={'青樓':'青樓','藝館':'藝館','酒樓':'酒樓','茶館':'茶館',
+  '客棧':'客棧','醫館':'醫館','藥鋪':'醫館','工坊':'鐵匠鋪',
+  '鏢局':'鏢局','貨棧':'車行'};
+ const kind=alias[category];if(!kind)return null;
+ const town=v91Town(st,hub);
+ let shop=(town.businesses91||[]).find(b=>b.id===st.activeVenueShop91&&b.site===loc&&!b.closed);
+ if(!shop)shop=(town.businesses91||[]).find(b=>b.site===loc&&!b.closed&&b.city===hub&&(b.kind===kind||(kind==='青樓'&&b.kind==='藝館')));
+ if(!shop)shop=v913Provision(st,kind);
+ if(!shop||shop.site!==loc)return null;
+ st.activeVenueShop91=shop.id;
+ // Make this place capable of providing its advertised service.
+ v98EnsureShopCast(st,shop);
+ return shop;
+}
 function v99FindShop(st,kind){
  const hub=v81Hub(st),town=v91Town(st,hub),active=v99CurrentShop(st);
  if(active&&(active.kind===kind||(kind==='青樓'&&active.kind==='藝館')))return active;
  const eligible=(town.businesses91||[]).filter(b=>!b.closed&&b.city===hub&&(b.kind===kind||(kind==='青樓'&&b.kind==='藝館')));
- if(!eligible.length)return null;
+ if(!eligible.length){
+  // Small settlements can have a venue map node but no generated merchant of that type.
+  return v913Provision(st,kind);
+ }
  // A consistent shop choice per city and type; repeated visits don't shuffle identity.
  return eligible[v91Hash(hub+'::'+kind+'::v99')%eligible.length];
 }
@@ -4211,7 +4259,7 @@ function v99Inquiry(st,action){
 // V9.12: The venue is a persistent conversational context, not a one-turn arrival scene.
 // This resolver is deliberately prior to generic social / NPC merchant templates.
 function v912Shop(st){
- const b=v99CurrentShop(st)||v92Venue(st,null);
+ const b=v99CurrentShop(st)||v913BindScene(st)||v92Venue(st,null);
  return b&&!b.closed&&b.city===v81Hub(st)&&b.site===st.location?b:null;
 }
 function v912Intent(st,raw){
@@ -4415,7 +4463,7 @@ function v98Person(st,id,site,job,opts={}){
  let n=st.npcs.find(x=>x.id===id);
  if(n){if(n.alive===false)return n;if(!n.home)n.home=site;if(!n.job||n.job==='日常生活')n.job=job;return n;}
  st.npcSequence=(Number(st.npcSequence)||0)+1;
- n=makeNPC(st,st.npcSequence);n.id=id;n.home=site;n.job=job;n.activity=opts.activity||('正在'+site+'從事'+job+'工作');
+ n=makeNPC(st,st.npcSequence);n.id=id;n.home=site;n.job=job;if(opts.adult)n.age=20+(v91Hash(id)%25);n.activity=opts.activity||('正在'+site+'從事'+job+'工作');
  n.encountered=false;n.bond='尚未相識';n.familyRole=null;n.age=Math.max(18,Number(n.age)||18);
  if(opts.name)n.name=opts.name;
  if(opts.sex){n.sex=opts.sex;if(!opts.name)n.name=makePersonName(st,n.sex,null,new Set(st.npcs.map(p=>p.name).concat(st.name)));}
@@ -4441,7 +4489,12 @@ function v98EnsureShopCast(st,shop){
  const count=Math.min(3,Math.max(/青樓|藝館|酒樓|茶館|客棧|醫館/.test(shop.kind)?1:0,Number(shop.staff)||0));
  for(let i=0;i<count;i++){
   const id='v98-employee-'+shop.id+'-'+i;
-  const worker=v98Person(st,id,shop.site,roles[1],{shopId:shop.id,activity:'在'+shop.name+'值勤'});
+  let worker=v98Person(st,id,shop.site,roles[1],{shopId:shop.id,adult:/青樓|藝館/.test(shop.kind),activity:'在'+shop.name+'值勤'});
+  if(/青樓|藝館/.test(shop.kind)&&worker.age<18){
+   // Preserve the old underage NPC unchanged; hire a separate adult for the role.
+   worker.job='店內學徒';worker.workplaceId=null;
+   worker=v98Person(st,id+'-adult',shop.site,roles[1],{shopId:shop.id,adult:true,activity:'在'+shop.name+'值勤'});
+  }
   worker.workplaceId=shop.id;out.push(worker);
  }
  return out;
